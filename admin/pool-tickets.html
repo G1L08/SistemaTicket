@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pool de Tickets - Sistema de Tickets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .ticket-card {
+            transition: all 0.3s;
+            border-left: 4px solid #0d6efd;
+        }
+        .ticket-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+        }
+        .ticket-card.priority-critica { border-left-color: #dc3545; }
+        .ticket-card.priority-alta { border-left-color: #fd7e14; }
+        .ticket-card.priority-media { border-left-color: #ffc107; }
+        .ticket-card.priority-baja { border-left-color: #28a745; }
+        
+        .badge-prioridad {
+            font-size: 12px;
+            padding: 5px 12px;
+        }
+        .badge-prioridad-critica { background: #dc3545; color: white; }
+        .badge-prioridad-alta { background: #fd7e14; color: white; }
+        .badge-prioridad-media { background: #ffc107; color: #000; }
+        .badge-prioridad-baja { background: #28a745; color: white; }
+        
+        .estadisticas-pool {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .estadisticas-pool .numero {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .btn-tomar {
+            transition: all 0.3s;
+        }
+        .btn-tomar:hover {
+            transform: scale(1.05);
+        }
+        .filtros-pool {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .empty-pool {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .empty-pool i {
+            font-size: 4rem;
+            color: #28a745;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        .prioridad-select {
+            min-width: 140px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                <i class="bi bi-inbox"></i> Pool de Tickets - DAR TI
+            </span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Usuario</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../dashboard.html">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../mis-tickets.html">
+                                <i class="bi bi-list-ul"></i> Mis tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../nuevo-ticket.html">
+                                <i class="bi bi-plus-circle"></i> Nuevo ticket
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <hr>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="pool-tickets.html">
+                                <i class="bi bi-inbox"></i> Pool de tickets
+                            </a>
+                        </li>
+                        <li class="nav-item" id="adminMenu" style="display:none;">
+                            <a class="nav-link" href="todos-tickets.html">
+                                <i class="bi bi-grid"></i> Todos los tickets
+                            </a>
+                            <a class="nav-link" href="usuarios.html">
+                                <i class="bi bi-people"></i> Usuarios
+                            </a>
+                            <a class="nav-link" href="dashboard-admin.html">
+                                <i class="bi bi-graph-up"></i> Panel Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+  
+            
+
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="bi bi-inbox text-primary"></i> Pool de tickets sin asignar
+                    </h1>
+                    <p class="text-muted">Haz clic en <strong>"Tomar ticket"</strong> para asignártelo y comenzar a trabajar</p>
+                </div>
+
+                
+                
+
+                <div class="estadisticas-pool row">
+                    <div class="col-md-3 text-center">
+                        <div class="numero" id="totalPool">0</div>
+                        <small>Disponibles</small>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="numero" id="criticosPool">0</div>
+                        <small>Críticos</small>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="numero" id="altaPool">0</div>
+                        <small>Alta prioridad</small>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="numero" id="mediaPool">0</div>
+                        <small>Media prioridad</small>
+                    </div>
+                </div>
+
+                
+
+                <div class="filtros-pool">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select id="filtroPrioridad" class="form-select" onchange="cargarPool()">
+                                <option value="">Todas las prioridades</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="filtroCategoria" class="form-select" onchange="cargarPool()">
+                                <option value="">Todas las categorías</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-primary w-100" onclick="cargarPool()">
+                                <i class="bi bi-arrow-clockwise"></i> Actualizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="poolContainer">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+        if (!usuario) {
+            window.location.href = '../login.html';
+        }
+        document.getElementById('usuarioNombre').textContent = usuario.nombre;
+
+        if (usuario.roles && usuario.roles.includes('Administrador')) {
+            document.getElementById('adminMenu').style.display = 'block';
+        }
+
+        function escapeHTML(texto) {
+            if (!texto) return '';
+            const div = document.createElement('div');
+            div.textContent = texto;
+            return div.innerHTML;
+        }
+
+        function calcularTiempo(fecha) {
+            if (!fecha) return 'No disponible';
+            const diff = Math.floor((new Date() - new Date(fecha)) / 1000);
+            if (diff < 60) return 'hace ' + diff + ' segundos';
+            if (diff < 3600) return 'hace ' + Math.floor(diff / 60) + ' minutos';
+            if (diff < 86400) return 'hace ' + Math.floor(diff / 3600) + ' horas';
+            return 'hace ' + Math.floor(diff / 86400) + ' días';
+        }
+
+        function formatearFecha(fecha) {
+            if (!fecha) return 'No disponible';
+            const d = new Date(fecha);
+            return d.toLocaleDateString('es-MX', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        async function cargarFiltros() {
+            try {
+                const res = await fetch('../api/prioridades/listar.php');
+                const prioridades = await res.json();
+                const select = document.getElementById('filtroPrioridad');
+                prioridades.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.Id_prioridad;
+                    option.textContent = p.Nombre;
+                    select.appendChild(option);
+                });
+
+                const res2 = await fetch('../api/categorias/listar.php');
+                const categorias = await res2.json();
+                const select2 = document.getElementById('filtroCategoria');
+                categorias.forEach(c => {
+                    const option = document.createElement('option');
+                    option.value = c.Id_categoria;
+                    option.textContent = c.Nombre;
+                    select2.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error al cargar filtros:', error);
+            }
+        }
+
+        // Cargar ticket
+        async function cargarPool() {
+            const container = document.getElementById('poolContainer');
+            
+            container.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            `;
+
+            try {
+                const prioridad = document.getElementById('filtroPrioridad').value;
+                const categoria = document.getElementById('filtroCategoria').value;
+
+                let url = '../api/tickets/pool.php';
+                const params = new URLSearchParams();
+                if (prioridad) params.append('prioridad', prioridad);
+                if (categoria) params.append('categoria', categoria);
+                if (params.toString()) url += '?' + params.toString();
+
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+                const tickets = await response.json();
+
+                if (tickets.error) {
+                    container.innerHTML = `<div class="alert alert-danger">${escapeHTML(tickets.error)}</div>`;
+                    return;
+                }
+
+                actualizarEstadisticas(tickets);
+
+                if (tickets.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-pool">
+                            <i class="bi bi-check-circle pulse"></i>
+                            <h4 class="mt-3">¡No hay tickets pendientes!</h4>
+                            <p class="text-muted">Todos los tickets han sido asignados</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+            
+
+                const prioridades = ['Baja', 'Media', 'Alta', 'Crítica'];
+                
+                container.innerHTML = tickets.map(t => {
+                    const prioridadClass = (t.prioridad_nombre || '').toLowerCase();
+                    const prioridadBadge = {
+                        'crítica': 'badge-prioridad-critica',
+                        'alta': 'badge-prioridad-alta',
+                        'media': 'badge-prioridad-media',
+                        'baja': 'badge-prioridad-baja'
+                    }[prioridadClass] || '';
+
+                    const selectPrioridad = `
+                        <select class="form-select form-select-sm prioridad-select" 
+                                onchange="cambiarPrioridad(${t.Id_ticket}, this.value)">
+                            <option value="">Cambiar prioridad</option>
+                            ${prioridades.map(p => `
+                                <option value="${p}" ${t.prioridad_nombre === p ? 'selected' : ''}>${p}</option>
+                            `).join('')}
+                        </select>
+                    `;
+
+                    return `
+                        <div class="card shadow-sm mb-3 ticket-card priority-${prioridadClass}">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-5">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <span class="badge bg-secondary">${escapeHTML(t.Folio || 'N/A')}</span>
+                                            <h5 class="mb-0">${escapeHTML(t.Titulo || 'Sin título')}</h5>
+                                        </div>
+                                        <div class="mt-2">
+                                            <span class="badge badge-prioridad ${prioridadBadge}">
+                                                ${escapeHTML(t.prioridad_nombre || 'Sin prioridad')}
+                                            </span>
+                                            <span class="badge bg-secondary">${escapeHTML(t.categoria_nombre || 'Sin categoría')}</span>
+                                            <small class="text-muted ms-2">
+                                                <i class="bi bi-calendar3"></i> Creado ${calcularTiempo(t.Fecha_creacion)}
+                                            </small>
+                                        </div>
+                                        <div class="mt-1">
+                                            <small class="text-muted">
+                                                <i class="bi bi-person"></i> ${escapeHTML(t.usuario_nombre || '')} ${escapeHTML(t.usuario_apellido || '')}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="text-muted d-block">
+                                            <i class="bi bi-clock-history"></i> 
+                                            ${t.Fecha_vencimiento ? 'Vence: ' + formatearFecha(t.Fecha_vencimiento) : 'Sin fecha de vencimiento'}
+                                        </small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex gap-2 flex-wrap align-items-center">
+                                            <a href="../detalle-ticket.html?id=${t.Id_ticket}" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye"></i> Ver
+                                            </a>
+                                            <button class="btn btn-sm btn-success" onclick="tomarTicket(${t.Id_ticket})">
+                                                <i class="bi bi-hand-index"></i> Tomar
+                                            </button>
+                                            <div style="min-width: 140px;">
+                                                ${selectPrioridad}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error al cargar pool:', error);
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        Error al cargar los tickets: ${escapeHTML(error.message)}
+                    </div>
+                `;
+            }
+        }
+
+        // Estadisticas
+        function actualizarEstadisticas(tickets) {
+            const total = tickets.length;
+            const criticos = tickets.filter(t => (t.prioridad_nombre || '').toLowerCase() === 'crítica').length;
+            const alta = tickets.filter(t => (t.prioridad_nombre || '').toLowerCase() === 'alta').length;
+            const media = tickets.filter(t => (t.prioridad_nombre || '').toLowerCase() === 'media').length;
+
+            document.getElementById('totalPool').textContent = total;
+            document.getElementById('criticosPool').textContent = criticos;
+            document.getElementById('altaPool').textContent = alta;
+            document.getElementById('mediaPool').textContent = media;
+        }
+
+        //  prioridad 
+        async function cambiarPrioridad(idTicket, prioridad) {
+            if (!prioridad) return;
+            
+            if (!confirm(`¿Estás seguro de cambiar la prioridad del ticket a "${prioridad}"?`)) {
+                const selects = document.querySelectorAll(`select[onchange*="cambiarPrioridad(${idTicket}"]`);
+                selects.forEach(select => {
+                    select.value = '';
+                });
+                return;
+            }
+
+            try {
+                const response = await fetch('../api/tickets/cambiar_prioridad.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id_ticket: idTicket,
+                        prioridad: prioridad
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.mensaje);
+                    cargarPool();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al cambiar la prioridad');
+            }
+        }
+        async function tomarTicket(id) {
+            if (!confirm('¿Estás seguro de que quieres tomar este ticket?')) return;
+
+            const buttons = document.querySelectorAll(`button[onclick="tomarTicket(${id})"]`);
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
+            });
+
+            try {
+                const response = await fetch('../api/tickets/tomar.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_ticket: id })
+                });
+
+                const text = await response.text();
+                const data = JSON.parse(text);
+                
+                if (data.success) {
+                    alert(` Ticket asignado exitosamente a ${data.tecnico || 'ti'}`);
+                    cargarPool();
+                } else {
+                    alert(' Error: ' + (data.error || 'Error desconocido'));
+                }
+            } catch (error) {
+                console.error('Error al tomar ticket:', error);
+                alert('Error de conexión al servidor');
+            } finally {
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-hand-index"></i> Tomar ticket';
+                });
+            }
+        }
+
+    
+
+
+        function cerrarSesion() {
+            sessionStorage.removeItem('usuario');
+            window.location.href = '../login.html';
+        }
+
+      
+        
+
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarFiltros();
+            cargarPool();
+            setInterval(cargarPool, 60000);
+        });
+    </script>
+</body>
+</html>

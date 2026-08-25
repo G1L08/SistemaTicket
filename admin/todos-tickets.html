@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos los Tickets - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .sidebar .nav-link.active { background-color: #0d6efd; color: white; }
+        .table-hover tbody tr { cursor: pointer; transition: all 0.2s; }
+        .table-hover tbody tr:hover { background-color: #f0f2f5; }
+        .filtros-container { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .badge-estado { padding: 5px 12px; border-radius: 20px; }
+        .badge-prioridad { padding: 5px 12px; border-radius: 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand"><i class="bi bi-grid"></i> Todos los Tickets - Admin</span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Admin</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="dashboard-admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="todos-tickets.html"><i class="bi bi-grid"></i> Todos los tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="pool-tickets.html"><i class="bi bi-inbox"></i> Pool de tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="usuarios.html"><i class="bi bi-people"></i> Usuarios</a></li>
+                        <li class="nav-item"><hr></li>
+                        <li class="nav-item"><a class="nav-link" href="../mis-tickets.html"><i class="bi bi-list-ul"></i> Mis tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../nuevo-ticket.html"><i class="bi bi-plus-circle"></i> Nuevo ticket</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="bi bi-grid text-primary"></i> Todos los tickets</h1>
+                </div>
+                <div class="filtros-container">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <select id="filtroEstado" class="form-select" onchange="cargarTickets()">
+                                <option value="">Todos los estados</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filtroPrioridad" class="form-select" onchange="cargarTickets()">
+                                <option value="">Todas las prioridades</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filtroCategoria" class="form-select" onchange="cargarTickets()">
+                                <option value="">Todas las categorías</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-success w-100" onclick="exportarExcel()">
+                                <i class="bi bi-file-excel"></i> Exportar Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Folio</th>
+                                        <th>Título</th>
+                                        <th>Estado</th>
+                                        <th>Prioridad</th>
+                                        <th>Categoría</th>
+                                        <th>Solicitante</th>
+                                        <th>Técnico</th>
+                                        <th>Fecha</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ticketsTableBody">
+                                    <tr>
+                                        <td colspan="9" class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Cargando...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+        if (!usuario || !usuario.roles.includes('Administrador')) window.location.href = '../login.html';
+        document.getElementById('usuarioNombre').textContent = usuario.nombre;
+
+        function escapeHTML(t) { if (!t) return ''; const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+
+        async function cargarFiltros() {
+            try {
+                const [estadosRes, prioridadesRes, categoriasRes] = await Promise.all([
+                    fetch('../api/estados/listar.php'),
+                    fetch('../api/prioridades/listar.php'),
+                    fetch('../api/categorias/listar.php')
+                ]);
+                const estados = await estadosRes.json();
+                const prioridades = await prioridadesRes.json();
+                const categorias = await categoriasRes.json();
+
+                const estadoSelect = document.getElementById('filtroEstado');
+                estados.forEach(e => { const o=document.createElement('option'); o.value=e.Id_estado; o.textContent=e.Nombre; estadoSelect.appendChild(o); });
+
+                const prioridadSelect = document.getElementById('filtroPrioridad');
+                prioridades.forEach(p => { const o=document.createElement('option'); o.value=p.Id_prioridad; o.textContent=p.Nombre; prioridadSelect.appendChild(o); });
+
+                const categoriaSelect = document.getElementById('filtroCategoria');
+                categorias.forEach(c => { const o=document.createElement('option'); o.value=c.Id_categoria; o.textContent=c.Nombre; categoriaSelect.appendChild(o); });
+            } catch(e) { console.error('Error cargando filtros:', e); }
+        }
+
+        async function cargarTickets() {
+            const tbody = document.getElementById('ticketsTableBody');
+            tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4"><div class="spinner-border text-primary"></div></td></tr>`;
+
+            try {
+                const estado = document.getElementById('filtroEstado').value;
+                const prioridad = document.getElementById('filtroPrioridad').value;
+                const categoria = document.getElementById('filtroCategoria').value;
+
+                let url = '../api/tickets/listar.php';
+                const params = new URLSearchParams();
+                if (estado) params.append('estado', estado);
+                if (prioridad) params.append('prioridad', prioridad);
+                if (categoria) params.append('categoria', categoria);
+                if (params.toString()) url += '?' + params.toString();
+
+                const response = await fetch(url);
+                const tickets = await response.json();
+
+                if (tickets.error || !Array.isArray(tickets)) {
+                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>`;
+                    return;
+                }
+
+                if (tickets.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">No hay tickets</td></tr>`;
+                    return;
+                }
+
+                const estadoColors = { 'Abierto':'warning', 'En proceso':'info', 'En espera':'secondary', 'Cerrado':'success', 'Expirado':'danger' };
+                const prioridadColors = { 'Crítica':'danger', 'Alta':'warning', 'Media':'info', 'Baja':'secondary' };
+
+                tbody.innerHTML = tickets.map(t => `
+                    <tr onclick="window.location.href='../detalle-ticket.html?id=${t.Id_ticket}'">
+                        <td><strong>${escapeHTML(t.Folio)}</strong></td>
+                        <td>${escapeHTML(t.Titulo)}</td>
+                        <td><span class="badge bg-${estadoColors[t.estado_nombre] || 'secondary'} badge-estado">${escapeHTML(t.estado_nombre)}</span></td>
+                        <td><span class="badge bg-${prioridadColors[t.prioridad_nombre] || 'secondary'} badge-prioridad">${escapeHTML(t.prioridad_nombre)}</span></td>
+                        <td>${escapeHTML(t.categoria_nombre)}</td>
+                        <td>${escapeHTML(t.usuario_nombre)}</td>
+                        <td>${escapeHTML(t.tecnico_nombre || 'Sin asignar')}</td>
+                        <td><small>${new Date(t.Fecha_creacion).toLocaleDateString()}</small></td>
+                        <td>
+                            <a href="../detalle-ticket.html?id=${t.Id_ticket}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch(e) {
+                console.error('Error:', e);
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>`;
+            }
+        }
+
+        function exportarExcel() {
+            alert('Función de exportación a Excel (próximamente)');
+        }
+
+        function cerrarSesion() { sessionStorage.removeItem('usuario'); window.location.href = '../login.html'; }
+
+        document.addEventListener('DOMContentLoaded', () => { cargarFiltros(); cargarTickets(); });
+    </script>
+</body>
+</html>

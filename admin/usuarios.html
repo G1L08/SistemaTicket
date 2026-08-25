@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .sidebar .nav-link.active { background-color: #0d6efd; color: white; }
+        .user-card { transition: all 0.3s; }
+        .user-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+        .user-avatar { width: 60px; height: 60px; border-radius: 50%; background: #0d6efd; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+        .badge-rol { padding: 4px 12px; border-radius: 20px; }
+        .badge-rol-admin { background: #dc3545; color: white; }
+        .badge-rol-tecnico { background: #fd7e14; color: white; }
+        .badge-rol-usuario { background: #28a745; color: white; }
+        .modal-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand"><i class="bi bi-people"></i> Gestión de Usuarios - Admin</span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Admin</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="dashboard-admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="todos-tickets.html"><i class="bi bi-grid"></i> Todos los tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="pool-tickets.html"><i class="bi bi-inbox"></i> Pool de tickets</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="usuarios.html"><i class="bi bi-people"></i> Usuarios</a></li>
+                        <li class="nav-item"><hr></li>
+                        <li class="nav-item"><a class="nav-link" href="../mis-tickets.html"><i class="bi bi-list-ul"></i> Mis tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../nuevo-ticket.html"><i class="bi bi-plus-circle"></i> Nuevo ticket</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1 class="h2"><i class="bi bi-people text-primary"></i> Usuarios</h1>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+                            <i class="bi bi-plus-circle"></i> Nuevo usuario
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-3" id="usuariosContainer">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalUsuario" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person-plus"></i> Nuevo usuario</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formUsuario">
+                        <input type="hidden" id="usuarioId">
+                        <div class="mb-3">
+                            <label class="form-label">No. de empleado *</label>
+                            <input type="text" id="noEmpleado" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre *</label>
+                            <input type="text" id="nombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Apellido paterno *</label>
+                            <input type="text" id="apellidoPaterno" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Apellido materno</label>
+                            <input type="text" id="apellidoMaterno" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email *</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña *</label>
+                            <input type="password" id="password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Puesto</label>
+                            <input type="text" id="puesto" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rol *</label>
+                            <select id="rol" class="form-select" required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="1">Administrador</option>
+                                <option value="2">Técnico</option>
+                                <option value="3">Usuario</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select id="estado" class="form-select">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarUsuario()">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+        if (!usuario || !usuario.roles.includes('Administrador')) window.location.href = '../login.html';
+        document.getElementById('usuarioNombre').textContent = usuario.nombre;
+
+        function escapeHTML(t) { if (!t) return ''; const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+
+        async function cargarUsuarios() {
+            const container = document.getElementById('usuariosContainer');
+            try {
+                const response = await fetch('../api/usuarios/listar.php');
+                const usuarios = await response.json();
+
+                if (usuarios.error) {
+                    container.innerHTML = `<div class="col-12"><div class="alert alert-danger">${usuarios.error}</div></div>`;
+                    return;
+                }
+
+                if (usuarios.length === 0) {
+                    container.innerHTML = `<div class="col-12"><div class="text-center text-muted">No hay usuarios</div></div>`;
+                    return;
+                }
+
+                const rolBadges = { 'Administrador':'badge-rol-admin', 'Técnico':'badge-rol-tecnico', 'Usuario':'badge-rol-usuario' };
+                const estadoBadges = { 1: 'success', 0: 'danger' };
+                const estadoTextos = { 1: 'Activo', 0: 'Inactivo' };
+
+                container.innerHTML = usuarios.map(u => `
+                    <div class="col-md-4">
+                        <div class="card user-card shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="user-avatar me-3">${escapeHTML(u.Nombre.charAt(0))}${escapeHTML(u.Apellido_paterno.charAt(0))}</div>
+                                    <div>
+                                        <h6 class="mb-0">${escapeHTML(u.Nombre)} ${escapeHTML(u.Apellido_paterno)}</h6>
+                                        <small class="text-muted">${escapeHTML(u.No_empleado)}</small>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="badge ${rolBadges[u.rol_nombre] || 'badge-rol-usuario'} badge-rol">${escapeHTML(u.rol_nombre || 'Usuario')}</span>
+                                    <span class="badge bg-${estadoBadges[u.estado] || 'secondary'}">${estadoTextos[u.estado] || 'Activo'}</span>
+                                </div>
+                                <p class="small text-muted mb-1"><i class="bi bi-envelope"></i> ${escapeHTML(u.correo)}</p>
+                                <p class="small text-muted mb-2"><i class="bi bi-briefcase"></i> ${escapeHTML(u.Puesto || 'Sin puesto')}</p>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editarUsuario(${u.Id_usuario})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarUsuario(${u.Id_usuario})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch(e) {
+                console.error('Error:', e);
+                container.innerHTML = `<div class="col-12"><div class="alert alert-danger">Error al cargar usuarios</div></div>`;
+            }
+        }
+
+        async function guardarUsuario() {
+            const data = {
+                id: document.getElementById('usuarioId').value,
+                no_empleado: document.getElementById('noEmpleado').value,
+                nombre: document.getElementById('nombre').value,
+                apellido_paterno: document.getElementById('apellidoPaterno').value,
+                apellido_materno: document.getElementById('apellidoMaterno').value,
+                correo: document.getElementById('email').value,
+                contraseña: document.getElementById('password').value,
+                puesto: document.getElementById('puesto').value,
+                id_rol: document.getElementById('rol').value,
+                estado: document.getElementById('estado').value
+            };
+
+            if (!data.no_empleado || !data.nombre || !data.apellido_paterno || !data.correo || !data.contraseña || !data.id_rol) {
+                alert('Por favor, completa todos los campos requeridos');
+                return;
+            }
+
+            try {
+                const url = data.id ? '../api/usuarios/actualizar.php' : '../api/usuarios/crear.php';
+                const method = data.id ? 'PUT' : 'POST';
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Usuario guardado exitosamente');
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalUsuario'));
+                    modal.hide();
+                    document.getElementById('formUsuario').reset();
+                    document.getElementById('usuarioId').value = '';
+                    cargarUsuarios();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch(e) {
+                console.error('Error:', e);
+                alert('Error al guardar el usuario');
+            }
+        }
+
+        function editarUsuario(id) {
+            alert('segunda parte');
+        }
+
+        async function eliminarUsuario(id) {
+            if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
+            try {
+                const response = await fetch('../api/usuarios/eliminar.php', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Usuario eliminado');
+                    cargarUsuarios();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch(e) {
+                console.error('Error:', e);
+                alert('Error al eliminar el usuario');
+            }
+        }
+
+        function cerrarSesion() { sessionStorage.removeItem('usuario'); window.location.href = '../login.html'; }
+
+        document.addEventListener('DOMContentLoaded', cargarUsuarios);
+    </script>
+</body>
+</html>

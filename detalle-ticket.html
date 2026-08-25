@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Ticket - Sistema de Tickets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --uaeh-rojo: #6B2737;
+            --uaeh-dorado: #C9A84C;
+            --uaeh-gris: #333333;
+            --uaeh-rojo-claro: #8B3A4A;
+            --uaeh-dorado-claro: #D4B96A;
+            --uaeh-gris-claro: #f5f5f5;
+        }
+        
+        .sidebar { background-color: var(--uaeh-rojo) !important; }
+        .sidebar .nav-link { color: #ffffff !important; }
+        .sidebar .nav-link:hover { background-color: var(--uaeh-rojo-claro) !important; color: var(--uaeh-dorado) !important; }
+        .sidebar .nav-link.active { background-color: var(--uaeh-dorado) !important; color: var(--uaeh-rojo) !important; }
+        .sidebar hr { border-color: var(--uaeh-dorado) !important; }
+        
+        .navbar { background-color: var(--uaeh-rojo) !important; }
+        .navbar-brand { color: var(--uaeh-dorado) !important; }
+        
+        .timeline-item { border-left: 3px solid var(--uaeh-dorado); padding-left: 15px; margin-bottom: 15px; position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -7px; top: 0; width: 11px; height: 11px; border-radius: 50%; background: var(--uaeh-dorado); border: 2px solid white; }
+        
+        .comentario-item { background: #f8f9fa; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--uaeh-dorado); }
+        .comentario-item .usuario { font-weight: bold; color: var(--uaeh-rojo); }
+        .comentario-item .fecha { font-size: 12px; color: #6c757d; }
+        .comentario-item .contenido { margin-top: 5px; white-space: pre-wrap; }
+        
+        .estado-badge { font-size: 14px; padding: 8px 16px; border-radius: 20px; }
+        
+        .drop-zone { border: 2px dashed #dee2e6; border-radius: 10px; cursor: pointer; transition: all 0.3s; background: #f8f9fa; }
+        .drop-zone:hover { border-color: var(--uaeh-dorado); background: #fdf9f0; }
+        .drop-zone.dragover { border-color: var(--uaeh-dorado); background: #fdf9f0; }
+        
+        .archivo-item { transition: all 0.2s; }
+        .archivo-item:hover { background: #e9ecef !important; }
+        
+        .progress-bar { background: linear-gradient(90deg, var(--uaeh-rojo), var(--uaeh-dorado)); }
+        
+        .descripcion-box { background: #f8f9fa; padding: 15px; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; }
+        .solucion-box { background: #d4edda; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745; white-space: pre-wrap; word-wrap: break-word; }
+        
+        .info-label { color: #6c757d; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .info-value { font-weight: 500; margin-bottom: 10px; }
+        
+        .accion-card { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
+        
+        .card-header.bg-primary { background-color: var(--uaeh-rojo) !important; }
+        .card-header.bg-light { background-color: var(--uaeh-gris-claro) !important; }
+        
+        .btn-primary { background-color: var(--uaeh-rojo) !important; border-color: var(--uaeh-rojo) !important; }
+        .btn-primary:hover { background-color: var(--uaeh-rojo-claro) !important; border-color: var(--uaeh-rojo-claro) !important; }
+        .btn-outline-primary { color: var(--uaeh-rojo) !important; border-color: var(--uaeh-rojo) !important; }
+        .btn-outline-primary:hover { background-color: var(--uaeh-rojo) !important; color: white !important; }
+        
+        .btn-success { background-color: var(--uaeh-rojo) !important; border-color: var(--uaeh-rojo) !important; }
+        .btn-success:hover { background-color: var(--uaeh-rojo-claro) !important; border-color: var(--uaeh-rojo-claro) !important; }
+        
+        .btn-warning { background-color: var(--uaeh-dorado) !important; border-color: var(--uaeh-dorado) !important; color: var(--uaeh-rojo) !important; }
+        .btn-warning:hover { background-color: var(--uaeh-dorado-claro) !important; border-color: var(--uaeh-dorado-claro) !important; color: var(--uaeh-rojo) !important; }
+        
+        .btn-info { background-color: var(--uaeh-dorado) !important; border-color: var(--uaeh-dorado) !important; color: var(--uaeh-rojo) !important; }
+        .btn-info:hover { background-color: var(--uaeh-dorado-claro) !important; border-color: var(--uaeh-dorado-claro) !important; }
+        
+        .btn-outline-light { border-color: var(--uaeh-dorado) !important; color: var(--uaeh-dorado) !important; }
+        .btn-outline-light:hover { background-color: var(--uaeh-dorado) !important; color: var(--uaeh-rojo) !important; }
+        
+        .badge.bg-primary { background-color: var(--uaeh-rojo) !important; }
+        
+        .prioridad-box { display: flex; gap: 15px; flex-wrap: wrap; }
+        .prioridad-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            padding: 15px 20px; 
+            border-radius: 12px; 
+            background: #f8f9fa; 
+            flex: 1; 
+            min-width: 200px; 
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+        .prioridad-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .prioridad-icon { font-size: 2rem; color: #6c757d; }
+        .prioridad-contenido { flex: 1; }
+        .prioridad-etiqueta { font-size: 12px; text-transform: uppercase; color: #6c757d; font-weight: 600; margin-bottom: 5px; }
+        .prioridad-valor { font-size: 18px; font-weight: bold; margin: 5px 0; }
+        .prioridad-descripcion { font-size: 12px; color: #6c757d; margin-top: 5px; }
+        
+        .prioridad-fija { border-color: var(--uaeh-rojo); background: #fdf5f5; }
+        .prioridad-fija .prioridad-icon { color: var(--uaeh-rojo); }
+        .prioridad-confirmada { border-color: #28a745; background: #f0fff4; }
+        .prioridad-confirmada .prioridad-icon { color: #28a745; }
+        .prioridad-pendiente { border-color: var(--uaeh-dorado); background: #fffbf0; }
+        .prioridad-pendiente .prioridad-icon { color: var(--uaeh-dorado); }
+        
+        .badge-prioridad { font-size: 18px; padding: 10px 20px; }
+        .badge-prioridad i { margin-right: 5px; }
+        
+        .badge-estado { font-size: 14px; padding: 8px 16px; border-radius: 20px; }
+        
+        h1.h2 i, .card-header i { color: var(--uaeh-dorado) !important; }
+        h1.h2 { color: var(--uaeh-rojo) !important; }
+        
+        .modal-header.bg-success { background-color: var(--uaeh-rojo) !important; }
+        .modal-header.bg-warning { background-color: var(--uaeh-dorado) !important; color: var(--uaeh-rojo) !important; }
+        
+        .accion-card.bg-success.bg-opacity-10 { background-color: rgba(107, 39, 55, 0.1) !important; border-color: var(--uaeh-rojo) !important; }
+        .accion-card.bg-warning.bg-opacity-10 { background-color: rgba(201, 168, 76, 0.1) !important; border-color: var(--uaeh-dorado) !important; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand"><i class="bi bi-ticket-perforated"></i> Sistema de Tickets - DAR TI</span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Usuario</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="mis-tickets.html">
+                                <i class="bi bi-list-ul"></i> Mis tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="nuevo-ticket.html">
+                                <i class="bi bi-plus-circle"></i> Nuevo ticket
+                            </a>
+                        </li>
+                        <li class="nav-item" id="poolMenu" style="display:none;">
+                            <hr>
+                            <a class="nav-link" href="admin/pool-tickets.html">
+                                <i class="bi bi-inbox"></i> Pool de tickets
+                            </a>
+                        </li>
+                        <li class="nav-item" id="adminMenu" style="display:none;">
+                            <a class="nav-link" href="admin/todos-tickets.html">
+                                <i class="bi bi-grid"></i> Todos los tickets
+                            </a>
+                            <a class="nav-link" href="admin/usuarios.html">
+                                <i class="bi bi-people"></i> Usuarios
+                            </a>
+                            <a class="nav-link" href="admin/dashboard-admin.html">
+                                <i class="bi bi-graph-up"></i> Panel Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="bi bi-ticket"></i> Detalle del Ticket</h1>
+                </div>
+                <div id="ticketContainer">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para tomar ticket -->
+    <div class="modal fade" id="modalTomarTicket" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="bi bi-hand-index"></i> Tomar ticket</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <i class="bi bi-question-circle" style="font-size: 3rem; color: var(--uaeh-dorado);"></i>
+                    <h5 class="mt-3">¿Estás seguro de tomar este ticket?</h5>
+                    <p class="text-muted">El ticket se asignará a ti y cambiará a estado "En proceso"</p>
+                    <input type="hidden" id="modalTicketId" value="">
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="confirmarTomarTicket()">
+                        <i class="bi bi-check-circle"></i> Sí, tomar ticket
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para confirmar prioridad -->
+    <div class="modal fade" id="modalConfirmarPrioridad" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle"></i> Confirmar prioridad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <i class="bi bi-check-circle" style="font-size: 3rem; color: var(--uaeh-dorado);"></i>
+                    <h5 class="mt-3">¿Confirmar prioridad como <span id="modalPrioridadNombre"></span>?</h5>
+                    <p class="text-muted">
+                        <strong>Importante:</strong> Una vez confirmada, la prioridad no podrá cambiarse.<br>
+                        <span class="text-danger">La prioridad original del solicitante permanece igual.</span>
+                    </p>
+                    <input type="hidden" id="modalPrioridadTicketId" value="">
+                    <input type="hidden" id="modalPrioridadValor" value="">
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" onclick="confirmarPrioridad()">
+                        <i class="bi bi-check-circle"></i> Sí, confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+        if (!usuario) {
+            window.location.href = 'login.html';
+        }
+        document.getElementById('usuarioNombre').textContent = usuario.nombre;
+
+        const esTecnico = usuario.roles && (usuario.roles.includes('Técnico') || usuario.roles.includes('Administrador'));
+        const esAdmin = usuario.roles && usuario.roles.includes('Administrador');
+
+        if (esTecnico) {
+            document.getElementById('poolMenu').style.display = 'block';
+        }
+        if (esAdmin) {
+            document.getElementById('adminMenu').style.display = 'block';
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const ticketId = urlParams.get('id');
+
+        if (!ticketId) {
+            document.getElementById('ticketContainer').innerHTML = `
+                <div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> No se especificó el ticket</div>
+                <a href="mis-tickets.html" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+            `;
+        } else {
+            cargarDetalleTicket(ticketId);
+        }
+
+        function escapeHTML(texto) {
+            if (!texto) return '';
+            const div = document.createElement('div');
+            div.textContent = texto;
+            return div.innerHTML;
+        }
+
+        function formatearFecha(fecha) {
+            if (!fecha) return 'No disponible';
+            const d = new Date(fecha);
+            return d.toLocaleString('es-MX', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function calcularTiempo(fecha) {
+            if (!fecha) return 'No disponible';
+            const diff = Math.floor((new Date() - new Date(fecha)) / 1000);
+            if (diff < 60) return 'hace ' + diff + ' segundos';
+            if (diff < 3600) return 'hace ' + Math.floor(diff / 60) + ' minutos';
+            if (diff < 86400) return 'hace ' + Math.floor(diff / 3600) + ' horas';
+            return 'hace ' + Math.floor(diff / 86400) + ' días';
+        }
+
+        function getPrioridadColor(prioridad) {
+            const colors = { 'Crítica': 'danger', 'Alta': 'warning', 'Media': 'info', 'Baja': 'secondary' };
+            return colors[prioridad] || 'secondary';
+        }
+
+        async function cargarDetalleTicket(id) {
+            const container = document.getElementById('ticketContainer');
+            
+            container.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`api/tickets/detalle.php?id=${id}`);
+                
+                if (!response.ok) {
+                    if (response.status === 403) {
+                        throw new Error('No tienes permiso para ver este ticket');
+                    }
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                
+                const ticket = await response.json();
+                
+                if (ticket.error) {
+                    container.innerHTML = `
+                        <div class="alert alert-danger">${escapeHTML(ticket.error)}</div>
+                        <a href="mis-tickets.html" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+                    `;
+                    return;
+                }
+
+                const historialResponse = await fetch(`api/tickets/historial.php?id=${id}`);
+                const historial = await historialResponse.json();
+
+                const comentariosResponse = await fetch(`api/comentarios/listar.php?id=${id}`);
+                const comentarios = await comentariosResponse.json();
+
+                renderizarDetalle(ticket, historial, comentarios);
+
+            } catch (error) {
+                console.error('Error al cargar ticket:', error);
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        ${escapeHTML(error.message)}
+                    </div>
+                    <a href="mis-tickets.html" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+                `;
+            }
+        }
+
+        function renderizarDetalle(ticket, historial, comentarios) {
+            const container = document.getElementById('ticketContainer');
+
+            const estadoColors = { 'Abierto': 'warning', 'En proceso': 'info', 'En espera': 'secondary', 'Cerrado': 'success', 'Expirado': 'danger' };
+            const estadoColor = estadoColors[ticket.estado_nombre] || 'secondary';
+
+            const esSolicitante = ticket.Id_usuario == usuario.id;
+            const esTecnicoAsignado = ticket.Id_tecnico_asignado == usuario.id;
+            const tieneTecnicoAsignado = ticket.Id_tecnico_asignado !== null && ticket.Id_tecnico_asignado !== undefined;
+            const puedeEditar = esAdmin || esTecnicoAsignado;
+            const puedeTomar = esTecnico && ticket.Id_estado == 1 && !tieneTecnicoAsignado;
+
+            const prioridadOriginal = ticket.prioridad_nombre || 'Sin prioridad';
+            const prioridadConfirmada = ticket.Prioridad_confirmada || null;
+            const prioridades = ['Baja', 'Media', 'Alta', 'Crítica'];
+            const prioridadYaConfirmada = prioridadConfirmada !== null;
+
+            container.innerHTML = `
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card shadow mb-3">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="bi bi-ticket"></i> ${escapeHTML(ticket.Titulo)}</h5>
+                                <span class="badge bg-${estadoColor} badge-estado">${escapeHTML(ticket.estado_nombre || 'Sin estado')}</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="info-label">Folio</div>
+                                        <div class="info-value">${escapeHTML(ticket.Folio)}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="info-label">Fecha creación</div>
+                                        <div class="info-value">${formatearFecha(ticket.Fecha_creacion)}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="info-label">Tiempo</div>
+                                        <div class="info-value">${calcularTiempo(ticket.Fecha_creacion)}</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="info-label">Categoría</div>
+                                        <div class="info-value"><span class="badge bg-secondary">${escapeHTML(ticket.categoria_nombre || 'Sin categoría')}</span></div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="info-label">Prioridades</div>
+                                        <div class="info-value">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="prioridad-item prioridad-fija">
+                                                        <div class="prioridad-icon">
+                                                            <i class="bi bi-person"></i>
+                                                        </div>
+                                                        <div class="prioridad-contenido">
+                                                            <div class="prioridad-etiqueta">
+                                                                Prioridad del solicitante
+                                                                <span class="badge bg-danger ms-2">Fija</span>
+                                                            </div>
+                                                            <div class="prioridad-valor">
+                                                                <span class="badge bg-${getPrioridadColor(prioridadOriginal)} badge-prioridad">
+                                                                    <i class="bi bi-lock-fill"></i> ${escapeHTML(prioridadOriginal)}
+                                                                </span>
+                                                            </div>
+                                                            <div class="prioridad-descripcion">
+                                                                <i class="bi bi-info-circle"></i> Seleccionada al crear el ticket
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="prioridad-item ${prioridadYaConfirmada ? 'prioridad-confirmada' : 'prioridad-pendiente'}">
+                                                        <div class="prioridad-icon">
+                                                            <i class="bi bi-tools"></i>
+                                                        </div>
+                                                        <div class="prioridad-contenido">
+                                                            <div class="prioridad-etiqueta">
+                                                                Prioridad confirmada por TI
+                                                                ${prioridadYaConfirmada ? 
+                                                                    '<span class="badge bg-success ms-2">Confirmada</span>' : 
+                                                                    '<span class="badge bg-warning ms-2">Pendiente</span>'
+                                                                }
+                                                            </div>
+                                                            <div class="prioridad-valor">
+                                                                ${prioridadYaConfirmada ? 
+                                                                    `<span class="badge bg-${getPrioridadColor(prioridadConfirmada)} badge-prioridad">
+                                                                        <i class="bi bi-check-circle-fill"></i> ${escapeHTML(prioridadConfirmada)}
+                                                                    </span>` : 
+                                                                    '<span class="text-muted" style="font-size: 16px;">Esperando confirmación</span>'
+                                                                }
+                                                            </div>
+                                                            <div class="prioridad-descripcion">
+                                                                <i class="bi bi-info-circle"></i> 
+                                                                ${prioridadYaConfirmada ? 
+                                                                    'Asignada por el técnico' : 
+                                                                    'El técnico debe confirmar'
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="info-label">Solicitante</div>
+                                        <div class="info-value">${escapeHTML(ticket.usuario_nombre || '')} ${escapeHTML(ticket.usuario_apellido || '')}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-label">Técnico asignado</div>
+                                        <div class="info-value">${ticket.tecnico_nombre ? escapeHTML(ticket.tecnico_nombre) : '<span class="text-muted">Sin asignar</span>'}</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="info-label">Vencimiento</div>
+                                        <div class="info-value">${formatearFecha(ticket.Fecha_vencimiento)}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-label">Tiempo extendido</div>
+                                        <div class="info-value">${ticket.Tiempo_extendido ? ticket.Tiempo_extendido + ' horas' : 'Sin extensiones'}</div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="info-label">Descripción</div>
+                                <div class="descripcion-box">${escapeHTML(ticket.Descripcion)}</div>
+                                ${ticket.Descripcion_solucion ? `
+                                    <hr>
+                                    <div class="info-label">Solución</div>
+                                    <div class="solucion-box">
+                                        <i class="bi bi-check-circle-fill text-success"></i> 
+                                        ${escapeHTML(ticket.Descripcion_solucion)}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <div class="card shadow mb-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="bi bi-clock-history"></i> Historial</h6>
+                            </div>
+                            <div class="card-body">${renderizarHistorial(historial)}</div>
+                        </div>
+
+                        ${esTecnico ? `
+                            <div class="card shadow">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="bi bi-chat"></i> Comentarios</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="comentariosContainer">${renderizarComentarios(comentarios)}</div>
+                                    <hr>
+                                    <form id="formComentario">
+                                        <input type="hidden" id="ticket_id" value="${ticket.Id_ticket}">
+                                        <div class="mb-2">
+                                            <label class="form-label">Agregar comentario</label>
+                                            <textarea id="comentario" class="form-control" rows="3" 
+                                                      placeholder="Escribe un comentario..." required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="bi bi-send"></i> Enviar comentario
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="card shadow">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="bi bi-chat"></i> Comentarios</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="comentariosContainer">${renderizarComentarios(comentarios)}</div>
+                                    <div class="alert alert-info mt-2">
+                                        <i class="bi bi-info-circle"></i> Los comentarios son visibles solo para técnicos y administradores.
+                                    </div>
+                                </div>
+                            </div>
+                        `}
+
+                        <div class="card shadow mt-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="bi bi-paperclip"></i> Archivos adjuntos</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="archivosContainer">
+                                    <div class="text-center text-muted">Cargando archivos...</div>
+                                </div>
+                                ${esTecnico ? `
+                                    <hr>
+                                    <form id="formSubirArchivo" enctype="multipart/form-data">
+                                        <input type="hidden" id="ticket_id_archivo" value="${ticket.Id_ticket}">
+                                        <div class="mb-2">
+                                            <label class="form-label">Subir archivo</label>
+                                            <div class="drop-zone" id="dropZoneArchivo">
+                                                <div class="text-center py-3">
+                                                    <i class="bi bi-cloud-upload" style="font-size: 2rem; color: #6c757d;"></i>
+                                                    <p class="mt-1">Arrastra un archivo o haz click para seleccionar</p>
+                                                    <small class="text-muted">
+                                                        <strong>Formatos permitidos:</strong> PDF, JPG, JPEG, PNG<br>
+                                                        <strong>Tamaño máximo:</strong> 5 MB
+                                                    </small>
+                                                    <input type="file" id="archivoInput" class="d-none" 
+                                                           accept=".pdf,.jpg,.jpeg,.png">
+                                                </div>
+                                            </div>
+                                            <div id="progressBar" class="progress mt-2" style="display:none;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                                     role="progressbar" style="width: 0%">0%</div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm" id="btnSubirArchivo">
+                                            <i class="bi bi-upload"></i> Subir archivo
+                                        </button>
+                                    </form>
+                                ` : `
+                                    <div class="alert alert-info mt-2">
+                                        <i class="bi bi-info-circle"></i> Solo técnicos y administradores pueden subir archivos.
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="bi bi-gear"></i> Acciones</h6>
+                            </div>
+                            <div class="card-body">
+                                ${puedeTomar ? `
+                                    <div class="accion-card bg-success bg-opacity-10 border border-success">
+                                        <button class="btn btn-success w-100" onclick="abrirModalTomar(${ticket.Id_ticket})">
+                                            <i class="bi bi-hand-index"></i> Tomar ticket
+                                        </button>
+                                        <small class="text-muted d-block mt-1">Este ticket está disponible en el pool</small>
+                                    </div>
+                                ` : ''}
+
+                                ${esTecnico && !prioridadYaConfirmada ? `
+                                    <div class="accion-card bg-warning bg-opacity-10 border border-warning">
+                                        <label class="form-label fw-bold">
+                                            <i class="bi bi-check-circle"></i> Confirmar prioridad
+                                            <span class="text-muted small">(El técnico asigna la prioridad)</span>
+                                        </label>
+                                        <select class="form-select" id="selectPrioridad" onchange="abrirModalPrioridad(this.value, ${ticket.Id_ticket})">
+                                            <option value="">Seleccionar prioridad a confirmar</option>
+                                            ${prioridades.map(p => `
+                                                <option value="${p}" ${prioridadConfirmada === p ? 'selected' : ''}>${p}</option>
+                                            `).join('')}
+                                        </select>
+                                        <small class="text-muted d-block mt-1">
+                                            Una vez confirmada, la prioridad no podrá cambiarse.
+                                        </small>
+                                    </div>
+                                ` : ''}
+
+                                ${esTecnico && prioridadYaConfirmada ? `
+                                    <div class="accion-card bg-success bg-opacity-10 border border-success">
+                                        <div class="text-center">
+                                            <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+                                            <h6 class="mt-2">Prioridad ya confirmada</h6>
+                                            <p class="text-muted small">Confirmada como <strong>${escapeHTML(prioridadConfirmada)}</strong></p>
+                                            <p class="text-danger small"><strong>No se puede volver a cambiar</strong></p>
+                                        </div>
+                                    </div>
+                                ` : ''}
+
+                                ${puedeEditar && tieneTecnicoAsignado ? `
+                                    <div class="accion-card">
+                                        <label class="form-label fw-bold">Cambiar estado</label>
+                                        <div class="d-grid gap-2">
+                                            ${ticket.Id_estado != 2 && ticket.Id_estado != 4 ? `
+                                                <button class="btn btn-warning" onclick="cambiarEstado(${ticket.Id_ticket}, 2)">
+                                                    <i class="bi bi-arrow-right"></i> En proceso
+                                                </button>
+                                            ` : ''}
+                                            ${ticket.Id_estado != 3 && ticket.Id_estado != 4 ? `
+                                                <button class="btn btn-secondary" onclick="cambiarEstado(${ticket.Id_ticket}, 3)">
+                                                    <i class="bi bi-pause-circle"></i> En espera
+                                                </button>
+                                            ` : ''}
+                                            ${ticket.Id_estado != 4 ? `
+                                                <button class="btn btn-success" onclick="cambiarEstado(${ticket.Id_ticket}, 4)">
+                                                    <i class="bi bi-check-circle"></i> Cerrar ticket
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                ` : ''}
+
+                                ${ticket.Id_estado == 4 && esSolicitante ? `
+                                    <hr>
+                                    <button class="btn btn-warning w-100" onclick="reabrirTicket(${ticket.Id_ticket})">
+                                        <i class="bi bi-arrow-counterclockwise"></i> Reabrir ticket
+                                    </button>
+                                    <small class="text-muted d-block mt-1">El ticket volverá a la pool</small>
+                                ` : ''}
+
+                                ${ticket.Id_estado == 4 && esSolicitante && ticket.Id_encuesta ? `
+                                    <hr>
+                                    <a href="encuesta.html?id=${ticket.Id_ticket}" class="btn btn-success w-100">
+                                        <i class="bi bi-clipboard-check"></i> Responder encuesta
+                                    </a>
+                                    <small class="text-muted d-block mt-1">Tu opinión nos ayuda a mejorar</small>
+                                ` : ''}
+
+                                ${puedeEditar && tieneTecnicoAsignado && [2, 3].includes(ticket.Id_estado) ? `
+                                    <hr>
+                                    <form id="formExtenderTiempo">
+                                        <input type="hidden" id="ticket_id_extender" value="${ticket.Id_ticket}">
+                                        <div class="mb-2">
+                                            <label class="form-label fw-bold">Extender tiempo</label>
+                                            <div class="input-group">
+                                                <input type="number" id="horas_extender" class="form-control" min="1" max="168" value="4">
+                                                <span class="input-group-text">horas</span>
+                                            </div>
+                                            <small class="text-muted">Máximo 168 horas (7 días)</small>
+                                        </div>
+                                        <button type="submit" class="btn btn-info w-100">
+                                            <i class="bi bi-clock-history"></i> Extender tiempo
+                                        </button>
+                                    </form>
+                                ` : ''}
+
+                                <hr>
+                                <a href="mis-tickets.html" class="btn btn-secondary w-100">
+                                    <i class="bi bi-arrow-left"></i> Volver
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card shadow mt-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="bi bi-info-circle"></i> Información</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled small">
+                                    <li><strong>Creado por:</strong> ${escapeHTML(ticket.usuario_nombre || '')} ${escapeHTML(ticket.usuario_apellido || '')}</li>
+                                    <li><strong>Email:</strong> ${escapeHTML(ticket.usuario_correo || 'No disponible')}</li>
+                                    <li><strong>No. empleado:</strong> ${escapeHTML(ticket.usuario_empleado || 'No disponible')}</li>
+                                    ${ticket.tecnico_nombre ? `
+                                        <li><strong>Técnico:</strong> ${escapeHTML(ticket.tecnico_nombre)} ${escapeHTML(ticket.tecnico_apellido || '')}</li>
+                                        <li><strong>Email técnico:</strong> ${escapeHTML(ticket.tecnico_correo || 'No disponible')}</li>
+                                    ` : ''}
+                                    ${ticket.Reabierto ? `
+                                        <li class="text-warning"><strong>Reabierto:</strong> ${formatearFecha(ticket.Fecha_reabierto)}</li>
+                                    ` : ''}
+                                    ${ticket.Tiempo_extendido ? `
+                                        <li><strong>Tiempo extendido:</strong> ${ticket.Tiempo_extendido} horas</li>
+                                    ` : ''}
+                                    ${prioridadYaConfirmada ? `
+                                        <li class="text-success"><strong>Prioridad confirmada:</strong> ${escapeHTML(prioridadConfirmada)}</li>
+                                    ` : ''}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            cargarArchivos(ticket.Id_ticket);
+
+            const formComentario = document.getElementById('formComentario');
+            if (formComentario) {
+                formComentario.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await agregarComentario(ticket.Id_ticket);
+                });
+            }
+
+            const formArchivo = document.getElementById('formSubirArchivo');
+            if (formArchivo) {
+                inicializarSubidaArchivos();
+            }
+
+            const formExtender = document.getElementById('formExtenderTiempo');
+            if (formExtender) {
+                formExtender.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await extenderTiempo(ticket.Id_ticket);
+                });
+            }
+        }
+
+        function renderizarHistorial(historial) {
+            if (!historial || historial.length === 0) {
+                return '<div class="text-center text-muted">No hay historial</div>';
+            }
+            return historial.map(h => `
+                <div class="timeline-item">
+                    <div class="d-flex justify-content-between">
+                        <span>
+                            <strong>${escapeHTML(h.Estado_anterior || 'N/A')}</strong> 
+                            <i class="bi bi-arrow-right"></i> 
+                            <strong>${escapeHTML(h.Estado_nuevo || 'N/A')}</strong>
+                        </span>
+                        <small class="text-muted">${formatearFecha(h.Fecha_cambio)}</small>
+                    </div>
+                    <small class="text-muted">
+                        <i class="bi bi-person"></i> 
+                        ${escapeHTML(h.usuario_nombre || '')} ${escapeHTML(h.usuario_apellido || 'Sistema')}
+                    </small>
+                </div>
+            `).join('');
+        }
+
+        function renderizarComentarios(comentarios) {
+            if (!comentarios || comentarios.length === 0) {
+                return '<div class="text-center text-muted">No hay comentarios</div>';
+            }
+            return comentarios.map(c => `
+                <div class="comentario-item">
+                    <div class="d-flex justify-content-between">
+                        <span class="usuario">
+                            <i class="bi bi-person-circle"></i> 
+                            ${escapeHTML(c.usuario_nombre || '')} ${escapeHTML(c.usuario_apellido || 'Usuario')}
+                            <small class="text-muted">(${escapeHTML(c.usuario_empleado || '')})</small>
+                        </span>
+                        <span class="fecha">${formatearFecha(c.Fecha_registro)}</span>
+                    </div>
+                    <div class="contenido">${escapeHTML(c.Contenido)}</div>
+                </div>
+            `).join('');
+        }
+
+        async function cargarArchivos(idTicket) {
+            try {
+                const response = await fetch(`api/upload/listar.php?id=${idTicket}`);
+                const archivos = await response.json();
+                const container = document.getElementById('archivosContainer');
+                
+                if (archivos.error || archivos.length === 0) {
+                    container.innerHTML = '<div class="text-center text-muted">No hay archivos adjuntos</div>';
+                    return;
+                }
+                
+                container.innerHTML = archivos.map(a => `
+                    <div class="archivo-item d-flex justify-content-between align-items-center p-2 mb-2 bg-light rounded">
+                        <div>
+                            <i class="bi bi-file-earmark"></i>
+                            <span class="fw-bold">${escapeHTML(a.Nombre_original)}</span>
+                            <small class="text-muted ms-2">(${(a.Tamanio_bytes / 1024).toFixed(1)} KB)</small>
+                            <br><small class="text-muted">Subido: ${formatearFecha(a.Fecha_carga)}</small>
+                        </div>
+                        <div>
+                            <a href="api/upload/descargar.php?id=${a.Id_archivo}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                <i class="bi bi-download"></i> Descargar
+                            </a>
+                            <span class="badge bg-secondary ms-1">Archivo</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error al cargar archivos:', error);
+                document.getElementById('archivosContainer').innerHTML = 
+                    '<div class="alert alert-danger">Error al cargar archivos</div>';
+            }
+        }
+
+        function inicializarSubidaArchivos() {
+            const form = document.getElementById('formSubirArchivo');
+            const dropZone = document.getElementById('dropZoneArchivo');
+            const fileInput = document.getElementById('archivoInput');
+            const progressBar = document.getElementById('progressBar');
+            const progressBarInner = progressBar.querySelector('.progress-bar');
+            const btnSubir = document.getElementById('btnSubirArchivo');
+
+            if (!form || !dropZone) return;
+
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    form.dispatchEvent(new Event('submit'));
+                }
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const file = fileInput.files[0];
+                if (!file) { 
+                    alert('Selecciona un archivo primero'); 
+                    return; 
+                }
+
+                const MAX_SIZE = 5 * 1024 * 1024;
+                if (file.size > MAX_SIZE) {
+                    alert('El archivo excede el límite de 5 MB. Tamaño actual: ' + (file.size / 1024 / 1024).toFixed(2) + ' MB');
+                    fileInput.value = '';
+                    return;
+                }
+
+                const tiposPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
+                const extensionesPermitidas = ['.pdf', '.jpg', '.jpeg', '.png'];
+                if (!tiposPermitidos.includes(file.type)) {
+                    const extension = '.' + file.name.split('.').pop().toLowerCase();
+                    if (!extensionesPermitidas.includes(extension)) {
+                        alert('Formato no permitido. Solo se aceptan: PDF, JPG, JPEG, PNG');
+                        fileInput.value = '';
+                        return;
+                    }
+                }
+
+                const ticketId = document.getElementById('ticket_id_archivo').value;
+                if (!ticketId) { 
+                    alert('Error: No se encontró el ID del ticket'); 
+                    return; 
+                }
+
+                progressBar.style.display = 'block';
+                progressBarInner.style.width = '0%';
+                progressBarInner.textContent = '0%';
+                btnSubir.disabled = true;
+
+                const formData = new FormData();
+                formData.append('archivo', file);
+                formData.append('id_ticket', ticketId);
+
+                try {
+                    const xhr = new XMLHttpRequest();
+                    xhr.upload.addEventListener('progress', (e) => {
+                        if (e.lengthComputable) {
+                            const percent = Math.round((e.loaded / e.total) * 100);
+                            progressBarInner.style.width = percent + '%';
+                            progressBarInner.textContent = percent + '%';
+                        }
+                    });
+                    xhr.onload = () => {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                alert('Archivo subido exitosamente');
+                                fileInput.value = '';
+                                progressBar.style.display = 'none';
+                                btnSubir.disabled = false;
+                                cargarArchivos(parseInt(ticketId));
+                            } else {
+                                alert('Error: ' + (response.error || 'Error desconocido'));
+                            }
+                        } catch (parseError) {
+                            console.error('Error al parsear respuesta:', xhr.responseText);
+                            alert('Error en el servidor');
+                        }
+                        btnSubir.disabled = false;
+                    };
+                    xhr.onerror = () => { 
+                        alert('Error de conexión'); 
+                        btnSubir.disabled = false; 
+                    };
+                    xhr.open('POST', 'api/upload/subir.php');
+                    xhr.send(formData);
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error al subir el archivo');
+                    btnSubir.disabled = false;
+                }
+            });
+        }
+
+        async function agregarComentario(idTicket) {
+            const comentario = document.getElementById('comentario').value.trim();
+            if (!comentario) { 
+                alert('Escribe un comentario'); 
+                return; 
+            }
+
+            try {
+                const response = await fetch('api/comentarios/agregar.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_ticket: idTicket, contenido: comentario })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('comentario').value = '';
+                    const comentariosResponse = await fetch(`api/comentarios/listar.php?id=${idTicket}`);
+                    const comentarios = await comentariosResponse.json();
+                    document.getElementById('comentariosContainer').innerHTML = renderizarComentarios(comentarios);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al enviar el comentario');
+            }
+        }
+
+        function abrirModalTomar(idTicket) {
+            document.getElementById('modalTicketId').value = idTicket;
+            const modal = new bootstrap.Modal(document.getElementById('modalTomarTicket'));
+            modal.show();
+        }
+
+        async function confirmarTomarTicket() {
+            const id = document.getElementById('modalTicketId').value;
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalTomarTicket'));
+            modal.hide();
+
+            try {
+                const response = await fetch('api/tickets/tomar.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_ticket: parseInt(id) })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.mensaje);
+                    cargarDetalleTicket(id);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al tomar el ticket');
+            }
+        }
+
+        function abrirModalPrioridad(prioridad, idTicket) {
+            if (!prioridad) return;
+            document.getElementById('modalPrioridadNombre').textContent = prioridad;
+            document.getElementById('modalPrioridadTicketId').value = idTicket;
+            document.getElementById('modalPrioridadValor').value = prioridad;
+            const modal = new bootstrap.Modal(document.getElementById('modalConfirmarPrioridad'));
+            modal.show();
+            document.getElementById('selectPrioridad').value = '';
+        }
+
+        async function confirmarPrioridad() {
+            const id = document.getElementById('modalPrioridadTicketId').value;
+            const prioridad = document.getElementById('modalPrioridadValor').value;
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmarPrioridad'));
+            modal.hide();
+
+            try {
+                const response = await fetch('api/tickets/cambiar_prioridad.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id_ticket: parseInt(id),
+                        prioridad: prioridad
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Prioridad confirmada exitosamente');
+                    cargarDetalleTicket(id);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al confirmar la prioridad');
+            }
+        }
+
+        async function cambiarEstado(id, estado) {
+            const estados = { 1: 'Abierto', 2: 'En proceso', 3: 'En espera', 4: 'Cerrado', 5: 'Expirado' };
+            
+            let descripcion_solucion = null;
+            if (estado == 4) {
+                descripcion_solucion = prompt('Registra la solución del ticket:');
+                if (descripcion_solucion === null) return;
+                if (descripcion_solucion.trim() === '') {
+                    alert('Debes registrar una solución para cerrar el ticket');
+                    return;
+                }
+            }
+            
+            if (!confirm('¿Estás seguro de cambiar el estado a "' + (estados[estado] || estado) + '"?')) return;
+
+            try {
+                const body = { id: id, estado: estado };
+                if (descripcion_solucion) body.descripcion_solucion = descripcion_solucion;
+                
+                const response = await fetch('api/tickets/actualizar.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.mensaje);
+                    cargarDetalleTicket(id);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al cambiar el estado');
+            }
+        }
+
+        async function reabrirTicket(id) {
+            const motivo = prompt('¿Por qué quieres reabrir el ticket? (Opcional)');
+            if (motivo === null) return;
+            if (!confirm('¿Estás seguro de reabrir este ticket? Volverá a la pool.')) return;
+
+            try {
+                const response = await fetch('api/tickets/reabrir.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_ticket: id, motivo: motivo || 'Reabierto por el usuario' })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.mensaje);
+                    window.location.href = 'mis-tickets.html';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al reabrir el ticket');
+            }
+        }
+
+        async function extenderTiempo(idTicket) {
+            const horas = document.getElementById('horas_extender').value;
+            if (!horas || horas <= 0) { 
+                alert('Ingresa un número de horas válido'); 
+                return; 
+            }
+            if (!confirm('¿Extender el tiempo de solución por ' + horas + ' horas?')) return;
+
+            try {
+                const response = await fetch('api/tickets/extender.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_ticket: parseInt(idTicket), horas: parseInt(horas) })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.mensaje);
+                    cargarDetalleTicket(idTicket);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al extender el tiempo');
+            }
+        }
+
+        function cerrarSesion() {
+            sessionStorage.removeItem('usuario');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
