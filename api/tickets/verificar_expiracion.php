@@ -36,7 +36,7 @@ function verificarTicketsExpirados() {
     $expirados = $stmt->fetchAll();
     
     foreach ($expirados as $ticket) {
-        // Volver a pool
+        // pool
         $stmt = $pdo->prepare("UPDATE Ticket SET Id_estado = 1, Id_tecnico_asignado = NULL 
                               WHERE Id_ticket = ?");
         $stmt->execute([$ticket['Id_ticket']]);

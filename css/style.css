@@ -6,7 +6,6 @@ html, body {
     overflow-x: hidden;
 }
 
-/* Estilo para que la imagen abarque toda la pantalla de fondo */
 .bg-image {
     position: fixed;
     top: 0;
@@ -17,7 +16,6 @@ html, body {
     z-index: -1;
 }
 
-/* Tarjeta flotante de login */
 .card-login {
     border-radius: 20px !important;
     max-width: 480px;
@@ -26,7 +24,6 @@ html, body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Estilos de los inputs con íconos */
 .custom-input-group .form-control,
 .custom-input-group .input-group-text,
 .custom-input-group .btn {
@@ -40,7 +37,6 @@ html, body {
     border-color: #495057;
 }
 
-/* Botón Guinda / Vino institucional */
 .btn-custom-red {
     background-color: #802320 !important;
     color: #ffffff !important;

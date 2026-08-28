@@ -132,7 +132,7 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <span class="navbar-brand">Todos los Tickets - Admin</span>
+            <span class="navbar-brand"><i class="bi bi-grid"></i> Todos los Tickets - Admin</span>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3" id="usuarioNombre">Admin</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
@@ -149,7 +149,7 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="../dashboard.html">
+                            <a class="nav-link" href="dashboard-admin.html">
                                 <i class="bi bi-speedometer2"></i> Dashboard
                             </a>
                         </li>
@@ -213,9 +213,9 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <button class="btn btn-success w-100" onclick="exportarExcel()">
+                            <a href="../api/exportar/excel.php" class="btn btn-success w-100" target="_blank">
                                 <i class="bi bi-file-excel"></i> Exportar Excel
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -310,7 +310,7 @@
 
         async function cargarTickets() {
             const tbody = document.getElementById('ticketsTableBody');
-            tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4"><div class="spinner-border text-primary"></div></td></tr>`;
+            tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4"><div class="spinner-border text-primary"></div></td></tr>';
 
             try {
                 const estado = document.getElementById('filtroEstado').value;
@@ -328,12 +328,12 @@
                 const tickets = await response.json();
 
                 if (tickets.error || !Array.isArray(tickets)) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>`;
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>';
                     return;
                 }
 
                 if (tickets.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">No hay tickets</td></tr>`;
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">No hay tickets</td></tr>';
                     return;
                 }
 
@@ -371,12 +371,8 @@
 
             } catch (e) {
                 console.error('Error:', e);
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>`;
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>';
             }
-        }
-
-        function exportarExcel() {
-            alert('idea en desarollo');
         }
 
         function cerrarSesion() {
