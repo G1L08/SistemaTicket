@@ -17,7 +17,6 @@
             overflow: hidden;
         }
 
-        /* Imagen al 100% de alto y ancho, fija al fondo */
         .bg-image {
             position: fixed;
             top: 0;
@@ -28,13 +27,11 @@
             z-index: 1;
         }
 
-        /* Contenedor del login superpuesto por encima de la imagen */
         .login-overlay {
             position: relative;
             z-index: 2;
         }
 
-        /* Tarjeta flotante de login */
         .card-login {
             border-radius: 20px !important;
             max-width: 450px;
@@ -76,21 +73,17 @@
 
 <body>
 
-    <!-- Imagen de fondo que ocupa toda la pantalla -->
     <img src="assets/img/dar.png" alt="Fondo" class="bg-image">
 
-    <!-- Capa del formulario sobre la imagen -->
     <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100 login-overlay">
         
-        <!-- Tarjeta de Login -->
         <div class="card card-login shadow-lg border-0">
             <div class="card-body p-4 p-md-5">
                 
-                <h2 class="card-title text-black fw-bold mb-0">Iniciar sesión</h2>
+                <h2 class="card-title text-black fw-bold mb-0">Iniciar sesion</h2>
                 <p class="text-secondary fs-5 mb-4">Sistema de Tickets - DAR TI</p>
 
                 <form id="loginForm">
-                    <!-- Campo No. de empleado -->
                     <div class="mb-3">
                         <label class="form-label text-dark fs-5 fw-normal">No. de empleado</label>
                         <div class="input-group custom-input-group">
@@ -101,7 +94,6 @@
                         </div>
                     </div>
 
-                    <!-- Campo Contraseña -->
                     <div class="mb-4">
                         <label class="form-label text-dark fs-5 fw-normal">Contraseña</label>
                         <div class="input-group custom-input-group">
@@ -115,9 +107,8 @@
                         </div>
                     </div>
 
-                    <!-- Botón de Inicio de Sesión -->
                     <button type="submit" class="btn btn-custom-red w-100 py-2 fw-bold fs-5">
-                        Iniciar sesión
+                        Iniciar sesion
                     </button>
                 </form>
 

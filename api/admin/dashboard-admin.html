@@ -9,24 +9,78 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .sidebar .nav-link.active { background-color: #0d6efd; color: white; }
-        .stat-card { border-radius: 12px; padding: 20px; color: white; transition: all 0.3s; cursor: pointer; }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-        .stat-card .icon { font-size: 2.5rem; opacity: 0.5; }
-        .stat-card .number { font-size: 2.5rem; font-weight: bold; }
-        .stat-card .label { font-size: 0.9rem; opacity: 0.8; }
-        .bg-gradient-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .bg-gradient-success { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #333; }
-        .bg-gradient-warning { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #333; }
-        .bg-gradient-danger { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .bg-gradient-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        .chart-container { position: relative; height: 300px; }
-        .ticket-item { padding: 12px; border-bottom: 1px solid #f0f2f5; transition: all 0.2s; }
-        .ticket-item:hover { background: #f8f9fa; }
-        .ticket-item:last-child { border-bottom: none; }
-        .alert-item { border-left: 4px solid #ffc107; padding: 10px 15px; margin-bottom: 8px; background: #fff; border-radius: 8px; }
-        .alert-item.critical { border-left-color: #dc3545; }
-        .alert-item.warning { border-left-color: #ffc107; }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd; 
+            color: white; 
+        }
+        .stat-card { 
+            border-radius: 12px; 
+            padding: 20px; 
+            color: white; 
+            transition: all 0.3s; 
+            cursor: pointer; 
+        }
+        .stat-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+        }
+        .stat-card .icon { 
+            font-size: 2.5rem; 
+            opacity: 0.5; 
+        }
+        .stat-card .number { 
+            font-size: 2.5rem; 
+            font-weight: bold; 
+        }
+        .stat-card .label { 
+            font-size: 0.9rem; 
+            opacity: 0.8; 
+        }
+        .bg-gradient-primary { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+        }
+        .bg-gradient-success { 
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); 
+            color: #333; 
+        }
+        .bg-gradient-warning { 
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); 
+            color: #333; 
+        }
+        .bg-gradient-danger { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+        }
+        .bg-gradient-info { 
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+        }
+        .chart-container { 
+            position: relative; 
+            height: 300px; 
+        }
+        .ticket-item { 
+            padding: 12px; 
+            border-bottom: 1px solid #f0f2f5; 
+            transition: all 0.2s; 
+        }
+        .ticket-item:hover { 
+            background: #f8f9fa; 
+        }
+        .ticket-item:last-child { 
+            border-bottom: none; 
+        }
+        .alert-item { 
+            border-left: 4px solid #ffc107; 
+            padding: 10px 15px; 
+            margin-bottom: 8px; 
+            background: #fff; 
+            border-radius: 8px; 
+        }
+        .alert-item.critical { 
+            border-left-color: #dc3545; 
+        }
+        .alert-item.warning { 
+            border-left-color: #ffc107; 
+        }
     </style>
 </head>
 <body>

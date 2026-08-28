@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const noEmpleado = document.getElementById('noEmpleado').value;
         const password = document.getElementById('password').value;
         
+        const btn = document.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Cargando...';
+        btn.disabled = true;
+        
         try {
             const response = await fetch(API_URL + 'auth/login.php', {
                 method: 'POST',
@@ -20,16 +25,26 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const data = await response.json();
             
+            if (data.error === 'usuario_inactivo') {
+                mostrarError('Su cuenta esta inactiva. Por favor, comuniquese con el departamento de TI.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
+            }
+            
             if (data.success) {
                 sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
                 window.location.href = 'dashboard.html';
             } else {
-                mostrarError(data.error || 'Credenciales inválidas');
+                mostrarError(data.error || 'Credenciales invalidas');
             }
         } catch (error) {
-            mostrarError('Error de conexión al servidor');
+            mostrarError('Error de conexion al servidor');
             console.error(error);
         }
+        
+        btn.innerHTML = originalText;
+        btn.disabled = false;
     });
 });
 

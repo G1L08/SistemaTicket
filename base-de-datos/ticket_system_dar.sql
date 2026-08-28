@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-08-2026 a las 19:07:55
+-- Tiempo de generación: 28-08-2026 a las 19:43:04
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -129,7 +129,8 @@ INSERT INTO `comentario` (`Id_comentario`, `Id_ticket`, `Id_usuario`, `Contenido
 (6, 2, 3, '🔄 Ticket reabierto. Motivo: Prueba', 0, '2026-08-23 18:41:43'),
 (7, 7, 3, 'entra y toma cap', 0, '2026-08-24 09:22:27'),
 (8, 7, 3, 'ejecuta x comando en cmd  y te adjunto evidencia', 0, '2026-08-24 09:22:46'),
-(9, 7, 1, '🔄 Ticket reabierto. Motivo: Cuando la volvi a prender volvio a fallar', 0, '2026-08-24 09:26:39');
+(9, 7, 1, '🔄 Ticket reabierto. Motivo: Cuando la volvi a prender volvio a fallar', 0, '2026-08-24 09:26:39'),
+(10, 4, 1, 'Holaa', 0, '2026-08-26 13:57:15');
 
 -- --------------------------------------------------------
 
@@ -162,7 +163,8 @@ CREATE TABLE `encuestasatisfaccion` (
 INSERT INTO `encuestasatisfaccion` (`Id_encuesta`, `Id_ticket`, `Calificacion_respeto`, `Calificacion_tiempo`, `Calificacion_conocimiento`, `Informado`, `Calificacion_archivos`, `Calificacion_facilidad`, `Contacto_externo`, `Interacciones`, `Comentarios`, `Fecha_respuesta`, `Respondida`, `Fecha_cierre`, `Fecha_envio`) VALUES
 (1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-23 04:57:02', 0, '2026-09-07 05:08:34', '2026-08-23 05:08:34'),
 (2, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-23 18:41:08', 0, NULL, '2026-08-23 18:41:08'),
-(3, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-24 09:24:43', 0, NULL, '2026-08-24 09:24:43');
+(3, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-24 09:24:43', 0, NULL, '2026-08-24 09:24:43'),
+(4, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-26 14:00:31', 0, NULL, '2026-08-26 14:00:31');
 
 -- --------------------------------------------------------
 
@@ -238,7 +240,11 @@ INSERT INTO `historialticket` (`Id_historial`, `Id_ticket`, `Estado_anterior`, `
 (29, 7, 'Abierto', 'En proceso', 3, '2026-08-24 09:22:00'),
 (30, 7, 'En proceso', 'Extendido +123h', 1, '2026-08-24 09:24:06'),
 (31, 7, 'En proceso', 'Cerrado', 1, '2026-08-24 09:24:42'),
-(32, 7, 'Cerrado', 'Reabierto - Pool', 1, '2026-08-24 09:26:39');
+(32, 7, 'Cerrado', 'Reabierto - Pool', 1, '2026-08-24 09:26:39'),
+(33, 6, 'Abierto', 'En proceso', 3, '2026-08-26 13:45:51'),
+(34, 7, 'Abierto', 'En proceso', 3, '2026-08-26 13:46:21'),
+(35, 4, 'Abierto', 'En proceso', 1, '2026-08-26 14:00:21'),
+(36, 4, 'En proceso', 'Cerrado', 1, '2026-08-26 14:00:31');
 
 -- --------------------------------------------------------
 
@@ -337,10 +343,10 @@ INSERT INTO `ticket` (`Id_ticket`, `Folio`, `Titulo`, `Descripcion`, `Id_usuario
 (1, 'TKT-2026-85796', 'Prueba del titulo', 'Sistema afectado: Plataforma garza\n\nPrueba de detalles', 1, 2, 1, 2, 3, '2026-08-22 23:33:53', '2026-08-23 05:51:46', '2026-08-25 07:33:53', 'Preuba de tiempo', NULL, 1, NULL, NULL, 1, '2026-08-23 05:51:26'),
 (2, 'TKT-2026-40447', 'Prueba del titulo 2', 'Sistema afectado: Plataforma garza\n\naaa', 3, 2, 2, 2, 3, '2026-08-23 04:44:30', '2026-08-23 18:41:57', '2026-08-25 12:44:30', 'Asi?', 'Media', 2, NULL, NULL, 1, '2026-08-23 18:41:43'),
 (3, 'TKT-2026-85615', 'Solo pool', 'Sistema afectado: Plataforma garza\n\ndf', 1, 2, 3, 2, 3, '2026-08-23 04:55:29', '2026-08-23 18:11:40', '2026-08-25 12:55:29', NULL, NULL, NULL, NULL, NULL, 0, NULL),
-(4, 'TKT-2026-21279', 'Prueba', 'Sistema afectado: sda\n\nada', 3, 1, 2, 9, NULL, '2026-08-23 18:42:15', '2026-08-23 18:42:31', '2026-08-26 02:42:15', NULL, 'Media', NULL, NULL, NULL, 0, NULL),
+(4, 'TKT-2026-21279', 'Prueba', 'Sistema afectado: sda\n\nada', 3, 4, 2, 9, 1, '2026-08-23 18:42:15', '2026-08-26 14:00:31', '2026-08-26 02:42:15', 'a', 'Media', 4, NULL, NULL, 0, NULL),
 (5, 'TKT-2026-07680', 'Prueba del titulo', 'Sistema afectado: Plataforma garza\n\nw', 1, 2, 1, 6, 3, '2026-08-24 01:01:44', '2026-08-24 01:13:45', '2026-08-26 09:01:44', NULL, 'Baja', NULL, NULL, NULL, 0, NULL),
-(6, 'TKT-2026-16065', 'PRIORIDADA', 'Sistema afectado: ASDA\n\nASD', 1, 1, 3, 2, NULL, '2026-08-24 01:28:57', '2026-08-24 01:32:07', '2026-08-26 09:28:57', NULL, 'Media', NULL, NULL, NULL, 0, NULL),
-(7, 'TKT-2026-38677', 'Prueba del titulo 3', 'Sistema afectado: sda\n\n123456', 1, 1, 2, 9, NULL, '2026-08-24 09:18:55', '2026-08-24 09:26:39', '2026-08-31 20:18:55', 'error en el comanpront', 'Alta', 3, 123, '2026-08-24 09:24:06', 1, '2026-08-24 09:26:39');
+(6, 'TKT-2026-16065', 'PRIORIDADA', 'Sistema afectado: ASDA\n\nASD', 1, 2, 3, 2, 3, '2026-08-24 01:28:57', '2026-08-26 13:45:51', '2026-08-26 09:28:57', NULL, 'Media', NULL, NULL, NULL, 0, NULL),
+(7, 'TKT-2026-38677', 'Prueba del titulo 3', 'Sistema afectado: sda\n\n123456', 1, 2, 2, 9, 3, '2026-08-24 09:18:55', '2026-08-26 13:46:21', '2026-08-31 20:18:55', 'error en el comanpront', 'Alta', 3, 123, '2026-08-24 09:24:06', 1, '2026-08-24 09:26:39');
 
 -- --------------------------------------------------------
 
@@ -358,18 +364,20 @@ CREATE TABLE `usuario` (
   `contraseña` varchar(255) NOT NULL,
   `Puesto` varchar(100) DEFAULT NULL,
   `estado` int(11) DEFAULT 1,
-  `Fecha_registro` datetime DEFAULT current_timestamp()
+  `Fecha_registro` datetime DEFAULT current_timestamp(),
+  `intentos_fallidos` int(11) DEFAULT 0,
+  `ultimo_intento` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`Id_usuario`, `No_empleado`, `Nombre`, `Apellido_paterno`, `Apellido_materno`, `correo`, `contraseña`, `Puesto`, `estado`, `Fecha_registro`) VALUES
-(1, 'ADMIN001', 'Administrador', 'Sistema', '', 'admin@dar.com', 'admin123', 'Administrador', 1, '2026-08-22 21:32:29'),
-(3, 'TEC001', 'Luis', 'Gómez', 'Pérez', 'luis.gomez@dar.com', 'tec123', 'Técnico de TI', 1, '2026-08-23 03:16:31'),
-(4, 'USR001', 'José', 'Ramírez', 'Martínez', 'jose.ramirez@dar.com', 'user123', 'Analista', 1, '2026-08-23 03:16:31'),
-(5, 'USR002', 'María', 'González', 'López', 'maria.gonzalez@dar.com', 'user123', 'Coordinadora', 1, '2026-08-23 03:16:31');
+INSERT INTO `usuario` (`Id_usuario`, `No_empleado`, `Nombre`, `Apellido_paterno`, `Apellido_materno`, `correo`, `contraseña`, `Puesto`, `estado`, `Fecha_registro`, `intentos_fallidos`, `ultimo_intento`) VALUES
+(1, 'ADMIN001', 'Administrador', 'Sistema', '', 'admin@dar.com', 'admin123', 'Administrador', 1, '2026-08-22 21:32:29', 0, '2026-08-26 14:51:55'),
+(3, 'TEC001', 'Luis', 'Gómez', 'Pérez', 'luis.gomez@dar.com', 'tec123', 'Técnico de TI', 1, '2026-08-23 03:16:31', 0, NULL),
+(4, 'USR001', 'José', 'Ramírez', 'Martínez', 'jose.ramirez@dar.com', 'user123', 'Analista', 1, '2026-08-23 03:16:31', 0, NULL),
+(7, 'INACTIVO01', 'Usuario', 'Inactivo', NULL, 'inactivo@dar.com', 'test123', 'Empleado', 0, '2026-08-26 14:41:51', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -390,7 +398,7 @@ INSERT INTO `usuariorol` (`Id_rol`, `Id_usuario`) VALUES
 (1, 1),
 (2, 3),
 (3, 4),
-(3, 5);
+(3, 7);
 
 --
 -- Índices para tablas volcadas
@@ -520,13 +528,13 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `comentario`
 --
 ALTER TABLE `comentario`
-  MODIFY `Id_comentario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `Id_comentario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `encuestasatisfaccion`
 --
 ALTER TABLE `encuestasatisfaccion`
-  MODIFY `Id_encuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Id_encuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `estado`
@@ -538,7 +546,7 @@ ALTER TABLE `estado`
 -- AUTO_INCREMENT de la tabla `historialticket`
 --
 ALTER TABLE `historialticket`
-  MODIFY `Id_historial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `Id_historial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `notificacion`
@@ -568,7 +576,7 @@ ALTER TABLE `ticket`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `Id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas

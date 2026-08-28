@@ -8,38 +8,105 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
+        :root {
+            --color-dar: #861f1b;
+            --color-dar-hover: #6a1815;
+            --color-dar-light: #f5e8e7;
         }
+
+        .navbar-dark.bg-dark {
+            background-color: #861f1b !important;
+        }
+        .navbar-dark .navbar-brand {
+            color: #fff !important;
+        }
+        .navbar-dark .navbar-brand:hover {
+            color: #f0d0ce !important;
+        }
+
+        .sidebar {
+            background-color: #f8f9fa !important;
+        }
+        .sidebar .nav-link {
+            color: #000 !important;
+            font-weight: 500;
+            border-radius: 8px;
+            margin: 2px 8px;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link i {
+            color: #000 !important;
+            margin-right: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #f0e8e7 !important;
+            color: #861f1b !important;
+        }
+        .sidebar .nav-link:hover i {
+            color: #861f1b !important;
+        }
+        .sidebar .nav-link.active {
+            background-color: #861f1b !important;
+            color: #fff !important;
+        }
+        .sidebar .nav-link.active i {
+            color: #fff !important;
+        }
+
         .stat-card {
             border-radius: 12px;
             padding: 20px;
-            color: white;
+            background: transparent !important;
+            border: 2px solid #dee2e6;
             transition: all 0.3s;
             cursor: pointer;
+            color: #333 !important;
         }
         .stat-card:hover {
+            border-color: #861f1b !important;
+            background-color: #861f1b !important;
+            color: #fff !important;
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(134, 31, 27, 0.3);
+        }
+        .stat-card:hover .number,
+        .stat-card:hover .label,
+        .stat-card:hover .icon {
+            color: #fff !important;
         }
         .stat-card .icon {
             font-size: 2.5rem;
             opacity: 0.5;
+            color: #6c757d;
         }
         .stat-card .number {
             font-size: 2.5rem;
             font-weight: bold;
+            color: #333;
         }
         .stat-card .label {
             font-size: 0.9rem;
             opacity: 0.8;
+            color: #6c757d;
         }
-        .bg-gradient-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .bg-gradient-success { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #333; }
-        .bg-gradient-warning { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #333; }
-        .bg-gradient-danger { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .bg-gradient-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+        .btn-outline-primary {
+            border-color: #000 !important;
+            color: #000 !important;
+            transition: all 0.3s;
+        }
+        .btn-outline-primary:hover {
+            background-color: #861f1b !important;
+            border-color: #861f1b !important;
+            color: #fff !important;
+        }
+        .btn-outline-primary i {
+            color: #000 !important;
+        }
+        .btn-outline-primary:hover i {
+            color: #fff !important;
+        }
+
         .ticket-item {
             padding: 12px;
             border-bottom: 1px solid #f0f2f5;
@@ -51,26 +118,40 @@
         .ticket-item:last-child {
             border-bottom: none;
         }
+
         .progress-bar {
             transition: width 0.6s ease;
         }
+
         .card-header {
             background: transparent;
             border-bottom: 2px solid #f0f2f5;
             font-weight: 600;
         }
+
         .badge-prioridad {
             font-size: 11px;
             padding: 4px 10px;
         }
+
+        .sidebar hr {
+            border-color: #dee2e6;
+            margin: 10px 15px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar .nav-link {
+                margin: 2px 4px;
+                padding: 10px 12px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- ====== NAVBAR ====== -->
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <span class="navbar-brand">
-                <i class="bi bi-ticket-perforated"></i> Sistema de Tickets - DAR TI
+                Sistema de Tickets - DAR TI
             </span>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3" id="usuarioNombre">Usuario</span>
@@ -81,10 +162,8 @@
         </div>
     </nav>
 
-    <!-- ====== CONTENIDO PRINCIPAL ====== -->
     <div class="container-fluid">
         <div class="row">
-            <!-- ====== MENÚ LATERAL ====== -->
             <nav class="col-md-2 d-md-block bg-light sidebar">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
@@ -124,19 +203,17 @@
                 </div>
             </nav>
 
-            <!-- ====== CONTENIDO PRINCIPAL ====== -->
             <main class="col-md-10 ms-sm-auto px-md-4">
                 <div class="pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">
-                        <i class="bi bi-speedometer2 text-primary"></i> Dashboard
+                        <i class="bi bi-speedometer2" style="color: #861f1b;"></i> Dashboard
                     </h1>
                     <p class="text-muted">Bienvenido, <span id="nombreUsuario"></span></p>
                 </div>
 
-                <!-- ====== ESTADÍSTICAS ====== -->
                 <div class="row g-3 mb-4">
                     <div class="col-md-3">
-                        <div class="stat-card bg-gradient-primary">
+                        <div class="stat-card">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="number" id="totalTickets">0</div>
@@ -147,7 +224,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card bg-gradient-warning">
+                        <div class="stat-card">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="number" id="ticketsAbiertos">0</div>
@@ -158,7 +235,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card bg-gradient-success">
+                        <div class="stat-card">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="number" id="ticketsCerrados">0</div>
@@ -169,7 +246,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card bg-gradient-danger">
+                        <div class="stat-card">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="number" id="ticketsPool">0</div>
@@ -181,12 +258,11 @@
                     </div>
                 </div>
 
-                <!-- ====== TICKETS RECIENTES Y PRIORIDADES ====== -->
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card shadow">
                             <div class="card-header">
-                                <i class="bi bi-clock-history text-primary"></i> Tickets recientes
+                                <i class="bi bi-clock-history" style="color: #861f1b;"></i> Tickets recientes
                             </div>
                             <div class="card-body" id="ticketsRecientes">
                                 <div class="text-center text-muted py-3">
@@ -200,7 +276,7 @@
                     <div class="col-md-5">
                         <div class="card shadow">
                             <div class="card-header">
-                                <i class="bi bi-pie-chart text-primary"></i> Distribución por prioridad
+                                <i class="bi bi-pie-chart" style="color: #861f1b;"></i> Distribución por prioridad
                             </div>
                             <div class="card-body" id="prioridadesContainer">
                                 <div class="text-center text-muted py-3">
@@ -213,10 +289,9 @@
                     </div>
                 </div>
 
-                <!-- ====== TICKETS CREADOS POR MÍ ====== -->
                 <div class="card shadow mt-4">
                     <div class="card-header">
-                        <i class="bi bi-person text-primary"></i> Mis últimos tickets
+                        <i class="bi bi-person" style="color: #861f1b;"></i> Mis últimos tickets
                     </div>
                     <div class="card-body" id="misTicketsContainer">
                         <div class="text-center text-muted py-3">
@@ -232,7 +307,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // AUTENTICACIÓN
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario) {
             window.location.href = 'login.html';
@@ -240,7 +314,6 @@
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
         document.getElementById('nombreUsuario').textContent = usuario.nombre;
 
-        // Menú dependiendo el rol 
         if (usuario.roles && (usuario.roles.includes('Técnico') || usuario.roles.includes('Administrador'))) {
             document.getElementById('poolMenu').style.display = 'block';
         }
@@ -275,10 +348,9 @@
             if (diff < 86400) return 'hace ' + Math.floor(diff / 3600) + ' horas';
             return 'hace ' + Math.floor(diff / 86400) + ' días';
         }
-        // DASHBOARD
+
         async function cargarDashboard() {
             try {
-                // Ob. tickect usuario
                 const response = await fetch('api/tickets/listar.php?tipo=creados');
                 const tickets = await response.json();
 
@@ -298,14 +370,13 @@
                 const abiertos = tickets.filter(t => t.Id_estado === 1).length;
                 const proceso = tickets.filter(t => t.Id_estado === 2 || t.Id_estado === 3).length;
                 const cerrados = tickets.filter(t => t.Id_estado === 4).length;
-                const expirados = tickets.filter(t => t.Id_estado === 5).length;
                 const pool = tickets.filter(t => t.Id_tecnico_asignado === null && t.Id_estado === 1).length;
 
                 document.getElementById('totalTickets').textContent = total;
                 document.getElementById('ticketsAbiertos').textContent = abiertos + proceso;
                 document.getElementById('ticketsCerrados').textContent = cerrados;
                 document.getElementById('ticketsPool').textContent = pool;
-                // Tickets recientes
+
                 const recientes = tickets.slice(0, 5);
                 const containerRecientes = document.getElementById('ticketsRecientes');
 
@@ -352,7 +423,7 @@
                         `;
                     }).join('');
                 }
-                //Orden por prioridad
+
                 const prioridades = {};
                 const prioridadColores = {
                     'Crítica': 'danger',
