@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Ticket - Sistema de Tickets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --color-dar: #861f1b;
+            --color-dar-hover: #6a1815;
+        }
+
+        .navbar-dark.bg-dark {
+            background-color: #861f1b !important;
+        }
+        .navbar-dark .navbar-brand {
+            color: #fff !important;
+        }
+
+        .sidebar {
+            background-color: #f8f9fa !important;
+        }
+        .sidebar .nav-link {
+            color: #000 !important;
+            font-weight: 500;
+            border-radius: 8px;
+            margin: 2px 8px;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link i {
+            color: #000 !important;
+            margin-right: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #f0e8e7 !important;
+            color: #861f1b !important;
+        }
+        .sidebar .nav-link:hover i {
+            color: #861f1b !important;
+        }
+        .sidebar .nav-link.active {
+            background-color: #861f1b !important;
+            color: #fff !important;
+        }
+        .sidebar .nav-link.active i {
+            color: #fff !important;
+        }
+        .sidebar hr {
+            border-color: #dee2e6;
+            margin: 10px 15px;
+        }
+
+        .btn-primary {
+            background-color: #861f1b !important;
+            border-color: #861f1b !important;
+            color: #fff !important;
+        }
+        .btn-primary:hover {
+            background-color: #6a1815 !important;
+            border-color: #6a1815 !important;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            color: #fff !important;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268 !important;
+            border-color: #545b62 !important;
+        }
+
+        .card-header {
+            background: transparent;
+            border-bottom: 2px solid #f0f2f5;
+            font-weight: 600;
+        }
+
+        .h2 i {
+            color: #861f1b;
+        }
+
+        .drop-zone {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .drop-zone:hover {
+            border-color: #861f1b;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #861f1b;
+            box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25);
+        }
+
+        .alert-info {
+            background-color: #f0e8e7;
+            border-color: #861f1b;
+            color: #861f1b;
+        }
+        .alert-info i {
+            color: #861f1b;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                Sistema de Tickets - DAR TI
+            </span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Usuario</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <nav class="col-md-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mis-tickets.html">
+                                <i class="bi bi-list-ul"></i> Mis tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="nuevo-ticket.html">
+                                <i class="bi bi-plus-circle"></i> Nuevo ticket
+                            </a>
+                        </li>
+                        <li class="nav-item" id="poolMenu" style="display:none;">
+                            <hr>
+                            <a class="nav-link" href="admin/pool-tickets.html">
+                                <i class="bi bi-inbox"></i> Pool de tickets
+                            </a>
+                        </li>
+                        <li class="nav-item" id="adminMenu" style="display:none;">
+                            <a class="nav-link" href="admin/todos-tickets.html">
+                                <i class="bi bi-grid"></i> Todos los tickets
+                            </a>
+                            <a class="nav-link" href="admin/usuarios.html">
+                                <i class="bi bi-people"></i> Usuarios
+                            </a>
+                            <a class="nav-link" href="admin/dashboard-admin.html">
+                                <i class="bi bi-graph-up"></i> Panel Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="bi bi-plus-circle"></i> Nuevo ticket de soporte
+                    </h1>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <form id="formNuevoTicket">
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Titulo *</label>
+                                        <input type="text" id="titulo" class="form-control" 
+                                               placeholder="Describa brevemente el problema" required>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold">Categoria *</label>
+                                            <select id="categoria" class="form-select" required>
+                                                <option value="">Seleccione la categoria</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold">Prioridad *</label>
+                                            <select id="prioridad" class="form-select" required>
+                                                <option value="">Seleccione la prioridad</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Sistema o aplicativo institucional *</label>
+                                        <input type="text" id="sistema" class="form-control" 
+                                               placeholder="Nombre del sistema afectado" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Descripcion detallada *</label>
+                                        <textarea id="descripcion" class="form-control" rows="5" 
+                                                  placeholder="Describe el problema con el mayor detalle posible: pasos para reproducirlo, mensaje de error, impacto..." required></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Archivos adjuntos (opcional)</label>
+                                        <div class="drop-zone" id="dropZone">
+                                            <div class="text-center py-4">
+                                                <i class="bi bi-cloud-upload" style="font-size: 3rem; color: #6c757d;"></i>
+                                                <p class="mt-2">Arrastra archivos o haz click para seleccionar</p>
+                                                <small class="text-muted">PDF, PNG, JPG - Max. 5MB</small>
+                                                <input type="file" id="archivos" class="d-none" multiple accept=".pdf,.png,.jpg,.jpeg">
+                                            </div>
+                                        </div>
+                                        <div id="listaArchivos" class="mt-2"></div>
+                                    </div>
+
+                                    <div class="alert alert-info">
+                                        <i class="bi bi-info-circle"></i>
+                                        La prioridad sera confirmada por el departamento de TI al momento de tomar el ticket.
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-send"></i> Enviar ticket
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
+                                            <i class="bi bi-x-circle"></i> Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-light">
+                                <i class="bi bi-info-circle"></i> Informacion
+                            </div>
+                            <div class="card-body">
+                                <h6><i class="bi bi-check-circle text-success"></i> Recomendaciones:</h6>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="bi bi-1-circle" style="color: #861f1b;"></i>
+                                        <small>Describe el problema de manera clara y concisa</small>
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-2-circle" style="color: #861f1b;"></i>
+                                        <small>Incluye mensajes de error si los hay</small>
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-3-circle" style="color: #861f1b;"></i>
+                                        <small>Adjunta capturas de pantalla si es posible</small>
+                                    </li>
+                                </ul>
+                                <hr>
+                                <p class="text-muted small">
+                                    <i class="bi bi-clock"></i> Tiempo estimado de respuesta: 
+                                    <span class="fw-bold">24-48 horas</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+        if (!usuario) {
+            window.location.href = 'login.html';
+        }
+        document.getElementById('usuarioNombre').textContent = usuario.nombre;
+
+        if (usuario.roles && (usuario.roles.includes('Tecnico') || usuario.roles.includes('Administrador'))) {
+            document.getElementById('poolMenu').style.display = 'block';
+        }
+        if (usuario.roles && usuario.roles.includes('Administrador')) {
+            document.getElementById('adminMenu').style.display = 'block';
+        }
+
+        async function cargarSelectores() {
+            try {
+                const catResponse = await fetch('api/categorias/listar.php');
+                const categorias = await catResponse.json();
+                
+                if (categorias.error) {
+                    console.error('Error al cargar categorias:', categorias.error);
+                    return;
+                }
+                
+                const catSelect = document.getElementById('categoria');
+                categorias.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.Id_categoria;
+                    option.textContent = cat.Nombre;
+                    catSelect.appendChild(option);
+                });
+
+                const prioridadResponse = await fetch('api/prioridades/listar.php');
+                const prioridades = await prioridadResponse.json();
+                
+                if (prioridades.error) {
+                    console.error('Error al cargar prioridades:', prioridades.error);
+                    return;
+                }
+                
+                const prioridadSelect = document.getElementById('prioridad');
+                prioridades.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.Id_prioridad;
+                    option.textContent = p.Nombre + ' (' + p.Horas_resolucion + 'h)';
+                    prioridadSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error('Error al cargar selectores:', error);
+                cargarSelectoresFallback();
+            }
+        }
+
+        function cargarSelectoresFallback() {
+            console.log('Usando opciones por defecto');
+            
+            const categorias = ['Software', 'Hardware', 'Redes', 'Sistema', 'Base de Datos', 'Seguridad'];
+            const prioridades = [
+                { nombre: 'Baja', horas: 48 },
+                { nombre: 'Media', horas: 24 },
+                { nombre: 'Alta', horas: 8 },
+                { nombre: 'Critica', horas: 2 }
+            ];
+
+            const catSelect = document.getElementById('categoria');
+            categorias.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                catSelect.appendChild(option);
+            });
+
+            const prioridadSelect = document.getElementById('prioridad');
+            prioridades.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.nombre;
+                option.textContent = p.nombre + ' (' + p.horas + 'h)';
+                prioridadSelect.appendChild(option);
+            });
+        }
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('archivos');
+        const listaArchivos = document.getElementById('listaArchivos');
+        let archivosSeleccionados = [];
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#861f1b';
+            dropZone.style.background = '#f0e8e7';
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#dee2e6';
+            dropZone.style.background = 'transparent';
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#dee2e6';
+            dropZone.style.background = 'transparent';
+            const files = Array.from(e.dataTransfer.files);
+            agregarArchivos(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            agregarArchivos(Array.from(e.target.files));
+        });
+
+        function agregarArchivos(files) {
+            files.forEach(file => {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('El archivo ' + file.name + ' excede el limite de 5MB');
+                    return;
+                }
+                archivosSeleccionados.push(file);
+            });
+            mostrarArchivos();
+            fileInput.value = '';
+        }
+
+        function mostrarArchivos() {
+            if (archivosSeleccionados.length === 0) {
+                listaArchivos.innerHTML = '';
+                return;
+            }
+            
+            listaArchivos.innerHTML = archivosSeleccionados.map((file, index) => `
+                <div class="d-flex justify-content-between align-items-center bg-light p-2 rounded mb-1">
+                    <span>
+                        <i class="bi bi-file-earmark"></i>
+                        ${file.name} (${(file.size / 1024).toFixed(1)} KB)
+                    </span>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="eliminarArchivo(${index})">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function eliminarArchivo(index) {
+            archivosSeleccionados.splice(index, 1);
+            mostrarArchivos();
+        }
+
+        document.getElementById('formNuevoTicket').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const titulo = document.getElementById('titulo').value.trim();
+            const descripcion = document.getElementById('descripcion').value.trim();
+            const categoria = document.getElementById('categoria').value;
+            const prioridad = document.getElementById('prioridad').value;
+            const sistema = document.getElementById('sistema').value.trim();
+
+            if (!titulo || !descripcion || !categoria || !prioridad || !sistema) {
+                alert('Por favor, completa todos los campos requeridos');
+                return;
+            }
+
+            if (!confirm('Esta seguro de que desea enviar este ticket?')) {
+                return;
+            }
+
+            const ticketData = {
+                titulo: titulo,
+                descripcion: 'Sistema afectado: ' + sistema + '\n\n' + descripcion,
+                id_categoria: categoria,
+                id_prioridad: prioridad
+            };
+
+            try {
+                const response = await fetch('api/tickets/crear.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(ticketData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Ticket creado exitosamente\nFolio: ' + data.folio);
+                    window.location.href = 'mis-tickets.html';
+                } else {
+                    alert('Error al crear el ticket: ' + (data.error || 'Error desconocido'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error de conexion al servidor');
+            }
+        });
+
+        function cerrarSesion() {
+            sessionStorage.removeItem('usuario');
+            // window.location.href = 'login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarSelectores();
+        });
+    </script>
+</body>
+</html>

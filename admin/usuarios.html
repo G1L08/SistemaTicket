@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Usuarios - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --color-dar: #861f1b;
+            --color-dar-hover: #6a1815;
+        }
+
+        .navbar-dark.bg-dark {
+            background-color: #861f1b !important;
+        }
+        .navbar-dark .navbar-brand {
+            color: #fff !important;
+        }
+
+        .sidebar {
+            background-color: #f8f9fa !important;
+        }
+        .sidebar .nav-link {
+            color: #000 !important;
+            font-weight: 500;
+            border-radius: 8px;
+            margin: 2px 8px;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link i {
+            color: #000 !important;
+            margin-right: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #f0e8e7 !important;
+            color: #861f1b !important;
+        }
+        .sidebar .nav-link:hover i {
+            color: #861f1b !important;
+        }
+        .sidebar .nav-link.active {
+            background-color: #861f1b !important;
+            color: #fff !important;
+        }
+        .sidebar .nav-link.active i {
+            color: #fff !important;
+        }
+        .sidebar hr {
+            border-color: #dee2e6;
+            margin: 10px 15px;
+        }
+
+        .btn-primary {
+            background-color: #861f1b !important;
+            border-color: #861f1b !important;
+            color: #fff !important;
+        }
+        .btn-primary:hover {
+            background-color: #6a1815 !important;
+            border-color: #6a1815 !important;
+        }
+
+        .btn-outline-primary {
+            border-color: #000 !important;
+            color: #000 !important;
+            transition: all 0.3s;
+        }
+        .btn-outline-primary:hover {
+            background-color: #861f1b !important;
+            border-color: #861f1b !important;
+            color: #fff !important;
+        }
+        .btn-outline-primary:hover i {
+            color: #fff !important;
+        }
+
+        .btn-outline-danger {
+            border-color: #dc3545 !important;
+            color: #dc3545 !important;
+            transition: all 0.3s;
+        }
+        .btn-outline-danger:hover {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            color: #fff !important;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            color: #fff !important;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268 !important;
+            border-color: #545b62 !important;
+        }
+
+        .btn-success {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            color: #fff !important;
+        }
+        .btn-success:hover {
+            background-color: #1e7e34 !important;
+            border-color: #1c7430 !important;
+        }
+
+        .user-card {
+            transition: all 0.3s;
+        }
+        .user-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #861f1b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .badge-rol {
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        .badge-rol-admin {
+            background: #861f1b;
+            color: white;
+        }
+        .badge-rol-tecnico {
+            background: #fd7e14;
+            color: white;
+        }
+        .badge-rol-usuario {
+            background: #28a745;
+            color: white;
+        }
+
+        .modal-header {
+            background-color: #861f1b !important;
+            color: white !important;
+        }
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .h2 i {
+            color: #861f1b;
+        }
+
+        .card-header {
+            background: transparent;
+            border-bottom: 2px solid #f0f2f5;
+            font-weight: 600;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #861f1b;
+            box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25);
+        }
+
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        .form-control[readonly]:focus {
+            box-shadow: none;
+            border-color: #ced4da;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand"><i class="bi bi-people"></i> Gestion de Usuarios - Admin</span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Admin</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <nav class="col-md-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../dashboard.html">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../mis-tickets.html">
+                                <i class="bi bi-list-ul"></i> Mis tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../nuevo-ticket.html">
+                                <i class="bi bi-plus-circle"></i> Nuevo ticket
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <hr>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="pool-tickets.html">
+                                <i class="bi bi-inbox"></i> Pool de tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="todos-tickets.html">
+                                <i class="bi bi-grid"></i> Todos los tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="usuarios.html">
+                                <i class="bi bi-people"></i> Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard-admin.html">
+                                <i class="bi bi-graph-up"></i> Panel Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1 class="h2"><i class="bi bi-people"></i> Usuarios</h1>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCrearUsuario">
+                            <i class="bi bi-plus-circle"></i> Nuevo usuario
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-3" id="usuariosContainer">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para crear usuario -->
+    <div class="modal fade" id="modalCrearUsuario" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person-plus"></i> Nuevo usuario</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCrearUsuario">
+                        <div class="mb-3">
+                            <label class="form-label">No. de empleado *</label>
+                            <input type="text" id="crearNoEmpleado" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre *</label>
+                            <input type="text" id="crearNombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Apellido paterno *</label>
+                            <input type="text" id="crearApellidoPaterno" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Apellido materno</label>
+                            <input type="text" id="crearApellidoMaterno" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email *</label>
+                            <input type="email" id="crearEmail" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña *</label>
+                            <input type="password" id="crearPassword" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Puesto</label>
+                            <input type="text" id="crearPuesto" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rol *</label>
+                            <select id="crearRol" class="form-select" required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="1">Administrador</option>
+                                <option value="2">Tecnico</option>
+                                <option value="3">Usuario</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select id="crearEstado" class="form-select">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarUsuario()">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar usuario -->
+    <div class="modal fade" id="modalEditarUsuario" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Editar usuario</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarUsuario">
+                        <input type="hidden" id="editarUsuarioId">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">No. de empleado</label>
+                            <input type="text" id="editarNoEmpleado" class="form-control" readonly>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre</label>
+                                    <input type="text" id="editarNombre" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Apellido paterno</label>
+                                    <input type="text" id="editarApellidoPaterno" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Apellido materno</label>
+                            <input type="text" id="editarApellidoMaterno" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="editarEmail" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password" id="editarPassword" class="form-control" readonly value="••••••••">
+                            <small class="text-muted">La contraseña no se puede modificar aqui</small>
+                        </div>
+
+                        <hr>
+                        <h6 class="text-muted mb-3">Campos editables</h6>
+
+                        <div class="mb-3">
+                            <label class="form-label">Puesto</label>
+                            <input type="text" id="editarPuesto" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rol *</label>
+                            <select id="editarRol" class="form-select" required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="1">Administrador</option>
+                                <option value="2">Tecnico</option>
+                                <option value="3">Usuario</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select id="editarEstado" class="form-select">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="actualizarUsuario()">
+                        <i class="bi bi-save"></i> Guardar cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+        if (!usuario || !usuario.roles.includes('Administrador')) {
+            window.location.href = '../login.html';
+        }
+        document.getElementById('usuarioNombre').textContent = usuario.nombre;
+
+        function escapeHTML(t) {
+            if (!t) return '';
+            const d = document.createElement('div');
+            d.textContent = t;
+            return d.innerHTML;
+        }
+
+        // ============================================
+        // CARGAR USUARIOS
+        // ============================================
+        async function cargarUsuarios() {
+            const container = document.getElementById('usuariosContainer');
+            try {
+                const response = await fetch('../api/usuarios/listar.php');
+                const usuarios = await response.json();
+
+                if (usuarios.error) {
+                    container.innerHTML = '<div class="col-12"><div class="alert alert-danger">' + usuarios.error + '</div></div>';
+                    return;
+                }
+
+                if (usuarios.length === 0) {
+                    container.innerHTML = '<div class="col-12"><div class="text-center text-muted">No hay usuarios</div></div>';
+                    return;
+                }
+
+                const rolBadges = {
+                    'Administrador': 'badge-rol-admin',
+                    'Tecnico': 'badge-rol-tecnico',
+                    'Usuario': 'badge-rol-usuario'
+                };
+                const estadoBadges = { 1: 'success', 0: 'danger' };
+                const estadoTextos = { 1: 'Activo', 0: 'Inactivo' };
+
+                container.innerHTML = usuarios.map(u => `
+                    <div class="col-md-4">
+                        <div class="card user-card shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="user-avatar me-3">${escapeHTML(u.Nombre.charAt(0))}${escapeHTML(u.Apellido_paterno.charAt(0))}</div>
+                                    <div>
+                                        <h6 class="mb-0">${escapeHTML(u.Nombre)} ${escapeHTML(u.Apellido_paterno)}</h6>
+                                        <small class="text-muted">${escapeHTML(u.No_empleado)}</small>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="badge ${rolBadges[u.rol_nombre] || 'badge-rol-usuario'} badge-rol">${escapeHTML(u.rol_nombre || 'Usuario')}</span>
+                                    <span class="badge bg-${estadoBadges[u.estado] || 'secondary'}">${estadoTextos[u.estado] || 'Activo'}</span>
+                                </div>
+                                <p class="small text-muted mb-1"><i class="bi bi-envelope"></i> ${escapeHTML(u.correo)}</p>
+                                <p class="small text-muted mb-2"><i class="bi bi-briefcase"></i> ${escapeHTML(u.Puesto || 'Sin puesto')}</p>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="abrirEditarUsuario(${u.Id_usuario})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarUsuario(${u.Id_usuario})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                console.error('Error:', e);
+                container.innerHTML = '<div class="col-12"><div class="alert alert-danger">Error al cargar usuarios</div></div>';
+            }
+        }
+
+        // ============================================
+        // CREAR USUARIO
+        // ============================================
+        async function guardarUsuario() {
+            const data = {
+                no_empleado: document.getElementById('crearNoEmpleado').value,
+                nombre: document.getElementById('crearNombre').value,
+                apellido_paterno: document.getElementById('crearApellidoPaterno').value,
+                apellido_materno: document.getElementById('crearApellidoMaterno').value,
+                correo: document.getElementById('crearEmail').value,
+                contraseña: document.getElementById('crearPassword').value,
+                puesto: document.getElementById('crearPuesto').value,
+                id_rol: document.getElementById('crearRol').value,
+                estado: document.getElementById('crearEstado').value
+            };
+
+            if (!data.no_empleado || !data.nombre || !data.apellido_paterno || !data.correo || !data.contraseña || !data.id_rol) {
+                alert('Por favor, completa todos los campos requeridos');
+                return;
+            }
+
+            try {
+                const response = await fetch('../api/usuarios/crear.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Usuario guardado exitosamente');
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalCrearUsuario'));
+                    modal.hide();
+                    document.getElementById('formCrearUsuario').reset();
+                    cargarUsuarios();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (e) {
+                console.error('Error:', e);
+                alert('Error al guardar el usuario');
+            }
+        }
+
+        // ============================================
+        // EDITAR USUARIO - ABRIR MODAL
+        // ============================================
+        async function abrirEditarUsuario(id) {
+    try {
+        // Hacer una petición directa para obtener el usuario específico
+        const response = await fetch('../api/usuarios/obtener.php?id=' + id);
+        
+        if (!response.ok) {
+            throw new Error('Error HTTP: ' + response.status);
+        }
+        
+        const usuarioData = await response.json();
+
+        if (usuarioData.error) {
+            alert('Error: ' + usuarioData.error);
+            return;
+        }
+
+        // Llenar campos del modal de edición
+        document.getElementById('editarUsuarioId').value = usuarioData.Id_usuario;
+        document.getElementById('editarNoEmpleado').value = usuarioData.No_empleado;
+        document.getElementById('editarNombre').value = usuarioData.Nombre;
+        document.getElementById('editarApellidoPaterno').value = usuarioData.Apellido_paterno;
+        document.getElementById('editarApellidoMaterno').value = usuarioData.Apellido_materno || '';
+        document.getElementById('editarEmail').value = usuarioData.correo;
+        document.getElementById('editarPassword').value = '••••••••';
+
+        // Campos editables
+        document.getElementById('editarPuesto').value = usuarioData.Puesto || '';
+        document.getElementById('editarRol').value = obtenerIdRol(usuarioData.rol_nombre);
+        document.getElementById('editarEstado').value = usuarioData.estado;
+
+        // Abrir modal
+        const modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
+        modal.show();
+
+    } catch (e) {
+        console.error('Error al cargar usuario:', e);
+        alert('Error al cargar los datos del usuario: ' + e.message);
+    }
+}
+
+        function obtenerIdRol(rolNombre) {
+            const roles = {
+                'Administrador': 1,
+                'Tecnico': 2,
+                'Usuario': 3
+            };
+            return roles[rolNombre] || '';
+        }
+
+        // ============================================
+        // ACTUALIZAR USUARIO
+        // ============================================
+        async function actualizarUsuario() {
+            const id = document.getElementById('editarUsuarioId').value;
+            const data = {
+                id: id,
+                puesto: document.getElementById('editarPuesto').value,
+                id_rol: document.getElementById('editarRol').value,
+                estado: document.getElementById('editarEstado').value
+            };
+
+            if (!data.id_rol) {
+                alert('Por favor, selecciona un rol');
+                return;
+            }
+
+            try {
+                const response = await fetch('../api/usuarios/actualizar.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Usuario actualizado exitosamente');
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditarUsuario'));
+                    modal.hide();
+                    cargarUsuarios();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (e) {
+                console.error('Error:', e);
+                alert('Error al actualizar el usuario');
+            }
+        }
+
+        // ============================================
+        // ELIMINAR USUARIO
+        // ============================================
+        async function eliminarUsuario(id) {
+            if (!confirm('Esta seguro de eliminar este usuario?')) return;
+            try {
+                const response = await fetch('../api/usuarios/eliminar.php', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Usuario eliminado');
+                    cargarUsuarios();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (e) {
+                console.error('Error:', e);
+                alert('Error al eliminar el usuario');
+            }
+        }
+
+        // ============================================
+        // CERRAR SESION
+        // ============================================
+        function cerrarSesion() {
+            sessionStorage.removeItem('usuario');
+            window.location.href = '../login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarUsuarios();
+        });
+    </script>
+</body>
+</html>

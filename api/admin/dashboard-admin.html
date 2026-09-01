@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Sistema de Tickets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar .nav-link.active { background-color: #0d6efd; color: white; }
+        .stat-card { border-radius: 12px; padding: 20px; color: white; transition: all 0.3s; cursor: pointer; }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .stat-card .icon { font-size: 2.5rem; opacity: 0.5; }
+        .stat-card .number { font-size: 2.5rem; font-weight: bold; }
+        .stat-card .label { font-size: 0.9rem; opacity: 0.8; }
+        .bg-gradient-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .bg-gradient-success { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #333; }
+        .bg-gradient-warning { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #333; }
+        .bg-gradient-danger { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .bg-gradient-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .chart-container { position: relative; height: 300px; }
+        .ticket-item { padding: 12px; border-bottom: 1px solid #f0f2f5; transition: all 0.2s; }
+        .ticket-item:hover { background: #f8f9fa; }
+        .ticket-item:last-child { border-bottom: none; }
+        .alert-item { border-left: 4px solid #ffc107; padding: 10px 15px; margin-bottom: 8px; background: #fff; border-radius: 8px; }
+        .alert-item.critical { border-left-color: #dc3545; }
+        .alert-item.warning { border-left-color: #ffc107; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand"><i class="bi bi-ticket-perforated"></i> Sistema de Tickets - Admin TI</span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Admin</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link active" href="dashboard-admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="todos-tickets.html"><i class="bi bi-grid"></i> Todos los tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="pool-tickets.html"><i class="bi bi-inbox"></i> Pool de tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="usuarios.html"><i class="bi bi-people"></i> Usuarios</a></li>
+                        <li class="nav-item"><hr></li>
+                        <li class="nav-item"><a class="nav-link" href="../mis-tickets.html"><i class="bi bi-list-ul"></i> Mis tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../nuevo-ticket.html"><i class="bi bi-plus-circle"></i> Nuevo ticket</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="bi bi-speedometer2 text-primary"></i> Panel de Administración</h1>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3"><div class="stat-card bg-gradient-primary"><div class="d-flex justify-content-between"><div><div class="number" id="totalTickets">0</div><div class="label">Total tickets</div></div><div class="icon"><i class="bi bi-ticket"></i></div></div></div></div>
+                    <div class="col-md-3"><div class="stat-card bg-gradient-warning"><div class="d-flex justify-content-between"><div><div class="number" id="ticketsAbiertos">0</div><div class="label">Abiertos</div></div><div class="icon"><i class="bi bi-envelope-open"></i></div></div></div></div>
+                    <div class="col-md-3"><div class="stat-card bg-gradient-success"><div class="d-flex justify-content-between"><div><div class="number" id="ticketsCerrados">0</div><div class="label">Cerrados</div></div><div class="icon"><i class="bi bi-check-circle"></i></div></div></div></div>
+                    <div class="col-md-3"><div class="stat-card bg-gradient-danger"><div class="d-flex justify-content-between"><div><div class="number" id="ticketsPool">0</div><div class="label">Sin asignar</div></div><div class="icon"><i class="bi bi-inbox"></i></div></div></div></div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6"><div class="card shadow"><div class="card-header"><i class="bi bi-pie-chart text-primary"></i> Tickets por estado</div><div class="card-body chart-container"><canvas id="estadosChart"></canvas></div></div></div>
+                    <div class="col-md-6"><div class="card shadow"><div class="card-header"><i class="bi bi-bar-chart text-primary"></i> Tickets por prioridad</div><div class="card-body chart-container"><canvas id="prioridadChart"></canvas></div></div></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8"><div class="card shadow"><div class="card-header"><i class="bi bi-clock-history"></i> Últimos tickets</div><div class="card-body" id="ultimosTickets"><div class="text-center text-muted">Cargando...</div></div></div></div>
+                    <div class="col-md-4"><div class="card shadow"><div class="card-header"><i class="bi bi-bell text-warning"></i> Alertas</div><div class="card-body" id="alertasContainer"><div class="text-center text-muted">Cargando...</div></div></div></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+        if (!usuario || !usuario.roles.includes('Administrador')) { window.location.href = '../login.html'; }
+        document.getElementById('usuarioNombre').textContent = usuario.nombre;
+
+        function escapeHTML(t) { if (!t) return ''; const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+        function formatearFecha(f) { if (!f) return 'N/A'; const d=new Date(f); return d.toLocaleDateString('es-MX', {day:'2-digit',month:'2-digit',year:'numeric'}); }
+
+        async function cargarDashboard() {
+            try {
+                const response = await fetch('../api/tickets/listar.php');
+                const tickets = await response.json();
+                if (tickets.error) return;
+
+                const total = tickets.length;
+                const abiertos = tickets.filter(t => t.Id_estado === 1 || t.Id_estado === 2 || t.Id_estado === 3).length;
+                const cerrados = tickets.filter(t => t.Id_estado === 4).length;
+                const pool = tickets.filter(t => !t.Id_tecnico_asignado && t.Id_estado !== 4 && t.Id_estado !== 5).length;
+
+                document.getElementById('totalTickets').textContent = total;
+                document.getElementById('ticketsAbiertos').textContent = abiertos;
+                document.getElementById('ticketsCerrados').textContent = cerrados;
+                document.getElementById('ticketsPool').textContent = pool;
+
+                crearGraficaEstados(tickets);
+                crearGraficaPrioridades(tickets);
+                mostrarUltimosTickets(tickets);
+                mostrarAlertas(tickets);
+            } catch(e) { console.error('Error:', e); }
+        }
+
+        function crearGraficaEstados(tickets) {
+            const estados = {};
+            tickets.forEach(t => { const n=t.estado_nombre||'Sin estado'; estados[n]=(estados[n]||0)+1; });
+            new Chart(document.getElementById('estadosChart'), {
+                type: 'doughnut',
+                data: { labels: Object.keys(estados), datasets: [{ data: Object.values(estados), backgroundColor: ['#ffc107','#17a2b8','#6c757d','#28a745','#dc3545'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        function crearGraficaPrioridades(tickets) {
+            const prioridades = {};
+            tickets.forEach(t => { const n=t.prioridad_nombre||'Sin prioridad'; prioridades[n]=(prioridades[n]||0)+1; });
+            new Chart(document.getElementById('prioridadChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(prioridades), datasets: [{ label: 'Tickets', data: Object.values(prioridades), backgroundColor: ['#28a745','#ffc107','#fd7e14','#dc3545'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
+        }
+
+        function mostrarUltimosTickets(tickets) {
+            const container = document.getElementById('ultimosTickets');
+            const ultimos = tickets.slice(0, 8);
+            if (ultimos.length === 0) { container.innerHTML = '<div class="text-center text-muted">No hay tickets</div>'; return; }
+            container.innerHTML = ultimos.map(t => `
+                <div class="ticket-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge bg-secondary">${escapeHTML(t.Folio)}</span>
+                        <strong>${escapeHTML(t.Titulo)}</strong>
+                        <br><small class="text-muted">${escapeHTML(t.usuario_nombre||'')} - ${formatearFecha(t.Fecha_creacion)}</small>
+                    </div>
+                    <a href="../detalle-ticket.html?id=${t.Id_ticket}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+                </div>
+            `).join('');
+        }
+
+        function mostrarAlertas(tickets) {
+            const container = document.getElementById('alertasContainer');
+            const alertas = [];
+            tickets.filter(t => t.prioridad_nombre === 'Crítica' && !t.Id_tecnico_asignado && t.Id_estado !== 4).forEach(t => {
+                alertas.push({ type: 'critical', icon: 'bi-exclamation-triangle', msg: `Ticket ${t.Folio} - Crítico sin asignar` });
+            });
+            tickets.filter(t => t.Fecha_vencimiento && t.Id_estado !== 4 && (new Date(t.Fecha_vencimiento) - new Date()) / (1000*60*60) < 4 && (new Date(t.Fecha_vencimiento) - new Date()) > 0).forEach(t => {
+                alertas.push({ type: 'warning', icon: 'bi-clock', msg: `Ticket ${t.Folio} - Vence en menos de 4h` });
+            });
+            tickets.filter(t => t.Fecha_vencimiento && t.Id_estado !== 4 && new Date(t.Fecha_vencimiento) < new Date()).forEach(t => {
+                alertas.push({ type: 'critical', icon: 'bi-clock-history', msg: `Ticket ${t.Folio} - EXPIRADO` });
+            });
+
+            if (alertas.length === 0) { container.innerHTML = `<div class="text-center text-muted"><i class="bi bi-check-circle text-success" style="font-size:2rem;"></i><p class="mt-2">No hay alertas</p></div>`; return; }
+            container.innerHTML = alertas.slice(0,5).map(a => `<div class="alert-item ${a.type}"><i class="bi ${a.icon} text-${a.type==='critical'?'danger':'warning'}"></i> ${escapeHTML(a.msg)}</div>`).join('');
+        }
+
+        function cerrarSesion() { sessionStorage.removeItem('usuario'); window.location.href = '../login.html'; }
+        document.addEventListener('DOMContentLoaded', cargarDashboard);
+    </script>
+</body>
+</html>

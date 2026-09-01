@@ -1,0 +1,41 @@
+# ============================================
+# CONFIGURACIÓN SEGURA PARA .HTACCESS
+# ============================================
+
+# Activar RewriteEngine
+RewriteEngine On
+
+# ============================================
+# HEADERS DE SEGURIDAD
+# ============================================
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ============================================
+# PREVENIR LISTADO DE DIRECTORIOS
+# ============================================
+Options -Indexes
+
+# ============================================
+# PROTEGER ARCHIVOS SENSIBLES
+# ============================================
+<FilesMatch "^(config|database|session|security)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ============================================
+# REDIRECCIONES
+# ============================================
+# Redirigir a login si no hay archivo
+RewriteRule ^$ login.html [L]
+
+# ============================================
+# ERRORES PERSONALIZADOS (opcional)
+# ============================================
+ErrorDocument 404 /error404.html
+ErrorDocument 500 /error500.html

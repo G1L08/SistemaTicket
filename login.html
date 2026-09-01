@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Tickets - DAR TI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .login-overlay {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-login {
+            border-radius: 20px !important;
+            max-width: 450px;
+            width: 100%;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .custom-input-group .form-control,
+        .custom-input-group .input-group-text,
+        .custom-input-group .btn {
+            border-color: #6c757d;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .custom-input-group .form-control:focus {
+            box-shadow: none;
+            border-color: #495057;
+        }
+
+        .btn-custom-red {
+            background-color: #802320 !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 6px;
+            max-width: 220px;
+            margin: 15px auto 0 auto;
+            display: block;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .btn-custom-red:hover {
+            background-color: #631b18 !important;
+            color: #ffffff !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img src="assets/img/dar.png" alt="Fondo" class="bg-image">
+
+    <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100 login-overlay">
+        
+        <div class="card card-login shadow-lg border-0">
+            <div class="card-body p-4 p-md-5">
+                
+                <h2 class="card-title text-black fw-bold mb-0">Iniciar sesion</h2>
+                <p class="text-secondary fs-5 mb-4">Sistema de Tickets - DAR TI</p>
+
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label text-dark fs-5 fw-normal">No. de empleado</label>
+                        <div class="input-group custom-input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-person text-secondary"></i>
+                            </span>
+                            <input type="text" id="noEmpleado" class="form-control border-start-0" placeholder="No. de cuenta" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-dark fs-5 fw-normal">Contraseña</label>
+                        <div class="input-group custom-input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-lock text-secondary"></i>
+                            </span>
+                            <input type="password" id="password" class="form-control border-start-0 border-end-0" placeholder="************" required>
+                            <button class="btn btn-outline-secondary border-start-0 bg-white" type="button" id="togglePassword">
+                                <i class="bi bi-eye text-secondary" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-custom-red w-100 py-2 fw-bold fs-5">
+                        Iniciar sesion
+                    </button>
+                </form>
+
+                <div id="loginError" class="alert alert-danger mt-3 d-none"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.classList.toggle('bi-eye');
+            eyeIcon.classList.toggle('bi-eye-slash');
+        });
+    </script>
+</body>
+
+</html>
