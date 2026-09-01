@@ -9,7 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 require_once '../config/database.php';
+<<<<<<< HEAD
 require_once '../notificaciones/crear.php';
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
@@ -29,7 +32,11 @@ $id_ticket = intval($data['id_ticket']);
 $usuario_id = $_SESSION['usuario_id'];
 $usuario_nombre = $_SESSION['nombre'] ?? 'Técnico';
 
+<<<<<<< HEAD
 try {
+=======
+try {//ticket disponible
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     $stmt = $pdo->prepare("SELECT t.*, e.Nombre as estado_nombre 
                            FROM Ticket t
                            LEFT JOIN Estado e ON t.Id_estado = e.Id_estado
@@ -41,7 +48,11 @@ try {
         echo json_encode(['error' => 'Ticket no encontrado']);
         exit;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     if ($ticket['Id_tecnico_asignado'] !== null) {
         echo json_encode(['error' => 'Este ticket ya fue asignado a otro técnico']);
         exit;
@@ -53,19 +64,28 @@ try {
     }
     
     $pdo->beginTransaction();
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     $stmt = $pdo->prepare("UPDATE Ticket 
                           SET Id_tecnico_asignado = ?, 
                               Id_estado = 2,
                               Fecha_actualizacion = NOW()
                           WHERE Id_ticket = ?");
     $stmt->execute([$usuario_id, $id_ticket]);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     $stmt = $pdo->prepare("INSERT INTO HistorialTicket 
                           (Id_ticket, Estado_anterior, Estado_nuevo, Id_usuario, Fecha_cambio) 
                           VALUES (?, 'Abierto', 'En proceso', ?, NOW())");
     $stmt->execute([$id_ticket, $usuario_id]);
     
     $pdo->commit();
+<<<<<<< HEAD
 
     if ($ticket['Id_usuario'] != $usuario_id) {
         notificarUsuariosTicket(
@@ -82,6 +102,8 @@ try {
         $id_ticket,
         [$usuario_id]
     );
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     
     echo json_encode([
         'success' => true,

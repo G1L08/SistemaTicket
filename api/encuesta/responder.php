@@ -18,6 +18,7 @@ if (!isset($data['id_encuesta'])) {
     exit;
 }
 
+<<<<<<< HEAD
 $id_encuesta = intval($data['id_encuesta']);
 
 try {
@@ -41,6 +42,9 @@ try {
         exit;
     }
 
+=======
+try {
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     $stmt = $pdo->prepare("UPDATE EncuestaSatisfaccion 
                           SET Calificacion_respeto = ?,
                               Calificacion_tiempo = ?,
@@ -54,7 +58,11 @@ try {
                               Respondida = 1,
                               Fecha_respuesta = NOW()
                           WHERE Id_encuesta = ?");
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     $stmt->execute([
         $data['calificacion_respeto'] ?? null,
         $data['calificacion_tiempo'] ?? null,
@@ -65,10 +73,20 @@ try {
         $data['contacto_externo'] ?? null,
         $data['interacciones'] ?? null,
         $data['comentarios'] ?? null,
+<<<<<<< HEAD
         $id_encuesta
     ]);
 
     echo json_encode(['success' => true, 'mensaje' => 'Encuesta respondida exitosamente']);
+=======
+        $data['id_encuesta']
+    ]);
+
+    echo json_encode([
+        'success' => true,
+        'mensaje' => 'Encuesta respondida exitosamente'
+    ]);
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
 } catch(PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);

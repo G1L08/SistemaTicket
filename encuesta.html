@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Encuesta de Satisfaccion</title>
+=======
+    <title>Encuesta de Satisfacción - Sistema de Tickets</title>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
+<<<<<<< HEAD
         :root {
             --color-dar: #861f1b;
             --color-dar-hover: #6a1815;
@@ -144,19 +149,53 @@
         <div class="container-fluid">
             <span class="navbar-brand">
                 <i class="bi bi-ticket-perforated"></i> Sistema de Tickets - DAR TI
+=======
+        body { background: #f0f2f5; }
+        .encuesta-card { border-radius: 15px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .encuesta-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0; padding: 20px; }
+        .pregunta-item { border-bottom: 1px solid #f0f2f5; padding: 15px 0; }
+        .pregunta-item:last-child { border-bottom: none; }
+        .rating-stars { display: flex; gap: 10px; margin-top: 5px; }
+        .rating-stars .star { font-size: 2rem; cursor: pointer; color: #dee2e6; transition: all 0.2s; }
+        .rating-stars .star:hover, .rating-stars .star.active { color: #ffc107; transform: scale(1.1); }
+        .option-btn { padding: 8px 20px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; transition: all 0.2s; margin: 3px; }
+        .option-btn:hover { border-color: #667eea; }
+        .option-btn.selected { border-color: #667eea; background: #667eea; color: white; }
+        .sidebar .nav-link.active { background-color: #0d6efd; color: white; }
+        .pregunta-item .required { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <!-- ====== NAVBAR ====== -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                Sistema de Tickets - DAR TI
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             </span>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3" id="usuarioNombre">Usuario</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+<<<<<<< HEAD
                     <i class="bi bi-box-arrow-right"></i> Cerrar sesion
+=======
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 </button>
             </div>
         </div>
     </nav>
 
+<<<<<<< HEAD
     <div class="container-fluid">
         <div class="row">
 
+=======
+    <!-- ====== CONTENIDO PRINCIPAL ====== -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- ====== MENÚ LATERAL ====== -->
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             <nav class="col-md-2 d-md-block bg-light sidebar">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
@@ -196,12 +235,22 @@
                 </div>
             </nav>
 
+<<<<<<< HEAD
             <main class="col-md-10 ms-sm-auto px-md-4">
                 <div class="pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">
                         <i class="bi bi-clipboard-check"></i> Encuesta de Satisfaccion
                     </h1>
                     <p class="text-muted">Tu opinion nos ayuda a mejorar nuestro servicio</p>
+=======
+            <!-- ====== CONTENIDO PRINCIPAL ====== -->
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="bi bi-clipboard-check text-primary"></i> Encuesta de Satisfacción
+                    </h1>
+                    <p class="text-muted">Tu opinión nos ayuda a mejorar nuestro servicio</p>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 </div>
 
                 <div id="encuestaContainer">
@@ -223,13 +272,19 @@
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
 
+<<<<<<< HEAD
         if (usuario.roles && (usuario.roles.includes('Tecnico') || usuario.roles.includes('Administrador'))) {
+=======
+        // Menú según el rol
+        if (usuario.roles && (usuario.roles.includes('Técnico') || usuario.roles.includes('Administrador'))) {
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             document.getElementById('poolMenu').style.display = 'block';
         }
         if (usuario.roles && usuario.roles.includes('Administrador')) {
             document.getElementById('adminMenu').style.display = 'block';
         }
 
+<<<<<<< HEAD
         const urlParams = new URLSearchParams(window.location.search);
         const ticketId = urlParams.get('id');
 
@@ -278,6 +333,21 @@
             });
         }
 
+=======
+        const bancoPreguntas = [
+            { id: 'calificacion_respeto', label: '¿El técnico trató su solicitud con respeto y profesionalismo?', type: 'rating' },
+            { id: 'calificacion_tiempo', label: '¿El tiempo de respuesta fue adecuado?', type: 'rating' },
+            { id: 'calificacion_conocimiento', label: '¿El técnico demostró conocimiento técnico suficiente?', type: 'rating' },
+            { id: 'informado', label: '¿El sistema de tickets le mantuvo informado sobre su solicitud?', type: 'si_no' },
+            { id: 'calificacion_archivos', label: '¿La funcionalidad de adjuntar archivos fue útil?', type: 'rating' },
+            { id: 'calificacion_facilidad', label: '¿Cómo califica la facilidad de uso del sistema?', type: 'rating' },
+            { id: 'contacto_externo', label: '¿Hubo necesidad de contactar al técnico por otros medios?', type: 'si_no' },
+            { id: 'interacciones', label: '¿El problema se resolvió a la primera o requirió múltiples interacciones?', type: 'interacciones' },
+            { id: 'calidad_solucion', label: '¿La solución proporcionada resolvió completamente el problema?', type: 'rating' },
+            { id: 'claridad_comunicacion', label: '¿La comunicación con el técnico fue clara y efectiva?', type: 'rating' }
+        ];
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         function seleccionarPreguntas() {
             const disponibles = [...bancoPreguntas];
             for (let i = disponibles.length - 1; i > 0; i--) {
@@ -285,14 +355,22 @@
                 [disponibles[i], disponibles[j]] = [disponibles[j], disponibles[i]];
             }
             const seleccionadas = disponibles.slice(0, 4);
+<<<<<<< HEAD
             seleccionadas.push({
                 id: 'comentarios',
                 label: 'Comentarios adicionales o sugerencias de mejora',
                 type: 'texto'
+=======
+            seleccionadas.push({ 
+                id: 'comentarios', 
+                label: 'Comentarios adicionales o sugerencias de mejora', 
+                type: 'texto' 
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             });
             return seleccionadas;
         }
 
+<<<<<<< HEAD
         function renderizarPregunta(pregunta, index) {
             const required = pregunta.type !== 'texto' ? '<span class="required-star"> *</span>' : '';
             let html = `
@@ -355,10 +433,43 @@
                     container.innerHTML = `
                         <div class="alert alert-info">${escapeHTML(data.error)}</div>
                         <a href="dashboard.html" class="btn btn-secondary">Volver</a>
+=======
+        //Obtiene ticket
+        const urlParams = new URLSearchParams(window.location.search);
+        const ticketId = urlParams.get('id');
+
+        if (!ticketId) {
+            document.getElementById('encuestaContainer').innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle"></i> No se especificó el ticket
+                </div>
+                <a href="dashboard.html" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+            `;
+        } else {
+            cargarEncuesta(ticketId);
+        }
+        //Carga encuesta
+        let encuestaData = {};
+
+        async function cargarEncuesta(idTicket) {
+            const container = document.getElementById('encuestaContainer');
+            
+            try {
+                const response = await fetch(`api/encuesta/ver.php?id_ticket=${idTicket}`);
+                const encuesta = await response.json();
+
+                if (encuesta.error) {
+                    container.innerHTML = `
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> ${encuesta.error}
+                        </div>
+                        <a href="dashboard.html" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     `;
                     return;
                 }
 
+<<<<<<< HEAD
                 encuestaData = data;
 
                 if (data.Respondida == 1) {
@@ -372,12 +483,26 @@
                             </div>
                             <div class="card-body text-center p-4">
                                 <a href="dashboard.html" class="btn btn-primary">Volver al dashboard</a>
+=======
+                if (encuesta.Respondida == 1) {
+                    container.innerHTML = `
+                        <div class="card encuesta-card">
+                            <div class="encuesta-header text-center">
+                                <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
+                                <h3 class="mt-2">¡Gracias por tu respuesta!</h3>
+                                <p class="mb-0 opacity-75">Ya has respondido esta encuesta.</p>
+                                <p class="mt-2"><small>Fecha de respuesta: ${new Date(encuesta.Fecha_respuesta).toLocaleString('es-MX')}</small></p>
+                            </div>
+                            <div class="card-body text-center p-4">
+                                <a href="dashboard.html" class="btn btn-primary"><i class="bi bi-house"></i> Volver al dashboard</a>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                             </div>
                         </div>
                     `;
                     return;
                 }
 
+<<<<<<< HEAD
                 if (data.expirada && data.Respondida == 1) {
                     container.innerHTML = `
                         <div class="card shadow">
@@ -388,12 +513,26 @@
                             </div>
                             <div class="card-body text-center p-4">
                                 <a href="dashboard.html" class="btn btn-primary">Volver al dashboard</a>
+=======
+                // Verificar si la encuesta expiró
+                if (encuesta.expirada) {
+                    container.innerHTML = `
+                        <div class="card encuesta-card">
+                            <div class="encuesta-header text-center">
+                                <i class="bi bi-clock" style="font-size: 3rem;"></i>
+                                <h3 class="mt-2">Encuesta cerrada</h3>
+                                <p class="mb-0 opacity-75">El plazo para responder la encuesta (15 días) ha expirado.</p>
+                            </div>
+                            <div class="card-body text-center p-4">
+                                <a href="dashboard.html" class="btn btn-primary"><i class="bi bi-house"></i> Volver al dashboard</a>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                             </div>
                         </div>
                     `;
                     return;
                 }
 
+<<<<<<< HEAD
                 mostrarFormulario(data);
 
             } catch (error) {
@@ -405,11 +544,26 @@
             }
         }
 
+=======
+                encuestaData = encuesta;
+                mostrarFormulario(encuesta);
+
+            } catch (error) {
+                console.error('Error:', error);
+                container.innerHTML = `
+                    <div class="alert alert-danger">Error al cargar la encuesta</div>
+                    <a href="dashboard.html" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+                `;
+            }
+        }
+        //Encuesta aleatoria
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         function mostrarFormulario(encuesta) {
             const container = document.getElementById('encuestaContainer');
             const preguntas = seleccionarPreguntas();
 
             container.innerHTML = `
+<<<<<<< HEAD
                 <div class="card shadow">
                     <div class="encuesta-header">
                         <h5 class="mb-0"><i class="bi bi-ticket"></i> ${escapeHTML(encuesta.Titulo)}</h5>
@@ -418,6 +572,26 @@
                     <div class="card-body">
                         <form id="formEncuesta">
                             ${preguntas.map((p, i) => renderizarPregunta(p, i)).join('')}
+=======
+                <div class="card encuesta-card">
+                    <div class="encuesta-header text-center">
+                        <i class="bi bi-clipboard-check" style="font-size: 3rem;"></i>
+                        <h3 class="mt-2">Encuesta de Satisfacción</h3>
+                        <p class="mb-0 opacity-75">Ticket: ${encuesta.Folio} - ${encuesta.Titulo}</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="formEncuesta">
+                            ${preguntas.map((p, index) => `
+                                <div class="pregunta-item">
+                                    <label class="fw-bold">
+                                        ${index + 1}. ${p.label}
+                                        ${p.type !== 'texto' ? '<span class="required"> *</span>' : ''}
+                                    </label>
+                                    ${renderizarPregunta(p)}
+                                </div>
+                            `).join('')}
+                            
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                             <div class="text-center mt-4">
                                 <button type="submit" class="btn btn-primary btn-lg px-5">
                                     <i class="bi bi-send"></i> Enviar encuesta
@@ -427,12 +601,20 @@
                     </div>
                 </div>
             `;
+<<<<<<< HEAD
 
+=======
+            //Encuesta de satisfaccion
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             document.querySelectorAll('.rating-stars .star').forEach(star => {
                 star.addEventListener('click', function() {
                     const input = document.getElementById(this.dataset.input);
                     const value = parseInt(this.dataset.value);
                     input.value = value;
+<<<<<<< HEAD
+=======
+                    
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     const siblings = this.parentElement.querySelectorAll('.star');
                     siblings.forEach(s => {
                         s.classList.toggle('active', parseInt(s.dataset.value) <= value);
@@ -440,10 +622,18 @@
                 });
             });
 
+<<<<<<< HEAD
+=======
+            //Encuesta de opciones
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             document.querySelectorAll('.option-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const input = document.getElementById(this.dataset.input);
                     input.value = this.dataset.value;
+<<<<<<< HEAD
+=======
+                    
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     const siblings = this.parentElement.querySelectorAll('.option-btn');
                     siblings.forEach(s => s.classList.remove('selected'));
                     this.classList.add('selected');
@@ -456,6 +646,7 @@
             });
         }
 
+<<<<<<< HEAD
 async function enviarEncuesta() {
     const preguntas = document.querySelectorAll('.pregunta-item');
     const datos = { id_encuesta: encuestaData.Id_encuesta };
@@ -527,6 +718,133 @@ async function enviarEncuesta() {
         alert('Error al enviar la encuesta');
     }
 }
+=======
+        function renderizarPregunta(pregunta) {
+            switch(pregunta.type) {
+                case 'rating':
+                    return `
+                        <input type="hidden" id="${pregunta.id}" value="0">
+                        <div class="rating-stars">
+                            ${[1,2,3,4,5].map(i => `
+                                <span class="star" data-input="${pregunta.id}" data-value="${i}">★</span>
+                            `).join('')}
+                        </div>
+                    `;
+                    
+                case 'si_no':
+                    return `
+                        <input type="hidden" id="${pregunta.id}" value="">
+                        <div>
+                            <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="1">Sí</button>
+                            <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="0">No</button>
+                        </div>
+                    `;
+                    
+                case 'interacciones':
+                    return `
+                        <input type="hidden" id="${pregunta.id}" value="">
+                        <div>
+                            <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="Una vez">Una vez</button>
+                            <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="Varias veces">Varias veces</button>
+                        </div>
+                    `;
+                    
+                case 'texto':
+                    return `
+                        <textarea id="${pregunta.id}" class="form-control mt-2" rows="3" 
+                                  placeholder="Escribe tus comentarios aquí..." 
+                                  style="resize: vertical;"></textarea>
+                    `;
+                    
+                default:
+                    return '';
+            }
+        }
+
+        async function enviarEncuesta() {
+            const preguntas = document.querySelectorAll('.pregunta-item');
+            const datos = {
+                id_encuesta: encuestaData.Id_encuesta
+            };
+            
+            let camposObligatorios = [];
+            
+            preguntas.forEach(item => {
+                const input = item.querySelector('input, textarea');
+                if (input) {
+                    const id = input.id;
+                    const value = input.value;
+                    const label = item.querySelector('label');
+                    const esObligatorio = label && label.innerHTML.includes('*');
+                    
+                    if (esObligatorio) {
+                        camposObligatorios.push(id);
+                    }
+                    
+                    datos[id] = value || null;
+                }
+            });
+
+            const faltantes = camposObligatorios.filter(campo => {
+                const value = datos[campo];
+                return value === null || value === '' || value === '0';
+            });
+
+            if (faltantes.length > 0) {
+                alert('Por favor, responde todas las preguntas');
+                faltantes.forEach(id => {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        input.closest('.pregunta-item').style.borderLeft = '4px solid #dc3545';
+                        input.closest('.pregunta-item').style.background = '#fff5f5';
+                        setTimeout(() => {
+                            input.closest('.pregunta-item').style.borderLeft = '';
+                            input.closest('.pregunta-item').style.background = '';
+                        }, 3000);
+                    }
+                });
+                return;
+            }
+
+            if (!confirm('¿Estás seguro de enviar la encuesta? No podrás modificarla después.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('api/encuesta/responder.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('encuestaContainer').innerHTML = `
+                        <div class="card encuesta-card">
+                            <div class="encuesta-header text-center">
+                                <i class="bi bi-check-circle" style="font-size: 4rem;"></i>
+                                <h3 class="mt-3">¡Gracias por tu respuesta!</h3>
+                                <p class="mb-0 opacity-75">Tu opinión nos ayuda a mejorar nuestro servicio.</p>
+                            </div>
+                            <div class="card-body text-center p-4">
+                                <i class="bi bi-emoji-smile" style="font-size: 3rem; color: #ffc107;"></i>
+                                <p class="mt-3">La encuesta ha sido registrada exitosamente.</p>
+                                <a href="dashboard.html" class="btn btn-primary mt-2">
+                                    <i class="bi bi-house"></i> Volver al dashboard
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al enviar la encuesta');
+            }
+        }
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');

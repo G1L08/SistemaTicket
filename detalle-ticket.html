@@ -291,7 +291,11 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
+<<<<<<< HEAD
             <span class="navbar-brand">
+=======
+<span class="navbar-brand">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 Sistema de Tickets - DAR TI
             </span>
             <div class="d-flex align-items-center">
@@ -360,6 +364,10 @@
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+    <!-- Modal para tomar ticket -->
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     <div class="modal fade" id="modalTomarTicket" tabindex="-1">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -383,6 +391,10 @@
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+    <!-- Modal para confirmar prioridad -->
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     <div class="modal fade" id="modalConfirmarPrioridad" tabindex="-1">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -541,6 +553,7 @@
             const prioridades = ['Baja', 'Media', 'Alta', 'Critica'];
             const prioridadYaConfirmada = prioridadConfirmada !== null;
 
+<<<<<<< HEAD
             // ===== PERMISO PARA COMENTAR Y SUBIR ARCHIVOS =====
             // Solo el solicitante, el técnico asignado y el administrador pueden.
             // Además, el ticket no debe estar cerrado.
@@ -549,6 +562,8 @@
             // ===== BOTÓN EXTENDER TIEMPO =====
             const puedeExtender = (esAdmin || esTecnicoAsignado) && tieneTecnicoAsignado && [2, 3].includes(ticket.Id_estado);
 
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             container.innerHTML = `
                 <div class="row">
                     <div class="col-md-8">
@@ -660,6 +675,7 @@
                             <div class="card-body">${renderizarHistorial(historial)}</div>
                         </div>
 
+<<<<<<< HEAD
                         <!-- Comentarios -->
                         <div class="card shadow">
                             <div class="card-header">
@@ -668,6 +684,15 @@
                             <div class="card-body">
                                 <div id="comentariosContainer">${renderizarComentarios(comentarios)}</div>
                                 ${puedeComentarYSubir ? `
+=======
+                        ${esTecnico ? `
+                            <div class="card shadow">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-chat"></i> Comentarios</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="comentariosContainer">${renderizarComentarios(comentarios)}</div>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                     <hr>
                                     <form id="formComentario">
                                         <input type="hidden" id="ticket_id" value="${ticket.Id_ticket}">
@@ -680,6 +705,7 @@
                                             <i class="bi bi-send"></i> Enviar comentario
                                         </button>
                                     </form>
+<<<<<<< HEAD
                                 ` : ticket.Id_estado == 4 ? `
                                     <div class="alert alert-secondary mt-2">
                                         <i class="bi bi-info-circle"></i> El ticket esta cerrado. No se pueden agregar nuevos comentarios.
@@ -693,6 +719,24 @@
                         </div>
 
                         <!-- Archivos adjuntos -->
+=======
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="card shadow">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-chat"></i> Comentarios</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="comentariosContainer">${renderizarComentarios(comentarios)}</div>
+                                    <div class="alert alert-info mt-2">
+                                        <i class="bi bi-info-circle"></i> Los comentarios son visibles solo para tecnicos y administradores.
+                                    </div>
+                                </div>
+                            </div>
+                        `}
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                         <div class="card shadow mt-3">
                             <div class="card-header">
                                 <h6 class="mb-0"><i class="bi bi-paperclip"></i> Archivos adjuntos</h6>
@@ -701,7 +745,11 @@
                                 <div id="archivosContainer">
                                     <div class="text-center text-muted">Cargando archivos...</div>
                                 </div>
+<<<<<<< HEAD
                                 ${puedeComentarYSubir ? `
+=======
+                                ${esTecnico ? `
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                     <hr>
                                     <form id="formSubirArchivo" enctype="multipart/form-data">
                                         <input type="hidden" id="ticket_id_archivo" value="${ticket.Id_ticket}">
@@ -728,6 +776,7 @@
                                             <i class="bi bi-upload"></i> Subir archivo
                                         </button>
                                     </form>
+<<<<<<< HEAD
                                 ` : ticket.Id_estado == 4 ? `
                                     <div class="alert alert-secondary mt-2">
                                         <i class="bi bi-info-circle"></i> El ticket esta cerrado. No se pueden subir archivos.
@@ -735,6 +784,11 @@
                                 ` : `
                                     <div class="alert alert-info mt-2">
                                         <i class="bi bi-info-circle"></i> Solo el solicitante, el tecnico asignado y los administradores pueden subir archivos.
+=======
+                                ` : `
+                                    <div class="alert alert-info mt-2">
+                                        <i class="bi bi-info-circle"></i> Solo tecnicos y administradores pueden subir archivos.
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                     </div>
                                 `}
                             </div>
@@ -783,6 +837,14 @@
                                                     <i class="bi bi-arrow-right"></i> En proceso
                                                 </button>
                                             ` : ''}
+<<<<<<< HEAD
+=======
+                                            ${ticket.Id_estado != 3 && ticket.Id_estado != 4 ? `
+                                                <button class="btn btn-secondary" onclick="cambiarEstado(${ticket.Id_ticket}, 3)">
+                                                    <i class="bi bi-pause-circle"></i> En espera
+                                                </button>
+                                            ` : ''}
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                             ${ticket.Id_estado != 4 ? `
                                                 <button class="btn btn-success" onclick="cambiarEstado(${ticket.Id_ticket}, 4)">
                                                     <i class="bi bi-check-circle"></i> Cerrar ticket
@@ -792,6 +854,7 @@
                                     </div>
                                 ` : ''}
 
+<<<<<<< HEAD
                                 ${puedeExtender ? `
                                     <hr>
                                     <form id="formExtenderTiempo">
@@ -810,6 +873,8 @@
                                     </form>
                                 ` : ''}
 
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                 ${ticket.Id_estado == 4 && esSolicitante ? `
                                     <hr>
                                     <button class="btn btn-warning w-100" onclick="reabrirTicket(${ticket.Id_ticket})">
@@ -826,6 +891,27 @@
                                     <small class="text-muted d-block mt-1">Tu opinion nos ayuda a mejorar</small>
                                 ` : ''}
 
+<<<<<<< HEAD
+=======
+                                ${puedeEditar && tieneTecnicoAsignado && [2, 3].includes(ticket.Id_estado) ? `
+                                    <hr>
+                                    <form id="formExtenderTiempo">
+                                        <input type="hidden" id="ticket_id_extender" value="${ticket.Id_ticket}">
+                                        <div class="mb-2">
+                                            <label class="form-label fw-bold">Extender tiempo</label>
+                                            <div class="input-group">
+                                                <input type="number" id="horas_extender" class="form-control" min="1" max="168" value="4">
+                                                <span class="input-group-text">horas</span>
+                                            </div>
+                                            <small class="text-muted">Maximo 168 horas (7 dias)</small>
+                                        </div>
+                                        <button type="submit" class="btn btn-info w-100">
+                                            <i class="bi bi-clock-history"></i> Extender tiempo
+                                        </button>
+                                    </form>
+                                ` : ''}
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                 <hr>
                                 <a href="mis-tickets.html" class="btn btn-secondary w-100">
                                     <i class="bi bi-arrow-left"></i> Volver
@@ -846,7 +932,11 @@
                                         <li><strong>Tecnico:</strong> ${escapeHTML(ticket.tecnico_nombre)} ${escapeHTML(ticket.tecnico_apellido || '')}</li>
                                         <li><strong>Email tecnico:</strong> ${escapeHTML(ticket.tecnico_correo || 'No disponible')}</li>
                                     ` : ''}
+<<<<<<< HEAD
                                     ${ticket.Reabierto == 1 && ticket.Fecha_reabierto ? `
+=======
+                                    ${ticket.Reabierto ? `
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                         <li><strong>Reabierto:</strong> ${formatearFecha(ticket.Fecha_reabierto)}</li>
                                     ` : ''}
                                     ${ticket.Tiempo_extendido ? `
@@ -886,7 +976,10 @@
             }
         }
 
+<<<<<<< HEAD
         // ===== FUNCIONES AUXILIARES =====
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         function renderizarHistorial(historial) {
             if (!historial || historial.length === 0) {
                 return '<div class="text-center text-muted">No hay historial</div>';

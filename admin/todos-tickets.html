@@ -77,6 +77,13 @@
             border-color: #6a1815 !important;
         }
 
+<<<<<<< HEAD
+=======
+        .btn-success i {
+            color: #fff !important;
+        }
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         .table-hover tbody tr {
             cursor: pointer;
             transition: all 0.2s;
@@ -111,11 +118,16 @@
             font-weight: 600;
         }
 
+<<<<<<< HEAD
         .form-select:focus, .form-control:focus {
+=======
+        .form-select:focus {
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             border-color: #861f1b;
             box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25);
         }
 
+<<<<<<< HEAD
         .pagination .page-item .page-link {
             color: #000;
             border-color: #dee2e6;
@@ -136,6 +148,13 @@
             pointer-events: none;
             background-color: #fff;
             border-color: #dee2e6;
+=======
+        .btn-outline-primary i {
+            color: #000 !important;
+        }
+        .btn-outline-primary:hover i {
+            color: #fff !important;
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         }
     </style>
 </head>
@@ -209,24 +228,42 @@
                 <div class="filtros-container">
                     <div class="row g-2">
                         <div class="col-md-3">
+<<<<<<< HEAD
                             <select id="filtroEstado" class="form-select" onchange="cargarTickets(1)">
+=======
+                            <select id="filtroEstado" class="form-select" onchange="cargarTickets()">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                 <option value="">Todos los estados</option>
                             </select>
                         </div>
                         <div class="col-md-3">
+<<<<<<< HEAD
                             <select id="filtroPrioridad" class="form-select" onchange="cargarTickets(1)">
+=======
+                            <select id="filtroPrioridad" class="form-select" onchange="cargarTickets()">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                 <option value="">Todas las prioridades</option>
                             </select>
                         </div>
                         <div class="col-md-3">
+<<<<<<< HEAD
                             <select id="filtroCategoria" class="form-select" onchange="cargarTickets(1)">
+=======
+                            <select id="filtroCategoria" class="form-select" onchange="cargarTickets()">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                 <option value="">Todas las categorias</option>
                             </select>
                         </div>
                         <div class="col-md-3">
+<<<<<<< HEAD
                             <button class="btn btn-success w-100" onclick="abrirModalExportar()">
                                 <i class="bi bi-file-excel"></i> Exportar Excel
                             </button>
+=======
+                            <a href="../api/exportar/excel.php" class="btn btn-success w-100" target="_blank">
+                                <i class="bi bi-file-excel"></i> Exportar Excel
+                            </a>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                         </div>
                     </div>
                 </div>
@@ -259,18 +296,22 @@
                                 </tbody>
                             </table>
                         </div>
+<<<<<<< HEAD
                         <div id="paginadorContainer" class="d-flex justify-content-between align-items-center mt-3">
                             <div id="infoPaginacion" class="text-muted small"></div>
                             <nav aria-label="Navegacion de paginas">
                                 <ul class="pagination pagination-sm mb-0" id="paginadorLista"></ul>
                             </nav>
                         </div>
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     </div>
                 </div>
             </main>
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Modal de exportación (se mantiene igual) -->
     <div class="modal fade" id="modalExportar" tabindex="-1">
         <div class="modal-dialog modal-xl">
@@ -363,6 +404,8 @@
         </div>
     </div>
 
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
@@ -371,9 +414,12 @@
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
 
+<<<<<<< HEAD
         let paginaActual = 1;
         let totalPaginas = 1;
 
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         function escapeHTML(t) {
             if (!t) return '';
             const d = document.createElement('div');
@@ -381,6 +427,7 @@
             return d.innerHTML;
         }
 
+<<<<<<< HEAD
         // Cargar filtros del modal de exportación
         async function cargarFiltrosExport() {
             try {
@@ -540,6 +587,8 @@
         }
 
         // ===== PAGINACIÓN Y FILTROS PRINCIPALES =====
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         async function cargarFiltros() {
             try {
                 const [estadosRes, prioridadesRes, categoriasRes] = await Promise.all([
@@ -579,8 +628,12 @@
             }
         }
 
+<<<<<<< HEAD
         async function cargarTickets(page = 1) {
             paginaActual = page;
+=======
+        async function cargarTickets() {
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             const tbody = document.getElementById('ticketsTableBody');
             tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4"><div class="spinner-border text-primary"></div></td></tr>';
 
@@ -589,11 +642,16 @@
                 const prioridad = document.getElementById('filtroPrioridad').value;
                 const categoria = document.getElementById('filtroCategoria').value;
 
+<<<<<<< HEAD
                 let url = '../api/tickets/listar.php?page=' + page + '&limit=6';
+=======
+                let url = '../api/tickets/listar.php';
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 const params = new URLSearchParams();
                 if (estado) params.append('estado', estado);
                 if (prioridad) params.append('prioridad', prioridad);
                 if (categoria) params.append('categoria', categoria);
+<<<<<<< HEAD
                 if (params.toString()) url += '&' + params.toString();
 
                 const response = await fetch(url);
@@ -613,6 +671,20 @@
                     tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">No hay tickets</td></tr>';
                     document.getElementById('paginadorLista').innerHTML = '';
                     document.getElementById('infoPaginacion').textContent = '0 tickets';
+=======
+                if (params.toString()) url += '?' + params.toString();
+
+                const response = await fetch(url);
+                const tickets = await response.json();
+
+                if (tickets.error || !Array.isArray(tickets)) {
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>';
+                    return;
+                }
+
+                if (tickets.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">No hay tickets</td></tr>';
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     return;
                 }
 
@@ -648,6 +720,7 @@
                     </tr>
                 `).join('');
 
+<<<<<<< HEAD
                 generarPaginador(page, totalPaginas, result.total);
 
             } catch (e) {
@@ -716,6 +789,14 @@
             cargarTickets(page);
         }
 
+=======
+            } catch (e) {
+                console.error('Error:', e);
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>';
+            }
+        }
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');
             window.location.href = '../login.html';
@@ -723,7 +804,11 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             cargarFiltros();
+<<<<<<< HEAD
             cargarTickets(1);
+=======
+            cargarTickets();
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         });
     </script>
 </body>

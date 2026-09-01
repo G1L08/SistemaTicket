@@ -53,6 +53,46 @@
             color: #fff !important;
         }
 
+<<<<<<< HEAD
+=======
+        .stat-card {
+            border-radius: 12px;
+            padding: 20px;
+            background: transparent !important;
+            border: 2px solid #dee2e6;
+            transition: all 0.3s;
+            cursor: pointer;
+            color: #333 !important;
+        }
+        .stat-card:hover {
+            border-color: #861f1b !important;
+            background-color: #861f1b !important;
+            color: #fff !important;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(134, 31, 27, 0.3);
+        }
+        .stat-card:hover .number,
+        .stat-card:hover .label,
+        .stat-card:hover .icon {
+            color: #fff !important;
+        }
+        .stat-card .icon {
+            font-size: 2.5rem;
+            opacity: 0.5;
+            color: #6c757d;
+        }
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-card .label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: #6c757d;
+        }
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         .btn-outline-primary {
             border-color: #000 !important;
             color: #000 !important;
@@ -81,23 +121,40 @@
         .ticket-item:last-child {
             border-bottom: none;
         }
+<<<<<<< HEAD
         .progress-bar {
             transition: width 0.6s ease;
         }
+=======
+
+        .progress-bar {
+            transition: width 0.6s ease;
+        }
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         .card-header {
             background: transparent;
             border-bottom: 2px solid #f0f2f5;
             font-weight: 600;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         .badge-prioridad {
             font-size: 11px;
             padding: 4px 10px;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         .sidebar hr {
             border-color: #dee2e6;
             margin: 10px 15px;
         }
 
+<<<<<<< HEAD
         .navbar .navbar-notificaciones {
             display: flex;
             align-items: center;
@@ -108,6 +165,8 @@
             right: auto !important;
         }
 
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         @media (max-width: 768px) {
             .sidebar .nav-link {
                 margin: 2px 4px;
@@ -117,6 +176,7 @@
     </style>
 </head>
 <body>
+<<<<<<< HEAD
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid d-flex justify-content-between align-items-center">
@@ -144,6 +204,17 @@
                 <span class="text-white" id="usuarioNombre">Usuario</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
                     <i class="bi bi-box-arrow-right"></i> Cerrar sesion
+=======
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                Sistema de Tickets - DAR TI
+            </span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Usuario</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 </button>
             </div>
         </div>
@@ -198,7 +269,57 @@
                     <p class="text-muted">Bienvenido, <span id="nombreUsuario"></span></p>
                 </div>
 
+<<<<<<< HEAD
                 <!-- SECCIÓN DE TICKETS RECIENTES Y PRIORIDADES (sin estadísticas) -->
+=======
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="number" id="totalTickets">0</div>
+                                    <div class="label">Total tickets</div>
+                                </div>
+                                <div class="icon"><i class="bi bi-ticket"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="number" id="ticketsAbiertos">0</div>
+                                    <div class="label">Abiertos</div>
+                                </div>
+                                <div class="icon"><i class="bi bi-envelope-open"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="number" id="ticketsCerrados">0</div>
+                                    <div class="label">Cerrados</div>
+                                </div>
+                                <div class="icon"><i class="bi bi-check-circle"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="number" id="ticketsPool">0</div>
+                                    <div class="label">Sin asignar</div>
+                                </div>
+                                <div class="icon"><i class="bi bi-inbox"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card shadow">
@@ -230,7 +351,10 @@
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 <!-- SECCIÓN: MIS ÚLTIMOS TICKETS -->
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 <div class="card shadow mt-4">
                     <div class="card-header">
                         <i class="bi bi-person" style="color: #861f1b;"></i> Mis últimos tickets
@@ -248,7 +372,10 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
     <script src="js/notificaciones.js"></script>
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     <script>
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario) {
@@ -309,8 +436,21 @@
                     return;
                 }
 
+<<<<<<< HEAD
                 // Solo actualizamos las secciones de tickets recientes y prioridades
                 // (las estadísticas fueron eliminadas)
+=======
+                const total = tickets.length;
+                const abiertos = tickets.filter(t => t.Id_estado === 1).length;
+                const proceso = tickets.filter(t => t.Id_estado === 2 || t.Id_estado === 3).length;
+                const cerrados = tickets.filter(t => t.Id_estado === 4).length;
+                const pool = tickets.filter(t => t.Id_tecnico_asignado === null && t.Id_estado === 1).length;
+
+                document.getElementById('totalTickets').textContent = total;
+                document.getElementById('ticketsAbiertos').textContent = abiertos + proceso;
+                document.getElementById('ticketsCerrados').textContent = cerrados;
+                document.getElementById('ticketsPool').textContent = pool;
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
                 const recientes = tickets.slice(0, 5);
                 const containerRecientes = document.getElementById('ticketsRecientes');
@@ -401,7 +541,10 @@
                     }).join('');
                 }
 
+<<<<<<< HEAD
                 // Sección "Mis últimos tickets"
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 const misTickets = tickets.slice(0, 8);
                 const containerMisTickets = document.getElementById('misTicketsContainer');
 

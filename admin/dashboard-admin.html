@@ -156,7 +156,13 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
+<<<<<<< HEAD
             <span class="navbar-brand"><i class="bi bi-ticket-perforated"></i> Sistema de Tickets - Admin TI</span>
+=======
+            <span class="navbar-brand">
+                Sistema de Tickets - DAR TI
+            </span>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             <div class="d-flex align-items-center">
                 <span class="text-white me-3" id="usuarioNombre">Admin</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
@@ -216,7 +222,11 @@
 
             <main class="col-md-10 ms-sm-auto px-md-4">
                 <div class="pt-3 pb-2 mb-3 border-bottom">
+<<<<<<< HEAD
                     <h1 class="h2"><i class="bi bi-graph-up"></i> Panel de Administracion</h1>
+=======
+                    <h1 class="h2"><i class="bi bi-speedometer2"></i> Panel de Administracion</h1>
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 </div>
 
                 <div class="row g-3 mb-4">
@@ -343,7 +353,10 @@
 
         async function cargarDashboard() {
             try {
+<<<<<<< HEAD
                 // Obtener TODOS los tickets (sin filtro de tipo)
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 const response = await fetch('../api/tickets/listar.php');
                 const tickets = await response.json();
 
@@ -352,6 +365,7 @@
                     return;
                 }
 
+<<<<<<< HEAD
                 if (!Array.isArray(tickets)) {
                     console.error('Respuesta no es un array:', tickets);
                     return;
@@ -362,12 +376,19 @@
                 const abiertos = tickets.filter(t => t.Id_estado == 1 || t.Id_estado == 2 || t.Id_estado == 3).length;
                 const cerrados = tickets.filter(t => t.Id_estado == 4).length;
                 const pool = tickets.filter(t => t.Id_tecnico_asignado === null && t.Id_estado == 1).length;
+=======
+                const total = tickets.length;
+                const abiertos = tickets.filter(t => t.Id_estado === 1 || t.Id_estado === 2 || t.Id_estado === 3).length;
+                const cerrados = tickets.filter(t => t.Id_estado === 4).length;
+                const pool = tickets.filter(t => !t.Id_tecnico_asignado && t.Id_estado !== 4 && t.Id_estado !== 5).length;
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
                 document.getElementById('totalTickets').textContent = total;
                 document.getElementById('ticketsAbiertos').textContent = abiertos;
                 document.getElementById('ticketsCerrados').textContent = cerrados;
                 document.getElementById('ticketsPool').textContent = pool;
 
+<<<<<<< HEAD
                 // ===== GRÁFICAS =====
                 crearGraficaEstados(tickets);
                 crearGraficaPrioridades(tickets);
@@ -376,6 +397,11 @@
                 mostrarUltimosTickets(tickets);
 
                 // ===== ALERTAS =====
+=======
+                crearGraficaEstados(tickets);
+                crearGraficaPrioridades(tickets);
+                mostrarUltimosTickets(tickets);
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 mostrarAlertas(tickets);
 
             } catch (error) {
@@ -467,17 +493,30 @@
                             <small class="text-muted">
                                 <i class="bi bi-person"></i> ${escapeHTML(t.usuario_nombre || '')}
                                 <span class="ms-2">
+<<<<<<< HEAD
                                     <span class="badge bg-${t.Id_estado == 1 ? 'warning' : 
                                                       t.Id_estado == 2 ? 'info' : 
                                                       t.Id_estado == 3 ? 'secondary' :
                                                       t.Id_estado == 4 ? 'success' : 'danger'}">
+=======
+                                    <span class="badge bg-${t.Id_estado === 1 ? 'warning' : 
+                                                      t.Id_estado === 2 ? 'info' : 
+                                                      t.Id_estado === 3 ? 'secondary' :
+                                                      t.Id_estado === 4 ? 'success' : 'danger'}">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                         ${escapeHTML(t.estado_nombre)}
                                     </span>
                                 </span>
                                 <span class="ms-1">
+<<<<<<< HEAD
                                     <span class="badge bg-${t.prioridad_nombre?.toLowerCase() == 'critica' ? 'danger' :
                                                       t.prioridad_nombre?.toLowerCase() == 'alta' ? 'warning' :
                                                       t.prioridad_nombre?.toLowerCase() == 'media' ? 'info' : 'secondary'}">
+=======
+                                    <span class="badge bg-${t.prioridad_nombre?.toLowerCase() === 'critica' ? 'danger' :
+                                                      t.prioridad_nombre?.toLowerCase() === 'alta' ? 'warning' :
+                                                      t.prioridad_nombre?.toLowerCase() === 'media' ? 'info' : 'secondary'}">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                                         ${escapeHTML(t.prioridad_nombre)}
                                     </span>
                                 </span>
@@ -497,8 +536,13 @@
 
             const criticos = tickets.filter(t =>
                 t.prioridad_nombre === 'Critica' &&
+<<<<<<< HEAD
                 t.Id_tecnico_asignado === null &&
                 t.Id_estado != 4
+=======
+                !t.Id_tecnico_asignado &&
+                t.Id_estado !== 4
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             );
             criticos.forEach(t => {
                 alertas.push({
@@ -509,7 +553,11 @@
             });
 
             const proximos = tickets.filter(t => {
+<<<<<<< HEAD
                 if (!t.Fecha_vencimiento || t.Id_estado == 4) return false;
+=======
+                if (!t.Fecha_vencimiento || t.Id_estado === 4) return false;
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 const diff = (new Date(t.Fecha_vencimiento) - new Date()) / (1000 * 60 * 60);
                 return diff > 0 && diff < 4;
             });
@@ -522,7 +570,11 @@
             });
 
             const expirados = tickets.filter(t => {
+<<<<<<< HEAD
                 if (!t.Fecha_vencimiento || t.Id_estado == 4) return false;
+=======
+                if (!t.Fecha_vencimiento || t.Id_estado === 4) return false;
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 return new Date(t.Fecha_vencimiento) < new Date();
             });
             expirados.forEach(t => {

@@ -93,10 +93,25 @@
             background: transparent;
         }
 
+<<<<<<< HEAD
+=======
+        .card-header {
+            background: transparent;
+            border-bottom: 2px solid #f0f2f5;
+            font-weight: 600;
+        }
+
+        .badge-prioridad {
+            font-size: 11px;
+            padding: 4px 10px;
+        }
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         .h2 i {
             color: #861f1b;
         }
 
+<<<<<<< HEAD
         .pagination .page-item .page-link {
             color: #000;
             border-color: #dee2e6;
@@ -117,6 +132,13 @@
             pointer-events: none;
             background-color: #fff;
             border-color: #dee2e6;
+=======
+        .ticket-item {
+            transition: all 0.2s;
+        }
+        .ticket-item:hover {
+            background: #f8f9fa;
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         }
     </style>
 </head>
@@ -124,11 +146,21 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
+<<<<<<< HEAD
             <span class="navbar-brand"><i class="bi bi-ticket-perforated"></i> Sistema de Tickets - DAR TI</span>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3" id="usuarioNombre">Usuario</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
                     <i class="bi bi-box-arrow-right"></i> Cerrar sesion
+=======
+            <span class="navbar-brand">
+                Sistema de Tickets - DAR TI
+            </span>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="usuarioNombre">Usuario</span>
+                <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 </button>
             </div>
         </div>
@@ -178,6 +210,7 @@
 
             <main class="col-md-10 ms-sm-auto px-md-4">
                 <div class="pt-3 pb-2 mb-3 border-bottom">
+<<<<<<< HEAD
                     <h1 class="h2"><i class="bi bi-list-ul"></i> Mis Tickets</h1>
                 </div>
 
@@ -185,30 +218,58 @@
                 <ul class="nav nav-tabs mb-3">
                     <li class="nav-item">
                         <a class="nav-link active" id="tabCreados" onclick="cambiarTipo('creados', 1)">
+=======
+                    <h1 class="h2">
+                        <i class="bi bi-list-ul"></i> Mis Tickets
+                    </h1>
+                </div>
+
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabCreados" onclick="cargarTickets('creados')">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                             <i class="bi bi-person"></i> Creados por mi
                         </a>
                     </li>
                     <li class="nav-item" id="tabAsignadosLi" style="display:none;">
+<<<<<<< HEAD
                         <a class="nav-link" id="tabAsignados" onclick="cambiarTipo('asignados', 1)">
+=======
+                        <a class="nav-link" id="tabAsignados" onclick="cargarTickets('asignados')">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                             <i class="bi bi-briefcase"></i> Asignados a mi
                         </a>
                     </li>
                 </ul>
 
+<<<<<<< HEAD
                 <!-- Filtros -->
                 <div class="row mb-3">
                     <div class="col-md-3">
                         <select id="filtroEstado" class="form-select" onchange="cargarTickets(1)">
+=======
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <select id="filtroEstado" class="form-select" onchange="cargarTickets()">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                             <option value="">Todos los estados</option>
                         </select>
                     </div>
                     <div class="col-md-3">
+<<<<<<< HEAD
                         <select id="filtroPrioridad" class="form-select" onchange="cargarTickets(1)">
+=======
+                        <select id="filtroPrioridad" class="form-select" onchange="cargarTickets()">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                             <option value="">Todas las prioridades</option>
                         </select>
                     </div>
                     <div class="col-md-3">
+<<<<<<< HEAD
                         <input type="text" id="filtroBusqueda" class="form-control" placeholder="Buscar por folio o titulo" onkeyup="cargarTickets(1)">
+=======
+                        <input type="text" id="filtroBusqueda" class="form-control" placeholder="Buscar por folio o titulo" onkeyup="cargarTickets()">
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     </div>
                     <div class="col-md-3 text-end">
                         <a href="nuevo-ticket.html" class="btn btn-primary">
@@ -222,6 +283,7 @@
                         <div class="spinner-border text-primary"></div>
                     </div>
                 </div>
+<<<<<<< HEAD
 
                 <!-- Paginador -->
                 <div id="paginadorContainer" class="d-flex justify-content-between align-items-center mt-3" style="display:none;">
@@ -230,6 +292,8 @@
                         <ul class="pagination pagination-sm mb-0" id="paginadorLista"></ul>
                     </nav>
                 </div>
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             </main>
         </div>
     </div>
@@ -251,8 +315,11 @@
         }
 
         let tipoActual = 'creados';
+<<<<<<< HEAD
         let paginaActual = 1;
         let totalPaginas = 1;
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
         function escapeHTML(t) {
             if (!t) return '';
@@ -271,6 +338,7 @@
             });
         }
 
+<<<<<<< HEAD
         function cambiarTipo(tipo, page) {
             tipoActual = tipo;
             document.getElementById('tabCreados').classList.toggle('active', tipo === 'creados');
@@ -278,6 +346,8 @@
             cargarTickets(page || 1);
         }
 
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         async function cargarFiltros() {
             try {
                 const res = await fetch('api/estados/listar.php');
@@ -304,8 +374,13 @@
             }
         }
 
+<<<<<<< HEAD
         async function cargarTickets(page = 1) {
             paginaActual = page;
+=======
+        async function cargarTickets(tipo) {
+            if (tipo) tipoActual = tipo;
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
             const container = document.getElementById('ticketsContainer');
             container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
 
@@ -314,11 +389,16 @@
                 const prioridad = document.getElementById('filtroPrioridad').value;
                 const busqueda = document.getElementById('filtroBusqueda').value.toLowerCase();
 
+<<<<<<< HEAD
                 let url = 'api/tickets/listar.php?tipo=' + tipoActual + '&page=' + page + '&limit=6';
+=======
+                let url = 'api/tickets/listar.php?tipo=' + tipoActual;
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                 if (estado) url += '&estado=' + estado;
                 if (prioridad) url += '&prioridad=' + prioridad;
 
                 const response = await fetch(url);
+<<<<<<< HEAD
                 const result = await response.json();
 
                 if (result.error) {
@@ -343,6 +423,24 @@
                 }
 
                 if (tickets.length === 0) {
+=======
+                const tickets = await response.json();
+
+                if (tickets.error) {
+                    container.innerHTML = '<div class="alert alert-danger">' + escapeHTML(tickets.error) + '</div>';
+                    return;
+                }
+
+                let filtrados = tickets;
+                if (busqueda) {
+                    filtrados = tickets.filter(t =>
+                        (t.Folio && t.Folio.toLowerCase().includes(busqueda)) ||
+                        (t.Titulo && t.Titulo.toLowerCase().includes(busqueda))
+                    );
+                }
+
+                if (filtrados.length === 0) {
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     const msj = tipoActual === 'asignados' ? 'No tienes tickets asignados' : 'Aun no has creado tickets';
                     container.innerHTML = `
                         <div class="text-center py-5">
@@ -353,7 +451,10 @@
                             </a>
                         </div>
                     `;
+<<<<<<< HEAD
                     document.getElementById('paginadorContainer').style.display = 'none';
+=======
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     return;
                 }
 
@@ -371,13 +472,21 @@
                     'Expirado': 'danger'
                 };
 
+<<<<<<< HEAD
                 container.innerHTML = tickets.map(t => {
+=======
+                container.innerHTML = filtrados.map(t => {
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     const pColor = prioridadColors[t.prioridad_nombre] || 'secondary';
                     const eColor = estadoColors[t.estado_nombre] || 'secondary';
 
                     let badge = '';
                     const esAsignado = t.Id_tecnico_asignado == usuario.id;
                     const esCreador = t.Id_usuario == usuario.id;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
                     if (esAsignado && esCreador) {
                         badge = '<span class="badge bg-info ms-2">Creador / Tecnico</span>';
                     } else if (esAsignado) {
@@ -423,6 +532,7 @@
                     `;
                 }).join('');
 
+<<<<<<< HEAD
                 // Mostrar paginador si hay más de 6 tickets
                 if (totalPaginas > 1) {
                     document.getElementById('paginadorContainer').style.display = 'flex';
@@ -490,6 +600,25 @@
 
         // Revisar si los eventos de pestañas ya están configurados (se llaman desde onclick en HTML)
         // También se puede manejar con addEventListener, pero ya están en el HTML.
+=======
+            } catch (e) {
+                console.error('Error:', e);
+                container.innerHTML = '<div class="alert alert-danger">Error al cargar</div>';
+            }
+        }
+
+        document.getElementById('tabCreados').addEventListener('click', function() {
+            document.getElementById('tabCreados').classList.add('active');
+            document.getElementById('tabAsignados').classList.remove('active');
+            cargarTickets('creados');
+        });
+
+        document.getElementById('tabAsignados').addEventListener('click', function() {
+            document.getElementById('tabAsignados').classList.add('active');
+            document.getElementById('tabCreados').classList.remove('active');
+            cargarTickets('asignados');
+        });
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');
@@ -498,7 +627,11 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             cargarFiltros();
+<<<<<<< HEAD
             cargarTickets(1);
+=======
+            cargarTickets('creados');
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
         });
     </script>
 </body>
