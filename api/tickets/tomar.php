@@ -26,9 +26,9 @@ if (!isset($data['id_ticket'])) {
 
 $id_ticket = intval($data['id_ticket']);
 $usuario_id = $_SESSION['usuario_id'];
-$usuario_nombre = $_SESSION['nombre'] ?? 'Técnico';
+$usuario_nombre = $_SESSION['nombre'] ?? 'Tecnico';
 
-try {//ticket disponible
+try {
     $stmt = $pdo->prepare("SELECT t.*, e.Nombre as estado_nombre 
                            FROM Ticket t
                            LEFT JOIN Estado e ON t.Id_estado = e.Id_estado
@@ -40,14 +40,14 @@ try {//ticket disponible
         echo json_encode(['error' => 'Ticket no encontrado']);
         exit;
     }
-
+    
     if ($ticket['Id_tecnico_asignado'] !== null) {
-        echo json_encode(['error' => 'Este ticket ya fue asignado a otro técnico']);
+        echo json_encode(['error' => 'Este ticket ya fue asignado a otro tecnico']);
         exit;
     }
     
     if ($ticket['Id_estado'] != 1) {
-        echo json_encode(['error' => 'Este ticket no está disponible (estado: ' . ($ticket['estado_nombre'] ?? 'desconocido') . ')']);
+        echo json_encode(['error' => 'Este ticket no esta disponible (estado: ' . ($ticket['estado_nombre'] ?? 'desconocido') . ')']);
         exit;
     }
     

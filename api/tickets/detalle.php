@@ -23,10 +23,10 @@ $roles = $_SESSION['roles'] ?? ['Usuario'];
 
 try {
     $stmt = $pdo->prepare("SELECT t.*, 
-                           u.Nombre as usuario_nombre, 
-                           u.Apellido_paterno as usuario_apellido,
-                           u.correo as usuario_correo,
-                           u.No_empleado as usuario_empleado,
+                           COALESCE(u.Nombre, 'Usuario desconocido') as usuario_nombre, 
+                           COALESCE(u.Apellido_paterno, '') as usuario_apellido,
+                           COALESCE(u.correo, 'No disponible') as usuario_correo,
+                           COALESCE(u.No_empleado, 'No disponible') as usuario_empleado,
                            e.Nombre as estado_nombre,
                            p.Nombre as prioridad_nombre,
                            p.Horas_resolucion as prioridad_horas,
@@ -43,21 +43,17 @@ try {
                            WHERE t.Id_ticket = ?");
     $stmt->execute([$id]);
     $ticket = $stmt->fetch();
-    
     if (!$ticket) {
         echo json_encode(['error' => 'Ticket no encontrado']);
         exit;
     }
-    
-    // VERIFICAR PERMISOS 
+
     $esAdmin = in_array('Administrador', $roles);
-    $esTecnico = in_array('Técnico', $roles);
+    $esTecnico = in_array('Tecnico', $roles);
     $esSolicitante = ($ticket['Id_usuario'] == $usuario_id);
     $esTecnicoAsignado = ($ticket['Id_tecnico_asignado'] == $usuario_id);
-    
-    
+
     $puedeVer = false;
-    
     if ($esAdmin) {
         $puedeVer = true;
     } elseif ($esTecnico) {
@@ -67,15 +63,14 @@ try {
     } elseif ($esSolicitante) {
         $puedeVer = true;
     }
-    
     if (!$puedeVer) {
         http_response_code(403);
         echo json_encode(['error' => 'No tienes permiso para ver este ticket']);
         exit;
     }
-    
+
     echo json_encode($ticket);
-    
+
 } catch(PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }

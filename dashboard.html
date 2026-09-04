@@ -11,7 +11,6 @@
         :root {
             --color-dar: #861f1b;
             --color-dar-hover: #6a1815;
-            --color-dar-light: #f5e8e7;
         }
 
         .navbar-dark.bg-dark {
@@ -19,9 +18,6 @@
         }
         .navbar-dark .navbar-brand {
             color: #fff !important;
-        }
-        .navbar-dark .navbar-brand:hover {
-            color: #f0d0ce !important;
         }
 
         .sidebar {
@@ -53,43 +49,6 @@
             color: #fff !important;
         }
 
-        .stat-card {
-            border-radius: 12px;
-            padding: 20px;
-            background: transparent !important;
-            border: 2px solid #dee2e6;
-            transition: all 0.3s;
-            cursor: pointer;
-            color: #333 !important;
-        }
-        .stat-card:hover {
-            border-color: #861f1b !important;
-            background-color: #861f1b !important;
-            color: #fff !important;
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(134, 31, 27, 0.3);
-        }
-        .stat-card:hover .number,
-        .stat-card:hover .label,
-        .stat-card:hover .icon {
-            color: #fff !important;
-        }
-        .stat-card .icon {
-            font-size: 2.5rem;
-            opacity: 0.5;
-            color: #6c757d;
-        }
-        .stat-card .number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #333;
-        }
-        .stat-card .label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            color: #6c757d;
-        }
-
         .btn-outline-primary {
             border-color: #000 !important;
             color: #000 !important;
@@ -119,10 +78,6 @@
             border-bottom: none;
         }
 
-        .progress-bar {
-            transition: width 0.6s ease;
-        }
-
         .card-header {
             background: transparent;
             border-bottom: 2px solid #f0f2f5;
@@ -145,18 +100,71 @@
                 padding: 10px 12px;
             }
         }
+
+        .btn-notificaciones {
+            position: relative;
+        }
+        .btn-notificaciones .badge {
+            font-size: 0.6rem;
+            padding: 0.25rem 0.5rem;
+        }
+        #notificacionesDropdown {
+            width: 350px;
+            max-height: 400px;
+            overflow-y: auto;
+            position: absolute;
+            right: 0;
+            top: 35px;
+            z-index: 1050;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: none;
+        }
+        #notificacionesDropdown .dropdown-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f2f5;
+            cursor: pointer;
+        }
+        #notificacionesDropdown .dropdown-item:hover {
+            background: #f8f9fa;
+        }
+        #notificacionesDropdown .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .fw-bold {
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
+
     <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
             <span class="navbar-brand">
                 Sistema de Tickets - DAR TI
             </span>
-            <div class="d-flex align-items-center">
-                <span class="text-white me-3" id="usuarioNombre">Usuario</span>
+            <div class="d-flex align-items-center gap-2">
+                <div class="position-relative">
+                    <button type="button" class="btn btn-outline-light btn-sm position-relative btn-notificaciones" onclick="toggleNotificaciones()">
+                        <i class="bi bi-bell"></i>
+                        <span id="notificacionContador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; display:none;">
+                            0
+                        </span>
+                    </button>
+                    <div id="notificacionesDropdown" class="dropdown-menu dropdown-menu-end p-0">
+                        <div class="p-2 bg-light border-bottom d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">Notificaciones</span>
+                            <button class="btn btn-sm btn-link" onclick="marcarTodasLeidas()">Marcar todas como leidas</button>
+                        </div>
+                        <div id="listaNotificaciones" class="p-2">
+                            <div class="text-center text-muted py-3">Cargando...</div>
+                        </div>
+                    </div>
+                </div>
+                <span class="text-white" id="usuarioNombre">Usuario</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesion
                 </button>
             </div>
         </div>
@@ -164,6 +172,7 @@
 
     <div class="container-fluid">
         <div class="row">
+
             <nav class="col-md-2 d-md-block bg-light sidebar">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
@@ -211,53 +220,6 @@
                     <p class="text-muted">Bienvenido, <span id="nombreUsuario"></span></p>
                 </div>
 
-                <div class="row g-3 mb-4">
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="number" id="totalTickets">0</div>
-                                    <div class="label">Total tickets</div>
-                                </div>
-                                <div class="icon"><i class="bi bi-ticket"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="number" id="ticketsAbiertos">0</div>
-                                    <div class="label">Abiertos</div>
-                                </div>
-                                <div class="icon"><i class="bi bi-envelope-open"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="number" id="ticketsCerrados">0</div>
-                                    <div class="label">Cerrados</div>
-                                </div>
-                                <div class="icon"><i class="bi bi-check-circle"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="number" id="ticketsPool">0</div>
-                                    <div class="label">Sin asignar</div>
-                                </div>
-                                <div class="icon"><i class="bi bi-inbox"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card shadow">
@@ -276,7 +238,7 @@
                     <div class="col-md-5">
                         <div class="card shadow">
                             <div class="card-header">
-                                <i class="bi bi-pie-chart" style="color: #861f1b;"></i> Distribución por prioridad
+                                <i class="bi bi-pie-chart" style="color: #861f1b;"></i> Distribucion por prioridad
                             </div>
                             <div class="card-body" id="prioridadesContainer">
                                 <div class="text-center text-muted py-3">
@@ -290,8 +252,9 @@
                 </div>
 
                 <div class="card shadow mt-4">
-                    <div class="card-header">
-                        <i class="bi bi-person" style="color: #861f1b;"></i> Mis últimos tickets
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-person" style="color: #861f1b;"></i> Mis ultimos tickets</span>
+                        <a href="mis-tickets.html" class="btn btn-sm btn-outline-primary">Ver todos</a>
                     </div>
                     <div class="card-body" id="misTicketsContainer">
                         <div class="text-center text-muted py-3">
@@ -301,12 +264,48 @@
                         </div>
                     </div>
                 </div>
+
             </main>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        function toggleNotificaciones() {
+            const dropdown = document.getElementById('notificacionesDropdown');
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                if (dropdown.style.display === 'block') {
+                    cargarNotificaciones();
+                }
+            }
+        }
+
+        function marcarTodasLeidas() {
+            alert('Funcionalidad en desarrollo');
+        }
+
+        async function cargarNotificaciones() {
+            const lista = document.getElementById('listaNotificaciones');
+            lista.innerHTML = '<div class="text-center text-muted py-3">Cargando...</div>';
+            try {
+                const response = await fetch('api/notificaciones/obtener.php');
+                const data = await response.json();
+                if (data.length === 0) {
+                    lista.innerHTML = '<div class="text-center text-muted py-3">No hay notificaciones</div>';
+                    return;
+                }
+                lista.innerHTML = data.map(n => `
+                    <div class="dropdown-item ${n.Leida ? 'text-muted' : 'fw-bold'}">
+                        ${n.Mensaje}
+                        <br><small class="text-muted">${new Date(n.Fecha_creacion).toLocaleString()}</small>
+                    </div>
+                `).join('');
+            } catch (e) {
+                lista.innerHTML = '<div class="alert alert-danger">Error al cargar notificaciones</div>';
+            }
+        }
+
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario) {
             window.location.href = 'login.html';
@@ -314,7 +313,7 @@
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
         document.getElementById('nombreUsuario').textContent = usuario.nombre;
 
-        if (usuario.roles && (usuario.roles.includes('Técnico') || usuario.roles.includes('Administrador'))) {
+        if (usuario.roles && (usuario.roles.includes('Administrador') || usuario.roles.includes('Tecnico'))) {
             document.getElementById('poolMenu').style.display = 'block';
         }
         if (usuario.roles && usuario.roles.includes('Administrador')) {
@@ -346,12 +345,12 @@
             if (diff < 60) return 'hace ' + diff + ' segundos';
             if (diff < 3600) return 'hace ' + Math.floor(diff / 60) + ' minutos';
             if (diff < 86400) return 'hace ' + Math.floor(diff / 3600) + ' horas';
-            return 'hace ' + Math.floor(diff / 86400) + ' días';
+            return 'hace ' + Math.floor(diff / 86400) + ' dias';
         }
 
         async function cargarDashboard() {
             try {
-                const response = await fetch('api/tickets/listar.php?tipo=creados');
+                const response = await fetch('api/tickets/listar.php?tipo=mis_tickets');
                 const tickets = await response.json();
 
                 if (tickets.error) {
@@ -365,17 +364,6 @@
                     mostrarError('Error en los datos recibidos');
                     return;
                 }
-
-                const total = tickets.length;
-                const abiertos = tickets.filter(t => t.Id_estado === 1).length;
-                const proceso = tickets.filter(t => t.Id_estado === 2 || t.Id_estado === 3).length;
-                const cerrados = tickets.filter(t => t.Id_estado === 4).length;
-                const pool = tickets.filter(t => t.Id_tecnico_asignado === null && t.Id_estado === 1).length;
-
-                document.getElementById('totalTickets').textContent = total;
-                document.getElementById('ticketsAbiertos').textContent = abiertos + proceso;
-                document.getElementById('ticketsCerrados').textContent = cerrados;
-                document.getElementById('ticketsPool').textContent = pool;
 
                 const recientes = tickets.slice(0, 5);
                 const containerRecientes = document.getElementById('ticketsRecientes');
@@ -426,7 +414,7 @@
 
                 const prioridades = {};
                 const prioridadColores = {
-                    'Crítica': 'danger',
+                    'Critica': 'danger',
                     'Alta': 'warning',
                     'Media': 'info',
                     'Baja': 'secondary'
@@ -471,30 +459,31 @@
 
                 if (misTickets.length === 0) {
                     containerMisTickets.innerHTML = `
-                        <div class="text-center text-muted py-3">
-                            <i class="bi bi-ticket" style="font-size: 2rem;"></i>
-                            <p class="mt-2">No has creado ningún ticket aún</p>
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-ticket" style="font-size: 3rem;"></i>
+                            <p class="mt-2">No has creado ningun ticket aun</p>
                             <a href="nuevo-ticket.html" class="btn btn-primary btn-sm">
                                 <i class="bi bi-plus-circle"></i> Crear mi primer ticket
                             </a>
                         </div>
                     `;
                 } else {
+                    const estadoColors = {
+                        'Abierto': 'warning',
+                        'En proceso': 'info',
+                        'En espera': 'secondary',
+                        'Cerrado': 'success',
+                        'Expirado': 'danger'
+                    };
+                    const prioridadColors = {
+                        'Critica': 'danger',
+                        'Alta': 'warning',
+                        'Media': 'info',
+                        'Baja': 'secondary'
+                    };
+
                     containerMisTickets.innerHTML = misTickets.map(t => {
-                        const estadoColors = {
-                            'Abierto': 'warning',
-                            'En proceso': 'info',
-                            'En espera': 'secondary',
-                            'Cerrado': 'success',
-                            'Expirado': 'danger'
-                        };
                         const eColor = estadoColors[t.estado_nombre] || 'secondary';
-                        const prioridadColors = {
-                            'Crítica': 'danger',
-                            'Alta': 'warning',
-                            'Media': 'info',
-                            'Baja': 'secondary'
-                        };
                         const pColor = prioridadColors[t.prioridad_nombre] || 'secondary';
 
                         return `
@@ -524,7 +513,7 @@
 
             } catch (error) {
                 console.error('Error al cargar dashboard:', error);
-                mostrarError('Error de conexión al servidor');
+                mostrarError('Error de conexion al servidor');
             }
         }
 

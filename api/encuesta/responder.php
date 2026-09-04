@@ -18,7 +18,33 @@ if (!isset($data['id_encuesta'])) {
     exit;
 }
 
+<<<<<<< HEAD
+$id_encuesta = intval($data['id_encuesta']);
+
 try {
+    $stmt = $pdo->prepare("SELECT e.*, t.Id_usuario FROM EncuestaSatisfaccion e JOIN Ticket t ON e.Id_ticket = t.Id_ticket WHERE e.Id_encuesta = ?");
+    $stmt->execute([$id_encuesta]);
+    $encuesta = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$encuesta) {
+        echo json_encode(['error' => 'Encuesta no encontrada']);
+        exit;
+    }
+
+    if ($encuesta['Respondida'] == 1) {
+        echo json_encode(['error' => 'Esta encuesta ya fue respondida']);
+        exit;
+    }
+
+    if ($encuesta['Id_usuario'] != $_SESSION['usuario_id'] && !in_array('Administrador', $_SESSION['roles'] ?? [])) {
+        http_response_code(403);
+        echo json_encode(['error' => 'No tienes permiso para responder esta encuesta']);
+        exit;
+    }
+
+=======
+try {
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     $stmt = $pdo->prepare("UPDATE EncuestaSatisfaccion 
                           SET Calificacion_respeto = ?,
                               Calificacion_tiempo = ?,
@@ -32,7 +58,11 @@ try {
                               Respondida = 1,
                               Fecha_respuesta = NOW()
                           WHERE Id_encuesta = ?");
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     $stmt->execute([
         $data['calificacion_respeto'] ?? null,
         $data['calificacion_tiempo'] ?? null,
@@ -43,6 +73,12 @@ try {
         $data['contacto_externo'] ?? null,
         $data['interacciones'] ?? null,
         $data['comentarios'] ?? null,
+<<<<<<< HEAD
+        $id_encuesta
+    ]);
+
+    echo json_encode(['success' => true, 'mensaje' => 'Encuesta respondida exitosamente']);
+=======
         $data['id_encuesta']
     ]);
 
@@ -50,6 +86,7 @@ try {
         'success' => true,
         'mensaje' => 'Encuesta respondida exitosamente'
     ]);
+>>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
 } catch(PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);

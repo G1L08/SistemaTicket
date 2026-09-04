@@ -77,10 +77,6 @@
             border-color: #6a1815 !important;
         }
 
-        .btn-success i {
-            color: #fff !important;
-        }
-
         .table-hover tbody tr {
             cursor: pointer;
             transition: all 0.2s;
@@ -115,16 +111,31 @@
             font-weight: 600;
         }
 
-        .form-select:focus {
+        .form-select:focus, .form-control:focus {
             border-color: #861f1b;
             box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25);
         }
 
-        .btn-outline-primary i {
-            color: #000 !important;
+        .pagination .page-item .page-link {
+            color: #000;
+            border-color: #dee2e6;
+            transition: all 0.3s;
         }
-        .btn-outline-primary:hover i {
-            color: #fff !important;
+        .pagination .page-item .page-link:hover {
+            background-color: #f0e8e7;
+            color: #861f1b;
+            border-color: #861f1b;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #861f1b;
+            border-color: #861f1b;
+            color: #fff;
+        }
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #fff;
+            border-color: #dee2e6;
         }
     </style>
 </head>
@@ -132,7 +143,7 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <span class="navbar-brand"><i class="bi bi-grid"></i> Todos los Tickets - Admin</span>
+            <span class="navbar-brand"> Todos los Tickets - Admin</span>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3" id="usuarioNombre">Admin</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
@@ -198,24 +209,24 @@
                 <div class="filtros-container">
                     <div class="row g-2">
                         <div class="col-md-3">
-                            <select id="filtroEstado" class="form-select" onchange="cargarTickets()">
+                            <select id="filtroEstado" class="form-select" onchange="cargarTickets(1)">
                                 <option value="">Todos los estados</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select id="filtroPrioridad" class="form-select" onchange="cargarTickets()">
+                            <select id="filtroPrioridad" class="form-select" onchange="cargarTickets(1)">
                                 <option value="">Todas las prioridades</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select id="filtroCategoria" class="form-select" onchange="cargarTickets()">
+                            <select id="filtroCategoria" class="form-select" onchange="cargarTickets(1)">
                                 <option value="">Todas las categorias</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <a href="../api/exportar/excel.php" class="btn btn-success w-100" target="_blank">
+                            <button class="btn btn-success w-100" onclick="abrirModalExportar()">
                                 <i class="bi bi-file-excel"></i> Exportar Excel
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -248,9 +259,106 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div id="paginadorContainer" class="d-flex justify-content-between align-items-center mt-3">
+                            <div id="infoPaginacion" class="text-muted small"></div>
+                            <nav aria-label="Navegacion de paginas">
+                                <ul class="pagination pagination-sm mb-0" id="paginadorLista"></ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalExportar" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-file-excel"></i> Exportar a Excel</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formExportar">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Buscar por folio o titulo</label>
+                                <input type="text" id="exportBusqueda" class="form-control" placeholder="Ej: TKT-2026-00001 o Error">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Estado</label>
+                                <select id="exportEstado" class="form-select">
+                                    <option value="">Todos los estados</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Prioridad</label>
+                                <select id="exportPrioridad" class="form-select">
+                                    <option value="">Todas las prioridades</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Categoria</label>
+                                <select id="exportCategoria" class="form-select">
+                                    <option value="">Todas las categorias</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha desde</label>
+                                <input type="date" id="exportFechaDesde" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha hasta</label>
+                                <input type="date" id="exportFechaHasta" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-12 text-end">
+                                <button type="button" class="btn btn-info" onclick="buscarPreview()">
+                                    <i class="bi bi-search"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="previewResultados" style="display:none;">
+                        <hr>
+                        <div class="resumen-stats">
+                            <span class="stat-item">
+                                <span class="numero" id="previewTotal">0</span>
+                                <span class="label">tickets encontrados</span>
+                            </span>
+                            <span class="stat-item">
+                                <span class="numero" id="previewAbiertos">0</span>
+                                <span class="label">Abiertos</span>
+                            </span>
+                            <span class="stat-item">
+                                <span class="numero" id="previewProceso">0</span>
+                                <span class="label">En proceso</span>
+                            </span>
+                            <span class="stat-item">
+                                <span class="numero" id="previewCerrados">0</span>
+                                <span class="label">Cerrados</span>
+                            </span>
+                        </div>
+                        <div class="resultado-preview" id="previewLista">
+                            <div class="text-center text-muted py-2">Cargando...</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mt-2">
+                        <i class="bi bi-info-circle"></i> Los filtros son opcionales. Deja los campos vacios para exportar todos los tickets.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="exportarConFiltros()">
+                        <i class="bi bi-file-earmark-excel"></i> Exportar
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -262,6 +370,9 @@
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
 
+        let paginaActual = 1;
+        let totalPaginas = 1;
+
         function escapeHTML(t) {
             if (!t) return '';
             const d = document.createElement('div');
@@ -269,6 +380,164 @@
             return d.innerHTML;
         }
 
+        async function cargarFiltrosExport() {
+            try {
+                const [estadosRes, prioridadesRes, categoriasRes] = await Promise.all([
+                    fetch('../api/estados/listar.php'),
+                    fetch('../api/prioridades/listar.php'),
+                    fetch('../api/categorias/listar.php')
+                ]);
+                const estados = await estadosRes.json();
+                const prioridades = await prioridadesRes.json();
+                const categorias = await categoriasRes.json();
+
+                const estadoSelect = document.getElementById('exportEstado');
+                estados.forEach(e => {
+                    const o = document.createElement('option');
+                    o.value = e.Id_estado;
+                    o.textContent = e.Nombre;
+                    estadoSelect.appendChild(o);
+                });
+
+                const prioridadSelect = document.getElementById('exportPrioridad');
+                prioridades.forEach(p => {
+                    const o = document.createElement('option');
+                    o.value = p.Id_prioridad;
+                    o.textContent = p.Nombre;
+                    prioridadSelect.appendChild(o);
+                });
+
+                const categoriaSelect = document.getElementById('exportCategoria');
+                categorias.forEach(c => {
+                    const o = document.createElement('option');
+                    o.value = c.Id_categoria;
+                    o.textContent = c.Nombre;
+                    categoriaSelect.appendChild(o);
+                });
+            } catch (e) {
+                console.error('Error cargando filtros para export:', e);
+            }
+        }
+
+        function abrirModalExportar() {
+            document.getElementById('previewResultados').style.display = 'none';
+            document.getElementById('exportBusqueda').value = '';
+            document.getElementById('exportFechaDesde').value = '';
+            document.getElementById('exportFechaHasta').value = '';
+            const modal = new bootstrap.Modal(document.getElementById('modalExportar'));
+            modal.show();
+            cargarFiltrosExport();
+        }
+
+        async function buscarPreview() {
+            const busqueda = document.getElementById('exportBusqueda').value.trim();
+            const estado = document.getElementById('exportEstado').value;
+            const prioridad = document.getElementById('exportPrioridad').value;
+            const categoria = document.getElementById('exportCategoria').value;
+            const fechaDesde = document.getElementById('exportFechaDesde').value;
+            const fechaHasta = document.getElementById('exportFechaHasta').value;
+
+            const previewDiv = document.getElementById('previewResultados');
+            const listaDiv = document.getElementById('previewLista');
+            
+            previewDiv.style.display = 'block';
+            listaDiv.innerHTML = '<div class="text-center text-muted py-2"><div class="spinner-border spinner-border-sm"></div> Cargando...</div>';
+
+            try {
+                let url = '../api/exportar/preview.php?';
+                const params = new URLSearchParams();
+                if (busqueda) params.append('busqueda', busqueda);
+                if (estado) params.append('estado', estado);
+                if (prioridad) params.append('prioridad', prioridad);
+                if (categoria) params.append('categoria', categoria);
+                if (fechaDesde) params.append('fecha_desde', fechaDesde);
+                if (fechaHasta) params.append('fecha_hasta', fechaHasta);
+                url += params.toString();
+
+                const response = await fetch(url);
+                const tickets = await response.json();
+
+                if (tickets.error) {
+                    listaDiv.innerHTML = '<div class="alert alert-danger">' + escapeHTML(tickets.error) + '</div>';
+                    return;
+                }
+
+                if (tickets.length === 0) {
+                    listaDiv.innerHTML = '<div class="text-center text-muted py-3">No se encontraron tickets con esos filtros</div>';
+                    document.getElementById('previewTotal').textContent = '0';
+                    document.getElementById('previewAbiertos').textContent = '0';
+                    document.getElementById('previewProceso').textContent = '0';
+                    document.getElementById('previewCerrados').textContent = '0';
+                    return;
+                }
+
+                const total = tickets.length;
+                const abiertos = tickets.filter(t => t.estado === 'Abierto').length;
+                const proceso = tickets.filter(t => t.estado === 'En proceso' || t.estado === 'En espera').length;
+                const cerrados = tickets.filter(t => t.estado === 'Cerrado').length;
+
+                document.getElementById('previewTotal').textContent = total;
+                document.getElementById('previewAbiertos').textContent = abiertos;
+                document.getElementById('previewProceso').textContent = proceso;
+                document.getElementById('previewCerrados').textContent = cerrados;
+
+                const estadoColors = {
+                    'Abierto': 'warning',
+                    'En proceso': 'info',
+                    'En espera': 'secondary',
+                    'Cerrado': 'success',
+                    'Expirado': 'danger'
+                };
+                const prioridadColors = {
+                    'Critica': 'danger',
+                    'Alta': 'warning',
+                    'Media': 'info',
+                    'Baja': 'secondary'
+                };
+
+                listaDiv.innerHTML = tickets.map(t => `
+                    <div class="ticket-mini">
+                        <div>
+                            <span class="badge bg-secondary">${escapeHTML(t.Folio)}</span>
+                            <strong>${escapeHTML(t.Titulo)}</strong>
+                            <span class="badge bg-${estadoColors[t.estado] || 'secondary'} ms-1">${escapeHTML(t.estado)}</span>
+                            <span class="badge bg-${prioridadColors[t.prioridad] || 'secondary'}">${escapeHTML(t.prioridad)}</span>
+                            <small class="text-muted ms-1">${escapeHTML(t.categoria)}</small>
+                        </div>
+                        <small class="text-muted">${escapeHTML(t.solicitante)} - ${escapeHTML(t.fecha_creacion)}</small>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error:', error);
+                listaDiv.innerHTML = '<div class="alert alert-danger">Error al buscar los tickets</div>';
+            }
+        }
+
+        function exportarConFiltros() {
+            const busqueda = document.getElementById('exportBusqueda').value.trim();
+            const estado = document.getElementById('exportEstado').value;
+            const prioridad = document.getElementById('exportPrioridad').value;
+            const categoria = document.getElementById('exportCategoria').value;
+            const fechaDesde = document.getElementById('exportFechaDesde').value;
+            const fechaHasta = document.getElementById('exportFechaHasta').value;
+
+            let url = '../api/exportar/excel.php?';
+            const params = new URLSearchParams();
+            if (busqueda) params.append('busqueda', busqueda);
+            if (estado) params.append('estado', estado);
+            if (prioridad) params.append('prioridad', prioridad);
+            if (categoria) params.append('categoria', categoria);
+            if (fechaDesde) params.append('fecha_desde', fechaDesde);
+            if (fechaHasta) params.append('fecha_hasta', fechaHasta);
+            url += params.toString();
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalExportar'));
+            modal.hide();
+            window.open(url, '_blank');
+        }
+
+        // ===== PAGINACIÓN Y FILTROS PRINCIPALES =====
         async function cargarFiltros() {
             try {
                 const [estadosRes, prioridadesRes, categoriasRes] = await Promise.all([
@@ -308,7 +577,8 @@
             }
         }
 
-        async function cargarTickets() {
+        async function cargarTickets(page = 1) {
+            paginaActual = page;
             const tbody = document.getElementById('ticketsTableBody');
             tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4"><div class="spinner-border text-primary"></div></td></tr>';
 
@@ -317,23 +587,30 @@
                 const prioridad = document.getElementById('filtroPrioridad').value;
                 const categoria = document.getElementById('filtroCategoria').value;
 
-                let url = '../api/tickets/listar.php';
+                let url = '../api/tickets/listar.php?page=' + page + '&limit=6';
                 const params = new URLSearchParams();
                 if (estado) params.append('estado', estado);
                 if (prioridad) params.append('prioridad', prioridad);
                 if (categoria) params.append('categoria', categoria);
-                if (params.toString()) url += '?' + params.toString();
+                if (params.toString()) url += '&' + params.toString();
 
                 const response = await fetch(url);
-                const tickets = await response.json();
+                const result = await response.json();
 
-                if (tickets.error || !Array.isArray(tickets)) {
-                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>';
+                if (result.error) {
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">' + escapeHTML(result.error) + '</td></tr>';
+                    document.getElementById('paginadorLista').innerHTML = '';
+                    document.getElementById('infoPaginacion').textContent = '';
                     return;
                 }
 
+                const tickets = result.data || [];
+                totalPaginas = result.pages || 1;
+
                 if (tickets.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">No hay tickets</td></tr>';
+                    document.getElementById('paginadorLista').innerHTML = '';
+                    document.getElementById('infoPaginacion').textContent = '0 tickets';
                     return;
                 }
 
@@ -369,10 +646,72 @@
                     </tr>
                 `).join('');
 
+                generarPaginador(page, totalPaginas, result.total);
+
             } catch (e) {
                 console.error('Error:', e);
                 tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Error al cargar los tickets</td></tr>';
+                document.getElementById('paginadorLista').innerHTML = '';
+                document.getElementById('infoPaginacion').textContent = '';
             }
+        }
+
+        function generarPaginador(actual, total, totalRegistros) {
+            const container = document.getElementById('paginadorLista');
+            const info = document.getElementById('infoPaginacion');
+            
+            if (total <= 1) {
+                container.innerHTML = '';
+                info.textContent = 'Mostrando ' + totalRegistros + ' tickets';
+                return;
+            }
+
+            let html = '';
+            html += `<li class="page-item ${actual <= 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" onclick="cambiarPagina(${actual - 1}); return false;">Anterior</a>
+                    </li>`;
+
+            let inicio = Math.max(1, actual - 2);
+            let fin = Math.min(total, actual + 2);
+            
+            if (actual <= 3) {
+                fin = Math.min(total, 5);
+            }
+            if (actual >= total - 2) {
+                inicio = Math.max(1, total - 4);
+            }
+
+            if (inicio > 1) {
+                html += `<li class="page-item"><a class="page-link" href="#" onclick="cambiarPagina(1); return false;">1</a></li>`;
+                if (inicio > 2) {
+                    html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                }
+            }
+
+            for (let i = inicio; i <= fin; i++) {
+                html += `<li class="page-item ${i === actual ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="cambiarPagina(${i}); return false;">${i}</a>
+                        </li>`;
+            }
+
+            if (fin < total) {
+                if (fin < total - 1) {
+                    html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                }
+                html += `<li class="page-item"><a class="page-link" href="#" onclick="cambiarPagina(${total}); return false;">${total}</a></li>`;
+            }
+
+            html += `<li class="page-item ${actual >= total ? 'disabled' : ''}">
+                        <a class="page-link" href="#" onclick="cambiarPagina(${actual + 1}); return false;">Siguiente</a>
+                    </li>`;
+
+            container.innerHTML = html;
+            info.textContent = 'Mostrando ' + totalRegistros + ' tickets | Pagina ' + actual + ' de ' + total;
+        }
+
+        function cambiarPagina(page) {
+            if (page < 1 || page > totalPaginas) return;
+            cargarTickets(page);
         }
 
         function cerrarSesion() {
@@ -382,7 +721,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             cargarFiltros();
-            cargarTickets();
+            cargarTickets(1);
         });
     </script>
 </body>

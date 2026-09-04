@@ -185,7 +185,7 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <span class="navbar-brand"><i class="bi bi-people"></i> Gestion de Usuarios - Admin</span>
+            <span class="navbar-brand"> Gestion de Usuarios - Admin</span>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3" id="usuarioNombre">Admin</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
@@ -264,7 +264,7 @@
         </div>
     </div>
 
-    <!-- Modal para crear usuario -->
+    <!-- crear usuario -->
     <div class="modal fade" id="modalCrearUsuario" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -330,7 +330,7 @@
         </div>
     </div>
 
-    <!-- Modal para editar usuario -->
+    <!--Editar usuario -->
     <div class="modal fade" id="modalEditarUsuario" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -424,9 +424,7 @@
             return d.innerHTML;
         }
 
-        // ============================================
-        // CARGAR USUARIOS
-        // ============================================
+        // cargar usuario
         async function cargarUsuarios() {
             const container = document.getElementById('usuariosContainer');
             try {
@@ -487,9 +485,6 @@
             }
         }
 
-        // ============================================
-        // CREAR USUARIO
-        // ============================================
         async function guardarUsuario() {
             const data = {
                 no_empleado: document.getElementById('crearNoEmpleado').value,
@@ -531,12 +526,8 @@
             }
         }
 
-        // ============================================
-        // EDITAR USUARIO - ABRIR MODAL
-        // ============================================
         async function abrirEditarUsuario(id) {
     try {
-        // Hacer una petición directa para obtener el usuario específico
         const response = await fetch('../api/usuarios/obtener.php?id=' + id);
         
         if (!response.ok) {
@@ -550,7 +541,6 @@
             return;
         }
 
-        // Llenar campos del modal de edición
         document.getElementById('editarUsuarioId').value = usuarioData.Id_usuario;
         document.getElementById('editarNoEmpleado').value = usuarioData.No_empleado;
         document.getElementById('editarNombre').value = usuarioData.Nombre;
@@ -558,13 +548,10 @@
         document.getElementById('editarApellidoMaterno').value = usuarioData.Apellido_materno || '';
         document.getElementById('editarEmail').value = usuarioData.correo;
         document.getElementById('editarPassword').value = '••••••••';
-
-        // Campos editables
         document.getElementById('editarPuesto').value = usuarioData.Puesto || '';
         document.getElementById('editarRol').value = obtenerIdRol(usuarioData.rol_nombre);
         document.getElementById('editarEstado').value = usuarioData.estado;
 
-        // Abrir modal
         const modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
         modal.show();
 
@@ -583,9 +570,7 @@
             return roles[rolNombre] || '';
         }
 
-        // ============================================
-        // ACTUALIZAR USUARIO
-        // ============================================
+
         async function actualizarUsuario() {
             const id = document.getElementById('editarUsuarioId').value;
             const data = {
@@ -622,9 +607,6 @@
             }
         }
 
-        // ============================================
-        // ELIMINAR USUARIO
-        // ============================================
         async function eliminarUsuario(id) {
             if (!confirm('Esta seguro de eliminar este usuario?')) return;
             try {
@@ -646,9 +628,6 @@
             }
         }
 
-        // ============================================
-        // CERRAR SESION
-        // ============================================
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');
             window.location.href = '../login.html';

@@ -33,6 +33,10 @@ try {
         echo json_encode(['error' => 'Ticket no encontrado']);
         exit;
     }
+
+    $usuario_es_tecnico = ($ticket['Id_tecnico_asignado'] == $usuario_id);
+    $usuario_es_admin = in_array('Administrador', $_SESSION['roles'] ?? []);
+
     
     $usuario_es_tecnico = ($ticket['Id_tecnico_asignado'] == $usuario_id);
     $usuario_es_admin = in_array('Administrador', $_SESSION['roles'] ?? []);
@@ -41,20 +45,22 @@ try {
         echo json_encode(['error' => 'No tienes permiso para cambiar el estado de este ticket']);
         exit;
     }
-    
+
     $stmt = $pdo->prepare("SELECT Nombre FROM Estado WHERE Id_estado = ?");
     $stmt->execute([$ticket['Id_estado']]);
     $estado_anterior_nombre = $stmt->fetchColumn() ?: 'Desconocido';
-    
+
     $stmt = $pdo->prepare("SELECT Nombre FROM Estado WHERE Id_estado = ?");
     $stmt->execute([$nuevo_estado]);
     $estado_nuevo_nombre = $stmt->fetchColumn() ?: 'Desconocido';
-    
+
     if ($nuevo_estado == 4 && empty($descripcion_solucion)) {
-        echo json_encode(['error' => 'Debes registrar una solución para cerrar el ticket']);
+        echo json_encode(['error' => 'Debes registrar una solucion para cerrar el ticket']);
         exit;
     }
-    
+
+    $pdo->beginTransaction();
+
     if ($nuevo_estado == 4) {
         $stmt = $pdo->prepare("UPDATE Ticket SET Id_estado = ?, Descripcion_solucion = ?, Fecha_actualizacion = NOW() WHERE Id_ticket = ?");
         $stmt->execute([$nuevo_estado, $descripcion_solucion, $id]);
@@ -71,25 +77,28 @@ try {
         $stmt = $pdo->prepare("SELECT Id_encuesta FROM Ticket WHERE Id_ticket = ?");
         $stmt->execute([$id]);
         $ticket_data = $stmt->fetch();
-        
+
         if (!$ticket_data['Id_encuesta']) {
-            $stmt = $pdo->prepare("INSERT INTO EncuestaSatisfaccion (Id_ticket) VALUES (?)");
+            $stmt = $pdo->prepare("INSERT INTO EncuestaSatisfaccion (Id_ticket, Fecha_envio, Fecha_cierre) VALUES (?, NOW(), DATE_ADD(NOW(), INTERVAL 15 DAY))");
             $stmt->execute([$id]);
             $id_encuesta = $pdo->lastInsertId();
-            
+
             $stmt = $pdo->prepare("UPDATE Ticket SET Id_encuesta = ? WHERE Id_ticket = ?");
             $stmt->execute([$id_encuesta, $id]);
         }
     }
-    
+
+    $pdo->commit();
+
     echo json_encode([
         'success' => true,
-        'mensaje' => 'Estado actualizado correctamente',
-        'estado_anterior' => $estado_anterior_nombre,
-        'estado_nuevo' => $estado_nuevo_nombre
+        'mensaje' => 'Estado actualizado correctamente'
     ]);
-    
+
 } catch(PDOException $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     echo json_encode(['error' => 'Error en la base de datos: ' . $e->getMessage()]);
 }
 ?>

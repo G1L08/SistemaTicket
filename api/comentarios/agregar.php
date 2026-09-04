@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
 require_once '../config/database.php';
+require_once '../notificaciones/crear.php';
 
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
@@ -23,29 +24,38 @@ $contenido = trim($data['contenido']);
 $usuario_id = $_SESSION['usuario_id'];
 
 if (empty($contenido)) {
-    echo json_encode(['error' => 'El comentario no puede estar vacío']);
+    echo json_encode(['error' => 'El comentario no puede estar vacio']);
     exit;
 }
 
 try {
-    // Verificar que el ticket exista
-    $stmt = $pdo->prepare("SELECT Id_ticket FROM Ticket WHERE Id_ticket = ?");
+    $stmt = $pdo->prepare("SELECT t.Id_ticket, t.Folio, t.Id_usuario, t.Id_tecnico_asignado, u.Nombre as usuario_nombre
+                           FROM Ticket t
+                           LEFT JOIN Usuario u ON t.Id_usuario = u.Id_usuario
+                           WHERE t.Id_ticket = ?");
     $stmt->execute([$id_ticket]);
-    if (!$stmt->fetch()) {
+    $ticket = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$ticket) {
         echo json_encode(['error' => 'Ticket no encontrado']);
         exit;
     }
     
-    $stmt = $pdo->prepare("INSERT INTO Comentario (Id_ticket, Id_usuario, Contenido) 
-                          VALUES (?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO Comentario (Id_ticket, Id_usuario, Contenido) VALUES (?, ?, ?)");
     $stmt->execute([$id_ticket, $usuario_id, $contenido]);
+    
+    $id_comentario = $pdo->lastInsertId();
+    
+    $mensaje = "Nuevo comentario en el ticket {$ticket['Folio']}: " . substr($contenido, 0, 50) . "...";
+    
+    notificarUsuariosTicket($id_ticket, $mensaje, 'comentario', [$usuario_id]);
     
     echo json_encode([
         'success' => true,
-        'id' => $pdo->lastInsertId()
+        'id' => $id_comentario
     ]);
     
 } catch(PDOException $e) {
-    echo json_encode(['error' => $e->getMessage()]);
+    echo json_encode(['error' => 'Error en la base de datos: ' . $e->getMessage()]);
 }
 ?>

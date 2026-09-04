@@ -34,11 +34,13 @@ try {
         echo json_encode(['error' => 'Ticket no encontrado']);
         exit;
     }
+
     
     if ($ticket['Id_usuario'] != $usuario_id && !in_array('Administrador', $_SESSION['roles'] ?? [])) {
         echo json_encode(['error' => 'No tienes permiso para reabrir este ticket']);
         exit;
     }
+
     
     if ($ticket['Id_estado'] != 4) {
         echo json_encode(['error' => 'Solo se pueden reabrir tickets cerrados']);
