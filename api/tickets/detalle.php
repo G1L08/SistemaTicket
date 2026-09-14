@@ -19,7 +19,15 @@ if (!$id) {
 }
 
 $usuario_id = $_SESSION['usuario_id'];
+
 $roles = $_SESSION['roles'] ?? ['Usuario'];
+if (is_string($roles)) {
+    $decoded = json_decode($roles, true);
+    $roles = is_array($decoded) ? $decoded : [$roles];
+}
+if (!is_array($roles)) {
+    $roles = ['Usuario'];
+}
 
 try {
     $stmt = $pdo->prepare("SELECT t.*, 
@@ -48,21 +56,16 @@ try {
         exit;
     }
 
-    $esAdmin = in_array('Administrador', $roles);
-    $esTecnico = in_array('Tecnico', $roles);
-    $esSolicitante = ($ticket['Id_usuario'] == $usuario_id);
+    $esAdmin           = in_array('Administrador', $roles);
+    $esTecnico         = in_array('Tecnico', $roles);
+    $esSolicitante     = ($ticket['Id_usuario'] == $usuario_id);
     $esTecnicoAsignado = ($ticket['Id_tecnico_asignado'] == $usuario_id);
 
-    $puedeVer = false;
-    if ($esAdmin) {
-        $puedeVer = true;
-    } elseif ($esTecnico) {
-        if ($ticket['Id_tecnico_asignado'] === null || $esTecnicoAsignado) {
-            $puedeVer = true;
-        }
-    } elseif ($esSolicitante) {
-        $puedeVer = true;
-    }
+    $puedeVer = $esAdmin
+             || $esSolicitante
+             || $esTecnicoAsignado
+             || ($esTecnico && $ticket['Id_tecnico_asignado'] === null);
+
     if (!$puedeVer) {
         http_response_code(403);
         echo json_encode(['error' => 'No tienes permiso para ver este ticket']);
@@ -74,4 +77,3 @@ try {
 } catch(PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }
-?>

@@ -1,7 +1,3 @@
-# ============================================
-# CONFIGURACIÓN SEGURA PARA .HTACCESS
-# ============================================
-
 # Activar RewriteEngine
 RewriteEngine On
 

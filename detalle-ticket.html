@@ -285,6 +285,9 @@
         .modal-header.bg-success {
             background-color: #861f1b !important;
         }
+        .modal-header.bg-warning {
+            background-color: #ffc107 !important;
+        }
     </style>
 </head>
 <body>
@@ -387,48 +390,31 @@
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title"><i class="bi bi-hand-index"></i> Tomar ticket</h5>
+                    <h5 class="modal-title"> Tomar ticket y asignar prioridad</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body text-center py-4">
-                    <i class="bi bi-question-circle" style="font-size: 3rem;"></i>
-                    <h5 class="mt-3">Esta seguro de tomar este ticket?</h5>
-                    <p class="text-muted">El ticket se asignara a ti y cambiara a estado "En proceso"</p>
+                <div class="modal-body">
+                    <p>Selecciona la prioridad que asignarás a este ticket:</p>
+                    <div class="mb-3">
+                        <label for="prioridadTomar" class="form-label fw-bold">Prioridad de TI</label>
+                        <select id="prioridadTomar" class="form-select">
+                            <option value="">Selecciona una prioridad</option>
+                            <option value="Baja">Baja</option>
+                            <option value="Media">Media</option>
+                            <option value="Alta">Alta</option>
+                            <option value="Critica">Crítica</option>
+                        </select>
+                        <div class="invalid-feedback">Debes seleccionar una prioridad</div>
+                    </div>
+                    <p class="text-muted small">Al tomar el ticket, se asignará a ti y cambiará a estado "En proceso".</p>
                     <input type="hidden" id="modalTicketId" value="">
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" onclick="confirmarTomarTicket()">
-                        <i class="bi bi-check-circle"></i> Tomar ticket
+                        <i class="bi bi-check-circle"></i> Tomar y confirmar
                     </button>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalConfirmarPrioridad" tabindex="-1">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-warning">
-                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle"></i> Confirmar prioridad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-              <!--  <div class="modal-body text-center py-4">
-                    <i class="bi bi-check-circle" style="font-size: 3rem; color: #ffc107;"></i>
-                    <h5 class="mt-3">Confirmar prioridad como <span id="modalPrioridadNombre"></span>?</h5>
-                    <p class="text-muted">
-                        <strong>Importante:</strong> Una vez confirmada, la prioridad no podra cambiarse.<br>
-                        <span class="text-danger">La prioridad original del solicitante permanece igual.</span>
-                    </p>
-                    <input type="hidden" id="modalPrioridadTicketId" value="">
-                    <input type="hidden" id="modalPrioridadValor" value="">
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-warning" onclick="confirmarPrioridad()">
-                        <i class="bi bi-check-circle"></i> Si, confirmar
-                    </button>
-                </div>-->
             </div>
         </div>
     </div>
@@ -562,12 +548,9 @@
 
             const prioridadOriginal = ticket.prioridad_nombre || 'Sin prioridad';
             const prioridadConfirmada = ticket.Prioridad_confirmada || null;
-            const prioridades = ['Baja', 'Media', 'Alta', 'Critica'];
             const prioridadYaConfirmada = prioridadConfirmada !== null;
 
-
             const puedeComentarYSubir = (esSolicitante || esAdmin || esTecnicoAsignado) && ticket.Id_estado != 4;
-
             const puedeExtender = (esAdmin || esTecnicoAsignado) && tieneTecnicoAsignado && [2, 3].includes(ticket.Id_estado);
 
             container.innerHTML = `
@@ -630,7 +613,7 @@
                                                             <div class="descripcion">
                                                                 ${prioridadYaConfirmada ? 
                                                                     'Asignada por el tecnico' : 
-                                                                    'El tecnico debe confirmar'
+                                                                    'El tecnico debe confirmar al tomar el ticket'
                                                                 }
                                                             </div>
                                                         </div>
@@ -765,7 +748,7 @@
                     <div class="col-md-4">
                         <div class="card shadow">
                             <div class="card-header">
-                                <h6 class="mb-0"><i class="bi bi-gear"></i> Acciones</h6>
+                                <h6 class="mb-0"> Acciones</h6>
                             </div>
                             <div class="card-body">
                                 ${puedeTomar ? `
@@ -773,25 +756,7 @@
                                         <button class="btn btn-success w-100" onclick="abrirModalTomar(${ticket.Id_ticket})">
                                             <i class="bi bi-hand-index"></i> Tomar ticket
                                         </button>
-                                        <small class="text-muted d-block mt-1">Este ticket esta disponible en el pool</small>
-                                    </div>
-                                ` : ''}
-
-                                ${esTecnico && !prioridadYaConfirmada ? `
-                                    <div class="accion-card">
-                                        <label class="form-label fw-bold">
-                                            <i class="bi bi-check-circle"></i> Confirmar prioridad
-                                            <span class="text-muted small">(El tecnico asigna la prioridad)</span>
-                                        </label>
-                                        <select class="form-select" id="selectPrioridad" onchange="abrirModalPrioridad(this.value, ${ticket.Id_ticket})">
-                                            <option value="">Seleccionar prioridad a confirmar</option>
-                                            ${prioridades.map(p => `
-                                                <option value="${p}" ${prioridadConfirmada === p ? 'selected' : ''}>${p}</option>
-                                            `).join('')}
-                                        </select>
-                                        <small class="text-muted d-block mt-1">
-                                            Una vez confirmada, la prioridad no podra cambiarse.
-                                        </small>
+                                        <small class="text-muted d-block mt-1">Selecciona la prioridad de TI al tomarlo</small>
                                     </div>
                                 ` : ''}
 
@@ -1125,52 +1090,39 @@
 
         function abrirModalTomar(idTicket) {
             document.getElementById('modalTicketId').value = idTicket;
+            document.getElementById('prioridadTomar').value = '';
+            document.getElementById('prioridadTomar').classList.remove('is-invalid');
             const modal = new bootstrap.Modal(document.getElementById('modalTomarTicket'));
             modal.show();
         }
 
         async function confirmarTomarTicket() {
             const id = document.getElementById('modalTicketId').value;
+            const prioridad = document.getElementById('prioridadTomar').value;
+
+            if (!prioridad) {
+                document.getElementById('prioridadTomar').classList.add('is-invalid');
+                return;
+            }
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalTomarTicket'));
             modal.hide();
 
             try {
-                const response = await fetch('api/tickets/tomar.php', {
+                // Primero tomar el ticket
+                const responseTomar = await fetch('api/tickets/tomar.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id_ticket: parseInt(id) })
                 });
-                const data = await response.json();
-                if (data.success) {
-                    alert(data.mensaje);
-                    cargarDetalleTicket(id);
-                } else {
-                    alert('Error: ' + data.error);
+                const dataTomar = await responseTomar.json();
+                if (!dataTomar.success) {
+                    alert('Error al tomar el ticket: ' + dataTomar.error);
+                    return;
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error al tomar el ticket');
-            }
-        }
 
-        function abrirModalPrioridad(prioridad, idTicket) {
-            if (!prioridad) return;
-            document.getElementById('modalPrioridadNombre').textContent = prioridad;
-            document.getElementById('modalPrioridadTicketId').value = idTicket;
-            document.getElementById('modalPrioridadValor').value = prioridad;
-            const modal = new bootstrap.Modal(document.getElementById('modalConfirmarPrioridad'));
-            modal.show();
-            document.getElementById('selectPrioridad').value = '';
-        }
-
-        async function confirmarPrioridad() {
-            const id = document.getElementById('modalPrioridadTicketId').value;
-            const prioridad = document.getElementById('modalPrioridadValor').value;
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmarPrioridad'));
-            modal.hide();
-
-            try {
-                const response = await fetch('api/tickets/cambiar_prioridad.php', {
+                // Luego guardar la prioridad confirmada
+                const responsePrioridad = await fetch('api/tickets/cambiar_prioridad.php', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1178,16 +1130,17 @@
                         prioridad: prioridad
                     })
                 });
-                const data = await response.json();
-                if (data.success) {
-                    alert('Prioridad confirmada exitosamente');
+                const dataPrioridad = await responsePrioridad.json();
+                if (dataPrioridad.success) {
+                    alert('Ticket tomado y prioridad confirmada exitosamente');
                     cargarDetalleTicket(id);
                 } else {
-                    alert('Error: ' + data.error);
+                    alert('Ticket tomado pero hubo un error al guardar la prioridad: ' + dataPrioridad.error);
+                    cargarDetalleTicket(id); // Recargar para mostrar el cambio de estado al menos
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error al confirmar la prioridad');
+                alert('Error al procesar la solicitud');
             }
         }
 

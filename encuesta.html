@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>Encuesta de Satisfaccion</title>
-=======
-    <title>Encuesta de Satisfacción - Sistema de Tickets</title>
->>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
+    <title>Encuesta de Satisfacción</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
@@ -17,16 +13,10 @@
             --color-dar-hover: #6a1815;
         }
 
-        .navbar-dark.bg-dark {
-            background-color: #861f1b !important;
-        }
-        .navbar-dark .navbar-brand {
-            color: #fff !important;
-        }
+        .navbar-dark.bg-dark { background-color: #861f1b !important; }
+        .navbar-dark .navbar-brand { color: #fff !important; }
 
-        .sidebar {
-            background-color: #f8f9fa !important;
-        }
+        .sidebar { background-color: #f8f9fa !important; }
         .sidebar .nav-link {
             color: #000 !important;
             font-weight: 500;
@@ -34,55 +24,26 @@
             margin: 2px 8px;
             transition: all 0.3s;
         }
-        .sidebar .nav-link i {
-            color: #000 !important;
-            margin-right: 10px;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #f0e8e7 !important;
-            color: #861f1b !important;
-        }
-        .sidebar .nav-link:hover i {
-            color: #861f1b !important;
-        }
-        .sidebar .nav-link.active {
-            background-color: #861f1b !important;
-            color: #fff !important;
-        }
-        .sidebar .nav-link.active i {
-            color: #fff !important;
-        }
-        .sidebar hr {
-            border-color: #dee2e6;
-            margin: 10px 15px;
-        }
+        .sidebar .nav-link i { color: #000 !important; margin-right: 10px; }
+        .sidebar .nav-link:hover { background-color: #f0e8e7 !important; color: #861f1b !important; }
+        .sidebar .nav-link:hover i { color: #861f1b !important; }
+        .sidebar .nav-link.active { background-color: #861f1b !important; color: #fff !important; }
+        .sidebar .nav-link.active i { color: #fff !important; }
+        .sidebar hr { border-color: #dee2e6; margin: 10px 15px; }
 
-        .h2 i {
-            color: #861f1b;
-        }
+        .h2 i { color: #861f1b; }
         .card-header {
             background: transparent !important;
             border-bottom: 2px solid #f0f2f5;
             font-weight: 600;
             color: #000 !important;
         }
-        .card-header i {
-            color: #861f1b !important;
-        }
+        .card-header i { color: #861f1b !important; }
 
-        .pregunta-item {
-            border-bottom: 1px solid #f0f2f5;
-            padding: 15px 0;
-        }
-        .pregunta-item:last-child {
-            border-bottom: none;
-        }
+        .pregunta-item { border-bottom: 1px solid #f0f2f5; padding: 15px 0; }
+        .pregunta-item:last-child { border-bottom: none; }
 
-        .rating-stars {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-        }
+        .rating-stars { display: flex; gap: 10px; margin-top: 5px; }
         .rating-stars .star {
             font-size: 2rem;
             cursor: pointer;
@@ -90,10 +51,7 @@
             transition: all 0.2s;
         }
         .rating-stars .star:hover,
-        .rating-stars .star.active {
-            color: #ffc107;
-            transform: scale(1.1);
-        }
+        .rating-stars .star.active { color: #ffc107; transform: scale(1.1); }
 
         .option-btn {
             padding: 8px 20px;
@@ -104,30 +62,13 @@
             transition: all 0.2s;
             margin: 3px;
         }
-        .option-btn:hover {
-            border-color: #861f1b;
-            background: #f0e8e7;
-        }
-        .option-btn.selected {
-            border-color: #861f1b;
-            background: #861f1b;
-            color: white;
-        }
+        .option-btn:hover { border-color: #861f1b; background: #f0e8e7; }
+        .option-btn.selected { border-color: #861f1b; background: #861f1b; color: white; }
 
-        .btn-primary {
-            background-color: #861f1b !important;
-            border-color: #861f1b !important;
-            color: #fff !important;
-        }
-        .btn-primary:hover {
-            background-color: #6a1815 !important;
-            border-color: #6a1815 !important;
-        }
+        .btn-primary { background-color: #861f1b !important; border-color: #861f1b !important; color: #fff !important; }
+        .btn-primary:hover { background-color: #6a1815 !important; border-color: #6a1815 !important; }
 
-        .form-control:focus {
-            border-color: #861f1b;
-            box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25);
-        }
+        .form-control:focus { border-color: #861f1b; box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25); }
 
         .encuesta-header {
             background: linear-gradient(135deg, #861f1b 0%, #6a1815 100%);
@@ -136,21 +77,38 @@
             padding: 20px;
         }
 
-        .required-star {
-            color: #dc3545;
-            font-weight: bold;
-        }
+        .required-star { color: #dc3545; font-weight: bold; }
+
+        .btn-outline-light { border-color: #fff !important; color: #fff !important; }
+        .btn-outline-light:hover { background-color: #fff !important; color: #861f1b !important; }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
             <span class="navbar-brand">
-                Sistema de Tickets - DAR TI
+                <i class="bi bi-ticket-perforated"></i> Sistema de Tickets - DAR TI
             </span>
-            <div class="d-flex align-items-center">
-                <span class="text-white me-3" id="usuarioNombre">Usuario</span>
+            <div class="d-flex align-items-center gap-2">
+                <div class="position-relative">
+                    <button type="button" class="btn btn-outline-light btn-sm position-relative" onclick="toggleNotificaciones()">
+                        <i class="bi bi-bell"></i>
+                        <span id="notificacionContador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; display:none;">
+                            0
+                        </span>
+                    </button>
+                    <div id="notificacionesDropdown" class="dropdown-menu dropdown-menu-end p-0" style="width: 350px; max-height: 400px; overflow-y: auto; display:none; position: absolute; right: 0; top: 30px; z-index: 1050;">
+                        <div class="p-2 bg-light border-bottom d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">Notificaciones</span>
+                            <button class="btn btn-sm btn-link" onclick="marcarTodasLeidas()">Marcar todas como leidas</button>
+                        </div>
+                        <div id="listaNotificaciones" class="p-2">
+                            <div class="text-center text-muted py-3">Cargando...</div>
+                        </div>
+                    </div>
+                </div>
+                <span class="text-white" id="usuarioNombre">Usuario</span>
                 <button class="btn btn-outline-light btn-sm" onclick="cerrarSesion()">
                     <i class="bi bi-box-arrow-right"></i> Cerrar sesion
                 </button>
@@ -220,6 +178,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/notificaciones.js"></script>
     <script>
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario) {
@@ -227,7 +186,7 @@
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
 
-        if (usuario.roles && (usuario.roles.includes('Tecnico') || usuario.roles.includes('Administrador'))) {
+        if (usuario.roles && (usuario.roles.includes('Técnico') || usuario.roles.includes('Administrador'))) {
             document.getElementById('poolMenu').style.display = 'block';
         }
         if (usuario.roles && usuario.roles.includes('Administrador')) {
@@ -248,17 +207,18 @@
             cargarEncuesta(ticketId);
         }
 
+        // ============================================
+        // BANCO DE PREGUNTAS (solo columnas que existen en la BD)
+        // ============================================
         const bancoPreguntas = [
-            { id: 'calificacion_respeto', label: 'El tecnico trato su solicitud con respeto y profesionalismo?', type: 'rating' },
-            { id: 'calificacion_tiempo', label: 'El tiempo de respuesta fue adecuado?', type: 'rating' },
-            { id: 'calificacion_conocimiento', label: 'El tecnico demostro conocimiento tecnico suficiente?', type: 'rating' },
-            { id: 'informado', label: 'El sistema de tickets le mantuvo informado sobre su solicitud?', type: 'si_no' },
-            { id: 'calificacion_archivos', label: 'La funcionalidad de adjuntar archivos fue util?', type: 'rating' },
-            { id: 'calificacion_facilidad', label: 'Como califica la facilidad de uso del sistema?', type: 'rating' },
-            { id: 'contacto_externo', label: 'Hubo necesidad de contactar al tecnico por otros medios?', type: 'si_no' },
-            { id: 'interacciones', label: 'El problema se resolvio a la primera o requirio multiples interacciones?', type: 'interacciones' },
-            { id: 'calidad_solucion', label: 'La solucion proporcionada resolvio completamente el problema?', type: 'rating' },
-            { id: 'claridad_comunicacion', label: 'La comunicacion con el tecnico fue clara y efectiva?', type: 'rating' }
+            { id: 'calificacion_respeto',      label: 'El tecnico trato su solicitud con respeto y profesionalismo?',             type: 'rating' },
+            { id: 'calificacion_tiempo',       label: 'El tiempo de respuesta fue adecuado?',                                     type: 'rating' },
+            { id: 'calificacion_conocimiento', label: 'El tecnico demostro conocimiento tecnico suficiente?',                      type: 'rating' },
+            { id: 'informado',                 label: 'El sistema de tickets le mantuvo informado sobre su solicitud?',            type: 'si_no' },
+            { id: 'calificacion_archivos',     label: 'La funcionalidad de adjuntar archivos fue util?',                           type: 'rating' },
+            { id: 'calificacion_facilidad',    label: 'Como califica la facilidad de uso del sistema?',                            type: 'rating' },
+            { id: 'contacto_externo',          label: 'Hubo necesidad de contactar al tecnico por otros medios?',                  type: 'si_no' },
+            { id: 'interacciones',             label: 'El problema se resolvio a la primera o requirio multiples interacciones?', type: 'interacciones' }
         ];
 
         let encuestaData = {};
@@ -382,7 +342,7 @@
                     return;
                 }
 
-                if (data.expirada && data.Respondida == 1) {
+                if (data.expirada && data.Respondida == 0) {
                     container.innerHTML = `
                         <div class="card shadow">
                             <div class="encuesta-header text-center">
@@ -431,6 +391,7 @@
                     </div>
                 </div>
             `;
+
             document.querySelectorAll('.rating-stars .star').forEach(star => {
                 star.addEventListener('click', function() {
                     const input = document.getElementById(this.dataset.input);
@@ -459,96 +420,45 @@
             });
         }
 
-        function renderizarPregunta(pregunta) {
-            switch(pregunta.type) {
-                case 'rating':
-                    return `
-                        <input type="hidden" id="${pregunta.id}" value="0">
-                        <div class="rating-stars">
-                            ${[1,2,3,4,5].map(i => `
-                                <span class="star" data-input="${pregunta.id}" data-value="${i}">★</span>
-                            `).join('')}
-                        </div>
-                    `;
-                    
-                case 'si_no':
-                    return `
-                        <input type="hidden" id="${pregunta.id}" value="">
-                        <div>
-                            <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="1">Sí</button>
-                            <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="0">No</button>
-                        </div>
-                    `;
-                    
-                case 'interacciones':
-                    return `
-                        <input type="hidden" id="${pregunta.id}" value="">
-                        <div>
-                            <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="Una vez">Una vez</button>
-                            <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="Varias veces">Varias veces</button>
-                        </div>
-                    `;
-                    
-                case 'texto':
-                    return `
-                        <textarea id="${pregunta.id}" class="form-control mt-2" rows="3" 
-                                  placeholder="Escribe tus comentarios aquí..." 
-                                  style="resize: vertical;"></textarea>
-                    `;
-                    
-                default:
-                    return '';
-            }
-        }
-
         async function enviarEncuesta() {
             const preguntas = document.querySelectorAll('.pregunta-item');
-            const datos = {
-                id_encuesta: encuestaData.Id_encuesta
-            };
-            
+            const datos = { id_encuesta: encuestaData.Id_encuesta };
             let camposObligatorios = [];
-            
+
             preguntas.forEach(item => {
                 const input = item.querySelector('input, textarea');
                 if (input) {
                     const id = input.id;
                     const value = input.value;
-                    const label = item.querySelector('label');
-                    const esObligatorio = label && label.innerHTML.includes('*');
-                    
-                    if (esObligatorio) {
-                        camposObligatorios.push(id);
-                    }
-                    
-                    datos[id] = value || null;
+                    const esObligatorio = item.querySelector('.required-star') !== null;
+                    if (esObligatorio) camposObligatorios.push(id);
+                    datos[id] = value !== '' ? value : null;
                 }
             });
 
             const faltantes = camposObligatorios.filter(campo => {
                 const value = datos[campo];
-                return value === null || value === '' || value === '0';
+                return value === null || value === '' || value === undefined;
             });
 
             if (faltantes.length > 0) {
-                alert('Por favor, responde todas las preguntas');
+                alert('Por favor, responde todas las preguntas obligatorias (marcadas con *)');
                 faltantes.forEach(id => {
                     const input = document.getElementById(id);
                     if (input) {
-                        input.closest('.pregunta-item').style.borderLeft = '4px solid #dc3545';
-                        input.closest('.pregunta-item').style.background = '#fff5f5';
+                        const item = input.closest('.pregunta-item');
+                        item.style.borderLeft = '4px solid #dc3545';
+                        item.style.background = '#fff5f5';
                         setTimeout(() => {
-                            input.closest('.pregunta-item').style.borderLeft = '';
-                            input.closest('.pregunta-item').style.background = '';
+                            item.style.borderLeft = '';
+                            item.style.background = '';
                         }, 3000);
                     }
                 });
                 return;
             }
 
-            if (!confirm('¿Estás seguro de enviar la encuesta? No podrás modificarla después.')) {
-                return;
-            }
+            if (!confirm('Esta seguro de enviar la encuesta? No podras modificarla despues.')) return;
 
             try {
                 const response = await fetch('api/encuesta/responder.php', {
@@ -561,18 +471,14 @@
 
                 if (result.success) {
                     document.getElementById('encuestaContainer').innerHTML = `
-                        <div class="card encuesta-card">
+                        <div class="card shadow">
                             <div class="encuesta-header text-center">
                                 <i class="bi bi-check-circle" style="font-size: 4rem;"></i>
-                                <h3 class="mt-3">¡Gracias por tu respuesta!</h3>
-                                <p class="mb-0 opacity-75">Tu opinión nos ayuda a mejorar nuestro servicio.</p>
+                                <h3 class="mt-3">Gracias por tu respuesta!</h3>
+                                <p class="mb-0">Tu opinion nos ayuda a mejorar nuestro servicio.</p>
                             </div>
                             <div class="card-body text-center p-4">
-                                <i class="bi bi-emoji-smile" style="font-size: 3rem; color: #ffc107;"></i>
-                                <p class="mt-3">La encuesta ha sido registrada exitosamente.</p>
-                                <a href="dashboard.html" class="btn btn-primary mt-2">
-                                    <i class="bi bi-house"></i> Volver al dashboard
-                                </a>
+                                <a href="dashboard.html" class="btn btn-primary">Volver al dashboard</a>
                             </div>
                         </div>
                     `;

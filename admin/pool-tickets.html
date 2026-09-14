@@ -120,6 +120,37 @@
             border-color: #861f1b;
             box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25);
         }
+
+        .paginador-container {
+            margin-top: 20px;
+        }
+        .paginador-container .pagination {
+            margin-bottom: 0;
+        }
+        .paginador-container .page-link {
+            color: #000;
+            border-color: #dee2e6;
+        }
+        .paginador-container .page-link:hover {
+            background-color: #f0e8e7;
+            color: #861f1b;
+            border-color: #861f1b;
+        }
+        .paginador-container .page-item.active .page-link {
+            background-color: #861f1b;
+            border-color: #861f1b;
+            color: #fff;
+        }
+        .paginador-container .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #fff;
+            border-color: #dee2e6;
+        }
+        .info-paginacion {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -215,6 +246,13 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="paginadorContainer" class="paginador-container d-flex justify-content-between align-items-center" style="display:none;">
+                    <div id="infoPaginacion" class="info-paginacion"></div>
+                    <nav aria-label="Navegación de páginas">
+                        <ul class="pagination pagination-sm mb-0" id="paginadorLista"></ul>
+                    </nav>
+                </div>
             </main>
         </div>
     </div>
@@ -233,6 +271,10 @@
         if (usuario.roles && usuario.roles.includes('Administrador')) {
             document.getElementById('adminMenu').style.display = 'block';
         }
+
+        let ticketsCompletos = [];
+        let paginaActual = 1;
+        const TICKETS_POR_PAGINA = 5;
 
         function escapeHTML(texto) {
             if (!texto) return '';
@@ -298,6 +340,7 @@
                     </div>
                 </div>
             `;
+            document.getElementById('paginadorContainer').style.display = 'none';
 
             try {
                 const prioridad = document.getElementById('filtroPrioridad').value;
@@ -318,66 +361,9 @@
                     return;
                 }
 
-                if (tickets.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-pool">
-                            <i class="bi bi-check-circle pulse"></i>
-                            <h4 class="mt-3">No hay tickets pendientes</h4>
-                            <p class="text-muted">Todos los tickets han sido asignados</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                container.innerHTML = tickets.map(t => {
-                    const prioridadClass = (t.prioridad_nombre || '').toLowerCase();
-                    const prioridadBadge = {
-                        'critica': 'badge-prioridad-critica',
-                        'alta': 'badge-prioridad-alta',
-                        'media': 'badge-prioridad-media',
-                        'baja': 'badge-prioridad-baja'
-                    }[prioridadClass] || '';
-
-                    return `
-                        <div class="card shadow-sm mb-3 ticket-card priority-${prioridadClass}">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-md-7">
-                                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                                            <span class="badge bg-secondary">${escapeHTML(t.Folio || 'N/A')}</span>
-                                            <h5 class="mb-0">${escapeHTML(t.Titulo || 'Sin titulo')}</h5>
-                                        </div>
-                                        <div class="mt-2">
-                                            <span class="badge badge-prioridad ${prioridadBadge}">
-                                                ${escapeHTML(t.prioridad_nombre || 'Sin prioridad')}
-                                            </span>
-                                            <span class="badge bg-secondary">${escapeHTML(t.categoria_nombre || 'Sin categoria')}</span>
-                                            <small class="text-muted ms-2">
-                                                <i class="bi bi-calendar3"></i> Creado ${calcularTiempo(t.Fecha_creacion)}
-                                            </small>
-                                        </div>
-                                        <div class="mt-1">
-                                            <small class="text-muted">
-                                                <i class="bi bi-person"></i> ${escapeHTML(t.usuario_nombre || '')} ${escapeHTML(t.usuario_apellido || '')}
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <small class="text-muted d-block">
-                                            <i class="bi bi-clock-history"></i> 
-                                            ${t.Fecha_vencimiento ? 'Vence: ' + formatearFecha(t.Fecha_vencimiento) : 'Sin fecha de vencimiento'}
-                                        </small>
-                                    </div>
-                                    <div class="col-md-2 text-end">
-                                        <a href="../detalle-ticket.html?id=${t.Id_ticket}" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-eye"></i> Ver
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+                ticketsCompletos = tickets;
+                paginaActual = 1;
+                renderizarPagina();
 
             } catch (error) {
                 console.error('Error al cargar pool:', error);
@@ -388,6 +374,137 @@
                     </div>
                 `;
             }
+        }
+
+        function renderizarPagina() {
+            const container = document.getElementById('poolContainer');
+            const paginadorContainer = document.getElementById('paginadorContainer');
+            const totalTickets = ticketsCompletos.length;
+
+            if (totalTickets === 0) {
+                container.innerHTML = `
+                    <div class="empty-pool">
+                        <i class="bi bi-check-circle pulse"></i>
+                        <h4 class="mt-3">No hay tickets pendientes</h4>
+                        <p class="text-muted">Todos los tickets han sido asignados</p>
+                    </div>
+                `;
+                paginadorContainer.style.display = 'none';
+                return;
+            }
+
+            const totalPaginas = Math.ceil(totalTickets / TICKETS_POR_PAGINA);
+            if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+            if (paginaActual < 1) paginaActual = 1;
+
+            const inicio = (paginaActual - 1) * TICKETS_POR_PAGINA;
+            const fin = Math.min(inicio + TICKETS_POR_PAGINA, totalTickets);
+            const ticketsPagina = ticketsCompletos.slice(inicio, fin);
+
+            container.innerHTML = ticketsPagina.map(t => {
+                const prioridadClass = (t.prioridad_nombre || '').toLowerCase();
+                const prioridadBadge = {
+                    'critica': 'badge-prioridad-critica',
+                    'alta': 'badge-prioridad-alta',
+                    'media': 'badge-prioridad-media',
+                    'baja': 'badge-prioridad-baja'
+                }[prioridadClass] || '';
+
+                return `
+                    <div class="card shadow-sm mb-3 ticket-card priority-${prioridadClass}">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-7">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="badge bg-secondary">${escapeHTML(t.Folio || 'N/A')}</span>
+                                        <h5 class="mb-0">${escapeHTML(t.Titulo || 'Sin titulo')}</h5>
+                                    </div>
+                                    <div class="mt-2">
+                                        <span class="badge badge-prioridad ${prioridadBadge}">
+                                            ${escapeHTML(t.prioridad_nombre || 'Sin prioridad')}
+                                        </span>
+                                        <span class="badge bg-secondary">${escapeHTML(t.categoria_nombre || 'Sin categoria')}</span>
+                                        <small class="text-muted ms-2">
+                                            <i class="bi bi-calendar3"></i> Creado ${calcularTiempo(t.Fecha_creacion)}
+                                        </small>
+                                    </div>
+                                    <div class="mt-1">
+                                        <small class="text-muted">
+                                            <i class="bi bi-person"></i> ${escapeHTML(t.usuario_nombre || '')} ${escapeHTML(t.usuario_apellido || '')}
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted d-block">
+                                        <i class="bi bi-clock-history"></i> 
+                                        ${t.Fecha_vencimiento ? 'Vence: ' + formatearFecha(t.Fecha_vencimiento) : 'Sin fecha de vencimiento'}
+                                    </small>
+                                </div>
+                                <div class="col-md-2 text-end">
+                                    <a href="../detalle-ticket.html?id=${t.Id_ticket}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Ver
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (totalPaginas > 1) {
+                paginadorContainer.style.display = 'flex';
+                generarPaginador(paginaActual, totalPaginas, totalTickets);
+            } else {
+                paginadorContainer.style.display = 'none';
+            }
+        }
+
+        function generarPaginador(actual, total, totalRegistros) {
+            const container = document.getElementById('paginadorLista');
+            const info = document.getElementById('infoPaginacion');
+
+            info.textContent = `Mostrando ${Math.min((actual-1)*TICKETS_POR_PAGINA+1, totalRegistros)} - ${Math.min(actual*TICKETS_POR_PAGINA, totalRegistros)} de ${totalRegistros} tickets`;
+
+            let html = '';
+            html += `<li class="page-item ${actual <= 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" onclick="cambiarPagina(${actual - 1}); return false;">Anterior</a>
+                    </li>`;
+
+            let inicio = Math.max(1, actual - 2);
+            let fin = Math.min(total, actual + 2);
+            
+            if (actual <= 3) fin = Math.min(total, 5);
+            if (actual >= total - 2) inicio = Math.max(1, total - 4);
+
+            if (inicio > 1) {
+                html += `<li class="page-item"><a class="page-link" href="#" onclick="cambiarPagina(1); return false;">1</a></li>`;
+                if (inicio > 2) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+
+            for (let i = inicio; i <= fin; i++) {
+                html += `<li class="page-item ${i === actual ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="cambiarPagina(${i}); return false;">${i}</a>
+                        </li>`;
+            }
+
+            if (fin < total) {
+                if (fin < total - 1) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                html += `<li class="page-item"><a class="page-link" href="#" onclick="cambiarPagina(${total}); return false;">${total}</a></li>`;
+            }
+
+            html += `<li class="page-item ${actual >= total ? 'disabled' : ''}">
+                        <a class="page-link" href="#" onclick="cambiarPagina(${actual + 1}); return false;">Siguiente</a>
+                    </li>`;
+
+            container.innerHTML = html;
+        }
+
+        function cambiarPagina(page) {
+            const totalPaginas = Math.ceil(ticketsCompletos.length / TICKETS_POR_PAGINA);
+            if (page < 1 || page > totalPaginas) return;
+            paginaActual = page;
+            renderizarPagina();
+            document.querySelector('main').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function cerrarSesion() {
@@ -402,4 +519,5 @@
         });
     </script>
 </body>
+<br>
 </html>
