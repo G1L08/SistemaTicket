@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/ticket-system/api/';
+const API_URL = 'api/';
 
 document.addEventListener('DOMContentLoaded', function() {
     if (sessionStorage.getItem('usuario')) {
