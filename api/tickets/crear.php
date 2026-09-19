@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
@@ -13,9 +12,6 @@ if (file_exists($notificaciones_path)) {
     function notificarAdministradores($mensaje, $tipo, $ticket_id = null, $usuarios_excluir = []) { return true; }
     function notificarTecnicos($mensaje, $tipo, $ticket_id = null, $usuarios_excluir = []) { return true; }
 }
-=======
-require_once '../config/database.php';
->>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
@@ -27,12 +23,7 @@ if (!isset($_SESSION['usuario_id'])) {
 $usuario_id = $_SESSION['usuario_id'];
 $data = json_decode(file_get_contents('php://input'), true);
 
-<<<<<<< HEAD
 if (!isset($data['titulo']) || !isset($data['descripcion'])) {
-=======
-if (!isset($data['titulo']) || !isset($data['descripcion']) || 
-    !isset($data['id_categoria']) || !isset($data['id_prioridad'])) {
->>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     echo json_encode(['error' => 'Faltan datos obligatorios']);
     exit;
 }
@@ -40,7 +31,6 @@ if (!isset($data['titulo']) || !isset($data['descripcion']) ||
 try {
     $pdo->beginTransaction();
 
-<<<<<<< HEAD
     $folio = generarFolio();
     $fecha_vencimiento = date('Y-m-d H:i:s', strtotime('+48 hours'));
     $titulo = $data['titulo'];
@@ -54,25 +44,6 @@ try {
     $stmt->execute([$folio, $titulo, $descripcion, $usuario_id, $id_categoria, $id_prioridad, $fecha_vencimiento]);
     $ticket_id = $pdo->lastInsertId();
 
-=======
-    
-    $folio = generarFolio();
-    $fecha_vencimiento = date('Y-m-d H:i:s', strtotime('+48 hours'));
-    $stmt = $pdo->prepare("INSERT INTO Ticket 
-                          (Folio, Titulo, Descripcion, Id_usuario, Id_categoria, Id_prioridad, Fecha_vencimiento) 
-                          VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([
-        $folio,
-        $data['titulo'],
-        $data['descripcion'],
-        $usuario_id,
-        $data['id_categoria'],
-        $data['id_prioridad'],
-        $fecha_vencimiento
-    ]);
-
-    $ticket_id = $pdo->lastInsertId();
->>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 
     $stmt = $pdo->prepare("INSERT INTO HistorialTicket (Id_ticket, Estado_anterior, Estado_nuevo, Id_usuario) 
                           VALUES (?, 'Nuevo', 'Abierto', ?)");
@@ -80,7 +51,6 @@ try {
 
     $pdo->commit();
 
-<<<<<<< HEAD
     // envio de notificaciones
     if (function_exists('notificarAdministradores') && function_exists('notificarTecnicos')) {
         $mensaje = "Nuevo ticket: {$folio} - {$titulo}";
@@ -88,8 +58,6 @@ try {
         notificarTecnicos($mensaje, 'ticket_nuevo', $ticket_id, [$usuario_id]);
     }
 
-=======
->>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     echo json_encode([
         'success' => true,
         'id' => $ticket_id,
@@ -98,7 +66,6 @@ try {
     ]);
 
 } catch(PDOException $e) {
-<<<<<<< HEAD
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
@@ -108,9 +75,5 @@ try {
         $pdo->rollBack();
     }
     echo json_encode(['error' => 'Error general: ' . $e->getMessage()]);
-=======
-    $pdo->rollBack();
-    echo json_encode(['error' => 'Error al crear ticket: ' . $e->getMessage()]);
->>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
 }
 ?>
