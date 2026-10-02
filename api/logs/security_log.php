@@ -24,17 +24,4 @@ function registrarLog($evento, $descripcion, $nivel = 'INFO') {
     ]);
 }
 
-CREATE TABLE LogSeguridad (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NULL,
-    ip VARCHAR(45) NOT NULL,
-    user_agent VARCHAR(255),
-    evento VARCHAR(100) NOT NULL,
-    descripcion TEXT,
-    nivel ENUM('INFO', 'WARNING', 'ERROR', 'CRITICAL') DEFAULT 'INFO',
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_evento (evento),
-    INDEX idx_usuario (usuario_id),
-    INDEX idx_timestamp (timestamp)
-);
 ?>

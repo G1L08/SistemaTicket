@@ -21,13 +21,16 @@ if (!isset($data['id_ticket']) || !isset($data['prioridad'])) {
 $id_ticket = intval($data['id_ticket']);
 $prioridad = trim($data['prioridad']);
 $usuario_id = $_SESSION['usuario_id'];
-$roles = $_SESSION['roles'] ?? ['Usuario'];
+$roles = $_SESSION['roles'] ?? [];
 
-
-$prioridades_validas = ['Baja', 'Media', 'Alta', 'Crítica'];
+$prioridades_validas = ['Baja', 'Media', 'Alta', 'Critica', 'Crítica'];
 if (!in_array($prioridad, $prioridades_validas)) {
-    echo json_encode(['error' => 'Prioridad no válida']);
+    echo json_encode(['error' => 'Prioridad no válida: ' . $prioridad]);
     exit;
+}
+
+if ($prioridad === 'Crítica') {
+    $prioridad = 'Critica';
 }
 
 try {
@@ -43,23 +46,29 @@ try {
         exit;
     }
     
-    // Solo técnicos o admin pueden cambiar prioridad
-    if (!in_array('Administrador', $roles) && !in_array('Técnico', $roles)) {
+    $esAdmin   = in_array('Administrador', $roles);
+    $esTecnico = in_array('Tecnico', $roles) || in_array('Técnico', $roles);
+    
+    if (!$esAdmin && !$esTecnico) {
         http_response_code(403);
-        echo json_encode(['error' => 'No tienes permiso para cambiar la prioridad']);
+        echo json_encode([
+            'error' => 'No tienes permiso para cambiar la prioridad',
+            'debug_roles' => $roles
+        ]);
         exit;
     }
+    
     if ($ticket['Prioridad_confirmada'] !== null) {
         echo json_encode(['error' => 'Este ticket ya tiene una prioridad confirmada. No se puede volver a cambiar.']);
         exit;
     }
     
-    // Guardar prioridad confirmada
     $stmt = $pdo->prepare("UPDATE Ticket 
                           SET Prioridad_confirmada = ?,
                               Fecha_actualizacion = NOW()
                           WHERE Id_ticket = ?");
     $stmt->execute([$prioridad, $id_ticket]);
+    
     $stmt = $pdo->prepare("INSERT INTO HistorialTicket 
                           (Id_ticket, Estado_anterior, Estado_nuevo, Id_usuario, Fecha_cambio) 
                           VALUES (?, ?, CONCAT('Prioridad confirmada: ', ?), ?, NOW())");

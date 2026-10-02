@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
     <title>Encuesta de Satisfaccion</title>
-=======
-    <title>Encuesta de Satisfacción - Sistema de Tickets</title>
->>>>>>> 736f6aadba33521ce6ddde9feb0616d51817ec85
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
@@ -20,6 +17,7 @@
         .navbar-dark.bg-dark {
             background-color: #861f1b !important;
         }
+
         .navbar-dark .navbar-brand {
             color: #fff !important;
         }
@@ -27,6 +25,7 @@
         .sidebar {
             background-color: #f8f9fa !important;
         }
+
         .sidebar .nav-link {
             color: #000 !important;
             font-weight: 500;
@@ -34,24 +33,30 @@
             margin: 2px 8px;
             transition: all 0.3s;
         }
+
         .sidebar .nav-link i {
             color: #000 !important;
             margin-right: 10px;
         }
+
         .sidebar .nav-link:hover {
             background-color: #f0e8e7 !important;
             color: #861f1b !important;
         }
+
         .sidebar .nav-link:hover i {
             color: #861f1b !important;
         }
+
         .sidebar .nav-link.active {
             background-color: #861f1b !important;
             color: #fff !important;
         }
+
         .sidebar .nav-link.active i {
             color: #fff !important;
         }
+
         .sidebar hr {
             border-color: #dee2e6;
             margin: 10px 15px;
@@ -60,12 +65,14 @@
         .h2 i {
             color: #861f1b;
         }
+
         .card-header {
             background: transparent !important;
             border-bottom: 2px solid #f0f2f5;
             font-weight: 600;
             color: #000 !important;
         }
+
         .card-header i {
             color: #861f1b !important;
         }
@@ -74,6 +81,7 @@
             border-bottom: 1px solid #f0f2f5;
             padding: 15px 0;
         }
+
         .pregunta-item:last-child {
             border-bottom: none;
         }
@@ -83,12 +91,14 @@
             gap: 10px;
             margin-top: 5px;
         }
+
         .rating-stars .star {
             font-size: 2rem;
             cursor: pointer;
             color: #dee2e6;
             transition: all 0.2s;
         }
+
         .rating-stars .star:hover,
         .rating-stars .star.active {
             color: #ffc107;
@@ -104,10 +114,12 @@
             transition: all 0.2s;
             margin: 3px;
         }
+
         .option-btn:hover {
             border-color: #861f1b;
             background: #f0e8e7;
         }
+
         .option-btn.selected {
             border-color: #861f1b;
             background: #861f1b;
@@ -119,6 +131,7 @@
             border-color: #861f1b !important;
             color: #fff !important;
         }
+
         .btn-primary:hover {
             background-color: #6a1815 !important;
             border-color: #6a1815 !important;
@@ -142,6 +155,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-dark bg-dark">
@@ -196,6 +210,12 @@
                                 <i class="bi bi-graph-up"></i> Panel Admin
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <hr>
+                            <a class="nav-link active" href="notificaciones.html">
+                                <i class="bi bi-bell"></i> Notificaciones
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -223,7 +243,7 @@
     <script>
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario) {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
 
@@ -309,7 +329,7 @@
                     html += `
                         <input type="hidden" id="${pregunta.id}" value="">
                         <div class="rating-stars">
-                            ${[1,2,3,4,5].map(i => `
+                            ${[1, 2, 3, 4, 5].map(i => `
                                 <span class="star" data-input="${pregunta.id}" data-value="${i}">★</span>
                             `).join('')}
                         </div>
@@ -432,7 +452,7 @@
                 </div>
             `;
             document.querySelectorAll('.rating-stars .star').forEach(star => {
-                star.addEventListener('click', function() {
+                star.addEventListener('click', function () {
                     const input = document.getElementById(this.dataset.input);
                     const value = parseInt(this.dataset.value);
                     input.value = value;
@@ -444,7 +464,7 @@
             });
 
             document.querySelectorAll('.option-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     const input = document.getElementById(this.dataset.input);
                     input.value = this.dataset.value;
                     const siblings = this.parentElement.querySelectorAll('.option-btn');
@@ -460,17 +480,17 @@
         }
 
         function renderizarPregunta(pregunta) {
-            switch(pregunta.type) {
+            switch (pregunta.type) {
                 case 'rating':
                     return `
                         <input type="hidden" id="${pregunta.id}" value="0">
                         <div class="rating-stars">
-                            ${[1,2,3,4,5].map(i => `
+                            ${[1, 2, 3, 4, 5].map(i => `
                                 <span class="star" data-input="${pregunta.id}" data-value="${i}">★</span>
                             `).join('')}
                         </div>
                     `;
-                    
+
                 case 'si_no':
                     return `
                         <input type="hidden" id="${pregunta.id}" value="">
@@ -479,7 +499,7 @@
                             <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="0">No</button>
                         </div>
                     `;
-                    
+
                 case 'interacciones':
                     return `
                         <input type="hidden" id="${pregunta.id}" value="">
@@ -488,14 +508,14 @@
                             <button type="button" class="option-btn" data-input="${pregunta.id}" data-value="Varias veces">Varias veces</button>
                         </div>
                     `;
-                    
+
                 case 'texto':
                     return `
                         <textarea id="${pregunta.id}" class="form-control mt-2" rows="3" 
                                   placeholder="Escribe tus comentarios aquí..." 
                                   style="resize: vertical;"></textarea>
                     `;
-                    
+
                 default:
                     return '';
             }
@@ -506,9 +526,9 @@
             const datos = {
                 id_encuesta: encuestaData.Id_encuesta
             };
-            
+
             let camposObligatorios = [];
-            
+
             preguntas.forEach(item => {
                 const input = item.querySelector('input, textarea');
                 if (input) {
@@ -516,11 +536,11 @@
                     const value = input.value;
                     const label = item.querySelector('label');
                     const esObligatorio = label && label.innerHTML.includes('*');
-                    
+
                     if (esObligatorio) {
                         camposObligatorios.push(id);
                     }
-                    
+
                     datos[id] = value || null;
                 }
             });
@@ -587,8 +607,9 @@
 
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     </script>
 </body>
+
 </html>

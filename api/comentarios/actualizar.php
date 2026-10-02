@@ -24,7 +24,7 @@ $usuario_id = $_SESSION['usuario_id'];
 $roles = $_SESSION['roles'] ?? ['Usuario'];
 
 try {
-    // Verificar permisos
+    // Verifica permisos
     $stmt = $pdo->prepare("SELECT Id_usuario, Id_tecnico_asignado, Id_estado FROM Ticket WHERE Id_ticket = ?");
     $stmt->execute([$id]);
     $ticket = $stmt->fetch();
@@ -34,7 +34,6 @@ try {
         exit;
     }
     
-    // Solo admin, técnico asignado o creador pueden cambiar estado
     if (!in_array('Administrador', $roles) && 
         $ticket['Id_tecnico_asignado'] != $usuario_id &&
         $ticket['Id_usuario'] != $usuario_id) {
@@ -53,8 +52,7 @@ try {
     $stmt = $pdo->prepare("SELECT Nombre FROM Estado WHERE Id_estado = ?");
     $stmt->execute([$nuevo_estado]);
     $estado_nuevo_nombre = $stmt->fetchColumn();
-    
-    // Actualizar ticket
+
     $stmt = $pdo->prepare("UPDATE Ticket SET Id_estado = ? WHERE Id_ticket = ?");
     $stmt->execute([$nuevo_estado, $id]);
     

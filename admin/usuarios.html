@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
         .navbar-dark.bg-dark {
             background-color: #861f1b !important;
         }
+
         .navbar-dark .navbar-brand {
             color: #fff !important;
         }
@@ -23,6 +25,7 @@
         .sidebar {
             background-color: #f8f9fa !important;
         }
+
         .sidebar .nav-link {
             color: #000 !important;
             font-weight: 500;
@@ -30,24 +33,30 @@
             margin: 2px 8px;
             transition: all 0.3s;
         }
+
         .sidebar .nav-link i {
             color: #000 !important;
             margin-right: 10px;
         }
+
         .sidebar .nav-link:hover {
             background-color: #f0e8e7 !important;
             color: #861f1b !important;
         }
+
         .sidebar .nav-link:hover i {
             color: #861f1b !important;
         }
+
         .sidebar .nav-link.active {
             background-color: #861f1b !important;
             color: #fff !important;
         }
+
         .sidebar .nav-link.active i {
             color: #fff !important;
         }
+
         .sidebar hr {
             border-color: #dee2e6;
             margin: 10px 15px;
@@ -58,6 +67,7 @@
             border-color: #861f1b !important;
             color: #fff !important;
         }
+
         .btn-primary:hover {
             background-color: #6a1815 !important;
             border-color: #6a1815 !important;
@@ -68,11 +78,13 @@
             color: #000 !important;
             transition: all 0.3s;
         }
+
         .btn-outline-primary:hover {
             background-color: #861f1b !important;
             border-color: #861f1b !important;
             color: #fff !important;
         }
+
         .btn-outline-primary:hover i {
             color: #fff !important;
         }
@@ -82,6 +94,7 @@
             color: #dc3545 !important;
             transition: all 0.3s;
         }
+
         .btn-outline-danger:hover {
             background-color: #dc3545 !important;
             border-color: #dc3545 !important;
@@ -93,6 +106,7 @@
             border-color: #6c757d !important;
             color: #fff !important;
         }
+
         .btn-secondary:hover {
             background-color: #5a6268 !important;
             border-color: #545b62 !important;
@@ -103,6 +117,7 @@
             border-color: #28a745 !important;
             color: #fff !important;
         }
+
         .btn-success:hover {
             background-color: #1e7e34 !important;
             border-color: #1c7430 !important;
@@ -111,9 +126,10 @@
         .user-card {
             transition: all 0.3s;
         }
+
         .user-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         .user-avatar {
@@ -133,14 +149,17 @@
             padding: 4px 12px;
             border-radius: 20px;
         }
+
         .badge-rol-admin {
             background: #861f1b;
             color: white;
         }
+
         .badge-rol-tecnico {
             background: #fd7e14;
             color: white;
         }
+
         .badge-rol-usuario {
             background: #28a745;
             color: white;
@@ -150,6 +169,7 @@
             background-color: #861f1b !important;
             color: white !important;
         }
+
         .modal-header .btn-close {
             filter: brightness(0) invert(1);
         }
@@ -164,7 +184,8 @@
             font-weight: 600;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: #861f1b;
             box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25);
         }
@@ -181,6 +202,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-dark bg-dark">
@@ -237,6 +259,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="dashboard-admin.html">
                                 <i class="bi bi-graph-up"></i> Panel Admin
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <hr>
+                            <a class="nav-link" href="../notificaciones.html">
+                                <i class="bi bi-bell"></i> Notificaciones
                             </a>
                         </li>
                     </ul>
@@ -341,7 +369,7 @@
                 <div class="modal-body">
                     <form id="formEditarUsuario">
                         <input type="hidden" id="editarUsuarioId">
-                        
+
                         <div class="mb-3">
                             <label class="form-label">No. de empleado</label>
                             <input type="text" id="editarNoEmpleado" class="form-control" readonly>
@@ -413,7 +441,7 @@
     <script>
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario || !usuario.roles.includes('Administrador')) {
-            window.location.href = '../login.html';
+            window.location.href = '../index.html';
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
 
@@ -527,39 +555,39 @@
         }
 
         async function abrirEditarUsuario(id) {
-    try {
-        const response = await fetch('../api/usuarios/obtener.php?id=' + id);
-        
-        if (!response.ok) {
-            throw new Error('Error HTTP: ' + response.status);
+            try {
+                const response = await fetch('../api/usuarios/obtener.php?id=' + id);
+
+                if (!response.ok) {
+                    throw new Error('Error HTTP: ' + response.status);
+                }
+
+                const usuarioData = await response.json();
+
+                if (usuarioData.error) {
+                    alert('Error: ' + usuarioData.error);
+                    return;
+                }
+
+                document.getElementById('editarUsuarioId').value = usuarioData.Id_usuario;
+                document.getElementById('editarNoEmpleado').value = usuarioData.No_empleado;
+                document.getElementById('editarNombre').value = usuarioData.Nombre;
+                document.getElementById('editarApellidoPaterno').value = usuarioData.Apellido_paterno;
+                document.getElementById('editarApellidoMaterno').value = usuarioData.Apellido_materno || '';
+                document.getElementById('editarEmail').value = usuarioData.correo;
+                document.getElementById('editarPassword').value = '••••••••';
+                document.getElementById('editarPuesto').value = usuarioData.Puesto || '';
+                document.getElementById('editarRol').value = obtenerIdRol(usuarioData.rol_nombre);
+                document.getElementById('editarEstado').value = usuarioData.estado;
+
+                const modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
+                modal.show();
+
+            } catch (e) {
+                console.error('Error al cargar usuario:', e);
+                alert('Error al cargar los datos del usuario: ' + e.message);
+            }
         }
-        
-        const usuarioData = await response.json();
-
-        if (usuarioData.error) {
-            alert('Error: ' + usuarioData.error);
-            return;
-        }
-
-        document.getElementById('editarUsuarioId').value = usuarioData.Id_usuario;
-        document.getElementById('editarNoEmpleado').value = usuarioData.No_empleado;
-        document.getElementById('editarNombre').value = usuarioData.Nombre;
-        document.getElementById('editarApellidoPaterno').value = usuarioData.Apellido_paterno;
-        document.getElementById('editarApellidoMaterno').value = usuarioData.Apellido_materno || '';
-        document.getElementById('editarEmail').value = usuarioData.correo;
-        document.getElementById('editarPassword').value = '••••••••';
-        document.getElementById('editarPuesto').value = usuarioData.Puesto || '';
-        document.getElementById('editarRol').value = obtenerIdRol(usuarioData.rol_nombre);
-        document.getElementById('editarEstado').value = usuarioData.estado;
-
-        const modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
-        modal.show();
-
-    } catch (e) {
-        console.error('Error al cargar usuario:', e);
-        alert('Error al cargar los datos del usuario: ' + e.message);
-    }
-}
 
         function obtenerIdRol(rolNombre) {
             const roles = {
@@ -630,12 +658,13 @@
 
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');
-            window.location.href = '../login.html';
+            window.location.href = '../index.html';
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             cargarUsuarios();
         });
     </script>
 </body>
+
 </html>

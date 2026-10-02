@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@
         .navbar-dark.bg-dark {
             background-color: #861f1b !important;
         }
+
         .navbar-dark .navbar-brand {
             color: #fff !important;
         }
@@ -24,6 +26,7 @@
         .sidebar {
             background-color: #f8f9fa !important;
         }
+
         .sidebar .nav-link {
             color: #000 !important;
             font-weight: 500;
@@ -31,24 +34,30 @@
             margin: 2px 8px;
             transition: all 0.3s;
         }
+
         .sidebar .nav-link i {
             color: #000 !important;
             margin-right: 10px;
         }
+
         .sidebar .nav-link:hover {
             background-color: #f0e8e7 !important;
             color: #861f1b !important;
         }
+
         .sidebar .nav-link:hover i {
             color: #861f1b !important;
         }
+
         .sidebar .nav-link.active {
             background-color: #861f1b !important;
             color: #fff !important;
         }
+
         .sidebar .nav-link.active i {
             color: #fff !important;
         }
+
         .sidebar hr {
             border-color: #dee2e6;
             margin: 10px 15px;
@@ -59,11 +68,13 @@
             color: #000 !important;
             transition: all 0.3s;
         }
+
         .btn-outline-primary:hover {
             background-color: #861f1b !important;
             border-color: #861f1b !important;
             color: #fff !important;
         }
+
         .btn-outline-primary:hover i {
             color: #fff !important;
         }
@@ -77,6 +88,7 @@
             cursor: pointer;
             color: #333 !important;
         }
+
         .stat-card:hover {
             border-color: #861f1b !important;
             background-color: #861f1b !important;
@@ -84,21 +96,25 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(134, 31, 27, 0.3);
         }
+
         .stat-card:hover .number,
         .stat-card:hover .label,
         .stat-card:hover .icon {
             color: #fff !important;
         }
+
         .stat-card .icon {
             font-size: 2.5rem;
             opacity: 0.5;
             color: #6c757d;
         }
+
         .stat-card .number {
             font-size: 2.5rem;
             font-weight: bold;
             color: #333;
         }
+
         .stat-card .label {
             font-size: 0.9rem;
             opacity: 0.8;
@@ -115,9 +131,11 @@
             border-bottom: 1px solid #f0f2f5;
             transition: all 0.2s;
         }
+
         .ticket-item:hover {
             background: #f8f9fa;
         }
+
         .ticket-item:last-child {
             border-bottom: none;
         }
@@ -128,11 +146,13 @@
             margin-bottom: 8px;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
+
         .alert-item.critical {
             border-left-color: #dc3545;
         }
+
         .alert-item.warning {
             border-left-color: #ffc107;
         }
@@ -152,6 +172,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-dark bg-dark">
@@ -210,6 +231,12 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="dashboard-admin.html">
                                 <i class="bi bi-graph-up"></i> Panel Admin
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <hr>
+                            <a class="nav-link" href="../notificaciones.html">
+                                <i class="bi bi-bell"></i> Notificaciones
                             </a>
                         </li>
                     </ul>
@@ -322,7 +349,7 @@
     <script>
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario || !usuario.roles.includes('Administrador')) {
-            window.location.href = '../login.html';
+            window.location.href = '../index.html';
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
 
@@ -457,17 +484,17 @@
                             <small class="text-muted">
                                 <i class="bi bi-person"></i> ${escapeHTML(t.usuario_nombre || '')}
                                 <span class="ms-2">
-                                    <span class="badge bg-${t.Id_estado === 1 ? 'warning' : 
-                                                      t.Id_estado === 2 ? 'info' : 
-                                                      t.Id_estado === 3 ? 'secondary' :
-                                                      t.Id_estado === 4 ? 'success' : 'danger'}">
+                                    <span class="badge bg-${t.Id_estado === 1 ? 'warning' :
+                    t.Id_estado === 2 ? 'info' :
+                        t.Id_estado === 3 ? 'secondary' :
+                            t.Id_estado === 4 ? 'success' : 'danger'}">
                                         ${escapeHTML(t.estado_nombre)}
                                     </span>
                                 </span>
                                 <span class="ms-1">
                                     <span class="badge bg-${t.prioridad_nombre?.toLowerCase() === 'critica' ? 'danger' :
-                                                      t.prioridad_nombre?.toLowerCase() === 'alta' ? 'warning' :
-                                                      t.prioridad_nombre?.toLowerCase() === 'media' ? 'info' : 'secondary'}">
+                    t.prioridad_nombre?.toLowerCase() === 'alta' ? 'warning' :
+                        t.prioridad_nombre?.toLowerCase() === 'media' ? 'info' : 'secondary'}">
                                         ${escapeHTML(t.prioridad_nombre)}
                                     </span>
                                 </span>
@@ -543,10 +570,11 @@
 
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');
-            window.location.href = '../login.html';
+            window.location.href = '../index.html';
         }
 
         document.addEventListener('DOMContentLoaded', cargarDashboard);
     </script>
 </body>
+
 </html>

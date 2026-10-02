@@ -21,7 +21,7 @@ try {
         die('Archivo no encontrado');
     }
     
-    $ruta_completa = __DIR__ . '/../../' . $archivo['Ruta'];
+    $ruta_completa = __DIR__ . '/../../../' . $archivo['Ruta'];
     
     if (!file_exists($ruta_completa)) {
         die('El archivo físico no existe');

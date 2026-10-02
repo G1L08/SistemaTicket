@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
         .navbar-dark.bg-dark {
             background-color: #861f1b !important;
         }
+
         .navbar-dark .navbar-brand {
             color: #fff !important;
         }
@@ -23,6 +25,7 @@
         .sidebar {
             background-color: #f8f9fa !important;
         }
+
         .sidebar .nav-link {
             color: #000 !important;
             font-weight: 500;
@@ -30,21 +33,26 @@
             margin: 2px 8px;
             transition: all 0.3s;
         }
+
         .sidebar .nav-link i {
             color: #000 !important;
             margin-right: 10px;
         }
+
         .sidebar .nav-link:hover {
             background-color: #f0e8e7 !important;
             color: #861f1b !important;
         }
+
         .sidebar .nav-link:hover i {
             color: #861f1b !important;
         }
+
         .sidebar .nav-link.active {
             background-color: #861f1b !important;
             color: #fff !important;
         }
+
         .sidebar .nav-link.active i {
             color: #fff !important;
         }
@@ -54,14 +62,17 @@
             color: #000 !important;
             transition: all 0.3s;
         }
+
         .btn-outline-primary:hover {
             background-color: #861f1b !important;
             border-color: #861f1b !important;
             color: #fff !important;
         }
+
         .btn-outline-primary i {
             color: #000 !important;
         }
+
         .btn-outline-primary:hover i {
             color: #fff !important;
         }
@@ -71,9 +82,11 @@
             border-bottom: 1px solid #f0f2f5;
             transition: all 0.2s;
         }
+
         .ticket-item:hover {
             background: #f8f9fa;
         }
+
         .ticket-item:last-child {
             border-bottom: none;
         }
@@ -104,10 +117,12 @@
         .btn-notificaciones {
             position: relative;
         }
+
         .btn-notificaciones .badge {
             font-size: 0.6rem;
             padding: 0.25rem 0.5rem;
         }
+
         #notificacionesDropdown {
             width: 350px;
             max-height: 400px;
@@ -118,25 +133,30 @@
             z-index: 1050;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             display: none;
         }
+
         #notificacionesDropdown .dropdown-item {
             padding: 10px 15px;
             border-bottom: 1px solid #f0f2f5;
             cursor: pointer;
         }
+
         #notificacionesDropdown .dropdown-item:hover {
             background: #f8f9fa;
         }
+
         #notificacionesDropdown .dropdown-item:last-child {
             border-bottom: none;
         }
+
         .fw-bold {
             font-weight: 600;
         }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-dark bg-dark">
@@ -146,16 +166,20 @@
             </span>
             <div class="d-flex align-items-center gap-2">
                 <div class="position-relative">
-                    <button type="button" class="btn btn-outline-light btn-sm position-relative btn-notificaciones" onclick="toggleNotificaciones()">
+                    <button type="button" class="btn btn-outline-light btn-sm position-relative btn-notificaciones"
+                        onclick="toggleNotificaciones()">
                         <i class="bi bi-bell"></i>
-                        <span id="notificacionContador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; display:none;">
+                        <span id="notificacionContador"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.6rem; display:none;">
                             0
                         </span>
                     </button>
                     <div id="notificacionesDropdown" class="dropdown-menu dropdown-menu-end p-0">
                         <div class="p-2 bg-light border-bottom d-flex justify-content-between align-items-center">
                             <span class="fw-bold">Notificaciones</span>
-                            <button class="btn btn-sm btn-link" onclick="marcarTodasLeidas()">Marcar todas como leidas</button>
+                            <button class="btn btn-sm btn-link" onclick="marcarTodasLeidas()">Marcar todas como
+                                leidas</button>
                         </div>
                         <div id="listaNotificaciones" class="p-2">
                             <div class="text-center text-muted py-3">Cargando...</div>
@@ -206,6 +230,13 @@
                             </a>
                             <a class="nav-link" href="admin/dashboard-admin.html">
                                 <i class="bi bi-graph-up"></i> Panel Admin
+                            </a>
+                        </li>
+                        </li>
+                        <li class="nav-item">
+                            <hr>
+                            <a class="nav-link" href="notificaciones.html">
+                                <i class="bi bi-bell"></i> Notificaciones
                             </a>
                         </li>
                     </ul>
@@ -308,7 +339,7 @@
 
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario) {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
         document.getElementById('nombreUsuario').textContent = usuario.nombre;
@@ -537,13 +568,14 @@
 
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             cargarDashboard();
             setInterval(cargarDashboard, 60000);
         });
     </script>
 </body>
+
 </html>

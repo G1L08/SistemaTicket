@@ -2,6 +2,9 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
+
 require_once '../config/database.php';
 require_once '../notificaciones/crear.php';
 
@@ -29,9 +32,8 @@ if (empty($contenido)) {
 }
 
 try {
-    $stmt = $pdo->prepare("SELECT t.Id_ticket, t.Folio, t.Id_usuario, t.Id_tecnico_asignado, u.Nombre as usuario_nombre
+    $stmt = $pdo->prepare("SELECT t.Id_ticket, t.Folio, t.Titulo, t.Id_usuario, t.Id_tecnico_asignado 
                            FROM Ticket t
-                           LEFT JOIN Usuario u ON t.Id_usuario = u.Id_usuario
                            WHERE t.Id_ticket = ?");
     $stmt->execute([$id_ticket]);
     $ticket = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -41,14 +43,42 @@ try {
         exit;
     }
     
+    $stmtU = $pdo->prepare("SELECT Nombre, Apellido_paterno FROM Usuario WHERE Id_usuario = ?");
+    $stmtU->execute([$usuario_id]);
+    $u = $stmtU->fetch(PDO::FETCH_ASSOC);
+    $nombreComentador = trim(($u['Nombre'] ?? '') . ' ' . ($u['Apellido_paterno'] ?? ''));
+    if ($nombreComentador === '') $nombreComentador = 'Un usuario';
+    
     $stmt = $pdo->prepare("INSERT INTO Comentario (Id_ticket, Id_usuario, Contenido) VALUES (?, ?, ?)");
     $stmt->execute([$id_ticket, $usuario_id, $contenido]);
     
     $id_comentario = $pdo->lastInsertId();
-    
-    $mensaje = "Nuevo comentario en el ticket {$ticket['Folio']}: " . substr($contenido, 0, 50) . "...";
-    
-    notificarUsuariosTicket($id_ticket, $mensaje, 'comentario', [$usuario_id]);
+
+    ob_start();
+    try {
+        if (function_exists('crearNotificacion')) {
+            $extracto = mb_strlen($contenido) > 100 ? mb_substr($contenido, 0, 100) . '...' : $contenido;
+            $mensaje = "{$nombreComentador} comentó en el ticket {$ticket['Folio']} - \"{$ticket['Titulo']}\": {$extracto}";
+
+            $destinatarios = array_unique(array_filter([
+                $ticket['Id_usuario'],
+                $ticket['Id_tecnico_asignado']
+            ]));
+
+            foreach ($destinatarios as $dest_id) {
+                if ($dest_id == $usuario_id) continue;
+                crearNotificacion($dest_id, $id_ticket, 'ticket_comentario', $mensaje);
+            }
+
+            if (function_exists('notificarAdministradores')) {
+                $excluir = array_merge([$usuario_id], $destinatarios);
+                notificarAdministradores($mensaje, 'ticket_comentario', $id_ticket, $excluir);
+            }
+        }
+    } catch (Exception $e) {
+        error_log('Notificación comentario: ' . $e->getMessage());
+    }
+    ob_end_clean();
     
     echo json_encode([
         'success' => true,

@@ -8,6 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(E_ALL);
+
 require_once '../config/database.php';
 
 session_start();
@@ -66,7 +70,31 @@ try {
     $stmt->execute([$id_ticket, $usuario_id]);
     
     $pdo->commit();
-    
+
+    ob_start();
+    try {
+        $notif_path = __DIR__ . '/../notificaciones/crear.php';
+        if (file_exists($notif_path)) {
+            require_once $notif_path;
+
+            if (function_exists('crearNotificacion')) {
+                $folio  = $ticket['Folio'];
+                $titulo = $ticket['Titulo'];
+
+                if (!empty($ticket['Id_usuario'])) {
+                    $msgCreador = "Tu ticket {$folio} - \"{$titulo}\" ha sido tomado por el técnico {$usuario_nombre}. Ahora está en proceso.";
+                    crearNotificacion($ticket['Id_usuario'], $id_ticket, 'ticket_tomado', $msgCreador);
+                }
+
+                $msgTecnico = "Has tomado el ticket {$folio} - \"{$titulo}\".";
+                crearNotificacion($usuario_id, $id_ticket, 'ticket_tomado', $msgTecnico);
+            }
+        }
+    } catch (Exception $e) {
+        error_log('Notificación tomar: ' . $e->getMessage());
+    }
+    ob_end_clean();
+
     echo json_encode([
         'success' => true,
         'mensaje' => 'Ticket asignado exitosamente',

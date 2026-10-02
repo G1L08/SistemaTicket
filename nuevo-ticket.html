@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
         .navbar-dark.bg-dark {
             background-color: #861f1b !important;
         }
+
         .navbar-dark .navbar-brand {
             color: #fff !important;
         }
@@ -23,6 +25,7 @@
         .sidebar {
             background-color: #f8f9fa !important;
         }
+
         .sidebar .nav-link {
             color: #000 !important;
             font-weight: 500;
@@ -30,24 +33,30 @@
             margin: 2px 8px;
             transition: all 0.3s;
         }
+
         .sidebar .nav-link i {
             color: #000 !important;
             margin-right: 10px;
         }
+
         .sidebar .nav-link:hover {
             background-color: #f0e8e7 !important;
             color: #861f1b !important;
         }
+
         .sidebar .nav-link:hover i {
             color: #861f1b !important;
         }
+
         .sidebar .nav-link.active {
             background-color: #861f1b !important;
             color: #fff !important;
         }
+
         .sidebar .nav-link.active i {
             color: #fff !important;
         }
+
         .sidebar hr {
             border-color: #dee2e6;
             margin: 10px 15px;
@@ -58,6 +67,7 @@
             border-color: #861f1b !important;
             color: #fff !important;
         }
+
         .btn-primary:hover {
             background-color: #6a1815 !important;
             border-color: #6a1815 !important;
@@ -68,6 +78,7 @@
             border-color: #6c757d !important;
             color: #fff !important;
         }
+
         .btn-secondary:hover {
             background-color: #5a6268 !important;
             border-color: #545b62 !important;
@@ -89,12 +100,14 @@
             cursor: pointer;
             transition: all 0.3s;
         }
+
         .drop-zone:hover {
             border-color: #861f1b;
             background: #f8f9fa;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: #861f1b;
             box-shadow: 0 0 0 0.2rem rgba(134, 31, 27, 0.25);
         }
@@ -104,11 +117,27 @@
             border-color: #861f1b;
             color: #861f1b;
         }
+
         .alert-info i {
             color: #861f1b;
         }
+
+        .contador-caracteres {
+            font-size: 0.85rem;
+        }
+
+        .contador-caracteres.text-warning {
+            color: #b8860b !important;
+            font-weight: 600;
+        }
+
+        .contador-caracteres.text-danger {
+            color: #dc3545 !important;
+            font-weight: 700;
+        }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-dark bg-dark">
@@ -118,16 +147,21 @@
             </span>
             <div class="d-flex align-items-center gap-2">
                 <div class="position-relative">
-                    <button type="button" class="btn btn-outline-light btn-sm position-relative" onclick="toggleNotificaciones()">
+                    <button type="button" class="btn btn-outline-light btn-sm position-relative"
+                        onclick="toggleNotificaciones()">
                         <i class="bi bi-bell"></i>
-                        <span id="notificacionContador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; display:none;">
+                        <span id="notificacionContador"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.6rem; display:none;">
                             0
                         </span>
                     </button>
-                    <div id="notificacionesDropdown" class="dropdown-menu dropdown-menu-end p-0" style="width: 350px; max-height: 400px; overflow-y: auto; display:none; position: absolute; right: 0; top: 30px; z-index: 1050;">
+                    <div id="notificacionesDropdown" class="dropdown-menu dropdown-menu-end p-0"
+                        style="width: 350px; max-height: 400px; overflow-y: auto; display:none; position: absolute; right: 0; top: 30px; z-index: 1050;">
                         <div class="p-2 bg-light border-bottom d-flex justify-content-between align-items-center">
                             <span class="fw-bold">Notificaciones</span>
-                            <button class="btn btn-sm btn-link" onclick="marcarTodasLeidas()">Marcar todas como leidas</button>
+                            <button class="btn btn-sm btn-link" onclick="marcarTodasLeidas()">Marcar todas como
+                                leidas</button>
                         </div>
                         <div id="listaNotificaciones" class="p-2">
                             <div class="text-center text-muted py-3">Cargando...</div>
@@ -180,6 +214,12 @@
                                 <i class="bi bi-graph-up"></i> Panel Admin
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <hr>
+                            <a class="nav-link" href="notificaciones.html">
+                                <i class="bi bi-bell"></i> Notificaciones
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -199,8 +239,8 @@
 
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Titulo *</label>
-                                        <input type="text" id="titulo" class="form-control" 
-                                               placeholder="Describa brevemente el problema" required>
+                                        <input type="text" id="titulo" class="form-control"
+                                            placeholder="Describa brevemente el problema" required>
                                     </div>
 
                                     <div class="row mb-3">
@@ -220,24 +260,31 @@
 
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Sistema o aplicativo institucional *</label>
-                                        <input type="text" id="sistema" class="form-control" 
-                                               placeholder="Nombre del sistema afectado" required>
+                                        <input type="text" id="sistema" class="form-control"
+                                            placeholder="Nombre del sistema afectado" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Descripcion detallada *</label>
-                                        <textarea id="descripcion" class="form-control" rows="5" 
-                                                  placeholder="Describe el problema con el mayor detalle posible: pasos para reproducirlo, mensaje de error, impacto..." required></textarea>
+                                        <textarea id="descripcion" class="form-control" rows="5"
+                                            placeholder="Describe el problema con el mayor detalle posible: pasos para reproducirlo, mensaje de error, impacto..."
+                                            required></textarea>
+                                        <div class="d-flex justify-content-end mt-1">
+                                            <small id="contadorCaracteres" class="text-muted contador-caracteres">0 /
+                                                250</small>
+                                        </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Archivos adjuntos (opcional)</label>
                                         <div class="drop-zone" id="dropZone">
                                             <div class="text-center py-4">
-                                                <i class="bi bi-cloud-upload" style="font-size: 3rem; color: #6c757d;"></i>
+                                                <i class="bi bi-cloud-upload"
+                                                    style="font-size: 3rem; color: #6c757d;"></i>
                                                 <p class="mt-2">Arrastra archivos o haz click para seleccionar</p>
-                                                <small class="text-muted">PDF, PNG, JPG - Max. 5MB</small>
-                                                <input type="file" id="archivos" class="d-none" multiple accept=".pdf,.png,.jpg,.jpeg">
+                                                <small class="text-muted">PDF, PNG, JPG, ZIP, RAR - Max. 5MB</small>
+                                                <input type="file" id="archivos" class="d-none" multiple
+                                                    accept=".pdf,.png,.jpg,.jpeg,.zip,.rar">
                                             </div>
                                         </div>
                                         <div id="listaArchivos" class="mt-2"></div>
@@ -245,14 +292,16 @@
 
                                     <div class="alert alert-info">
                                         <i class="bi bi-info-circle"></i>
-                                        La prioridad sera confirmada por el departamento de TI al momento de tomar el ticket.
+                                        La prioridad sera confirmada por el departamento de TI al momento de tomar el
+                                        ticket.
                                     </div>
 
                                     <div class="d-flex gap-2">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="bi bi-send"></i> Enviar ticket
                                         </button>
-                                        <button type="button" class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
+                                        <button type="button" class="btn btn-secondary"
+                                            onclick="window.location.href='dashboard.html'">
                                             <i class="bi bi-x-circle"></i> Cancelar
                                         </button>
                                     </div>
@@ -284,7 +333,7 @@
                                 </ul>
                                 <hr>
                                 <p class="text-muted small">
-                                    <i class="bi bi-clock"></i> Tiempo estimado de respuesta: 
+                                    <i class="bi bi-clock"></i> Tiempo estimado de respuesta:
                                     <span class="fw-bold">24-48 horas</span>
                                 </p>
                             </div>
@@ -297,7 +346,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        //notificaciones
         function toggleNotificaciones() {
             const dropdown = document.getElementById('notificacionesDropdown');
             if (dropdown) {
@@ -311,7 +359,7 @@
 
         const usuario = JSON.parse(sessionStorage.getItem('usuario'));
         if (!usuario) {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
         document.getElementById('usuarioNombre').textContent = usuario.nombre;
 
@@ -383,10 +431,40 @@
             });
         }
 
+        const MAX_CARACTERES = 250;
+        const descripcionEl = document.getElementById('descripcion');
+        const contadorCaracteres = document.getElementById('contadorCaracteres');
+
+        function actualizarContadorCaracteres() {
+            const num = descripcionEl.value.length;
+            contadorCaracteres.textContent = num + ' / ' + MAX_CARACTERES;
+
+            contadorCaracteres.classList.remove('text-muted', 'text-warning', 'text-danger');
+
+            if (num >= MAX_CARACTERES) {
+                contadorCaracteres.classList.add('text-danger');
+            } else if (num >= MAX_CARACTERES * 0.8) {
+                contadorCaracteres.classList.add('text-warning');
+            } else {
+                contadorCaracteres.classList.add('text-muted');
+            }
+        }
+
+        descripcionEl.addEventListener('input', function () {
+            if (this.value.length > MAX_CARACTERES) {
+                this.value = this.value.slice(0, MAX_CARACTERES);
+            }
+            actualizarContadorCaracteres();
+        });
+
+        actualizarContadorCaracteres();
+
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('archivos');
         const listaArchivos = document.getElementById('listaArchivos');
         let archivosSeleccionados = [];
+
+        const TIPOS_PERMITIDOS = ['.pdf', '.png', '.jpg', '.jpeg', '.zip', '.rar'];
 
         dropZone.addEventListener('click', () => fileInput.click());
         dropZone.addEventListener('dragover', (e) => {
@@ -412,6 +490,13 @@
 
         function agregarArchivos(files) {
             files.forEach(file => {
+                const nombreLower = file.name.toLowerCase();
+                const esValido = TIPOS_PERMITIDOS.some(ext => nombreLower.endsWith(ext));
+
+                if (!esValido) {
+                    alert('El archivo ' + file.name + ' no tiene un formato permitido (PDF, PNG, JPG, ZIP, RAR)');
+                    return;
+                }
                 if (file.size > 5 * 1024 * 1024) {
                     alert('El archivo ' + file.name + ' excede el limite de 5MB');
                     return;
@@ -445,11 +530,9 @@
             mostrarArchivos();
         }
 
-
-
-
         document.getElementById('formNuevoTicket').addEventListener('submit', async (e) => {
             e.preventDefault();
+            console.log('▶ Submit interceptado');
 
             const titulo = document.getElementById('titulo').value.trim();
             const descripcion = document.getElementById('descripcion').value.trim();
@@ -457,8 +540,15 @@
             const prioridad = document.getElementById('prioridad').value;
             const sistema = document.getElementById('sistema').value.trim();
 
+            console.log('▶ Valores:', { titulo, descripcion, categoria, prioridad, sistema, archivos: archivosSeleccionados.length });
+
             if (!titulo || !descripcion || !categoria || !prioridad || !sistema) {
                 alert('Por favor, completa todos los campos requeridos');
+                return;
+            }
+
+            if (descripcion.length > MAX_CARACTERES) {
+                alert('La descripcion no puede exceder los ' + MAX_CARACTERES + ' caracteres.');
                 return;
             }
 
@@ -476,29 +566,46 @@
                 formData.append('archivos[]', file);
             });
 
+            console.log('▶ FormData listo, haciendo fetch a api/tickets/crear.php');
+
             try {
                 const response = await fetch('api/tickets/crear.php', {
                     method: 'POST',
                     body: formData
                 });
 
-                const data = await response.json();
+                console.log('▶ Respuesta HTTP:', response.status);
+
+                const textoRespuesta = await response.text();
+                console.log('▶ Respuesta cruda:', textoRespuesta);
+
+                let data;
+                try {
+                    data = JSON.parse(textoRespuesta);
+                } catch (err) {
+                    alert('El servidor NO devolvió JSON válido:\n\n' + textoRespuesta.substring(0, 800));
+                    return;
+                }
 
                 if (data.success) {
-                    alert('Ticket creado exitosamente\nFolio: ' + data.folio);
+                    let msg = 'Ticket creado exitosamente\nFolio: ' + data.folio;
+                    if (data.errores_archivos && data.errores_archivos.length > 0) {
+                        msg += '\n\nAdvertencias:\n- ' + data.errores_archivos.join('\n- ');
+                    }
+                    alert(msg);
                     window.location.href = 'mis-tickets.html';
                 } else {
                     alert('Error al crear el ticket: ' + (data.error || 'Error desconocido'));
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('Error de conexion al servidor');
+                console.error('▶ Error en el fetch:', error);
+                alert('Error de conexión al servidor\n\nDetalle: ' + error.message);
             }
         });
 
         function cerrarSesion() {
             sessionStorage.removeItem('usuario');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -506,4 +613,5 @@
         });
     </script>
 </body>
+
 </html>
